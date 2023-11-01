@@ -13,7 +13,7 @@ public class CameraController : MonoBehaviour
     public float smoothTime = 0.25f;
 
     //movement variables
-    private Vector3 originPoint;
+    private Vector3 directionPoint;
 
 
     private Camera cameraComponent;
@@ -42,15 +42,15 @@ public class CameraController : MonoBehaviour
 
     private void moveManagement()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(1))
         {
-            originPoint = cameraComponent.ScreenToWorldPoint(Input.mousePosition);
+            directionPoint = cameraComponent.ScreenToWorldPoint(Input.mousePosition);
         }
             
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(1))
         {
-            Vector3 moveVector = originPoint - cameraComponent.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 moveVector = directionPoint - cameraComponent.ScreenToWorldPoint(Input.mousePosition);
 
             cameraComponent.transform.position += moveVector;
         }
