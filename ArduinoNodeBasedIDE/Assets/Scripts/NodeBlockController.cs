@@ -9,25 +9,38 @@ public class NodeBlockController : MonoBehaviour
     private Vector2 originPoint;
     private Vector2 directionPoint;
     public bool colliding = false;
+    public bool holding = false;
     void Start()
     {
 
     }
-
     // Update is called once per frame
     void Update()
     {
 
     }
-    private void OnMouseDown()
+    private void OnMouseOver()
     {
-        originPoint = transform.position;
-        directionPoint = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;
+        if (Input.GetMouseButtonDown(0))
+        {
+            originPoint = transform.position;
+            directionPoint = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;
+            holding = true;
+        }
+
+        if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.LeftControl))
+        {
+            Destroy(gameObject);
+        }
     }
     private void OnMouseDrag()
     {
-        Vector2 moveVector = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - directionPoint;
-        transform.position = moveVector;
+        if (holding)
+        {
+            Vector2 moveVector = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - directionPoint;
+            transform.position = moveVector;
+        }
+        
     }
 
     void OnMouseUp()
@@ -36,6 +49,8 @@ public class NodeBlockController : MonoBehaviour
         {
             transform.position = originPoint;
         }
+
+        holding = false;
 
     }
 

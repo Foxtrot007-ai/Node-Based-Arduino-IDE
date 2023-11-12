@@ -42,13 +42,13 @@ public class CameraController : MonoBehaviour
 
     private void moveManagement()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) && Input.GetKey(KeyCode.LeftControl))
         {
             directionPoint = cameraComponent.ScreenToWorldPoint(Input.mousePosition);
         }
             
 
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButton(1) && Input.GetKey(KeyCode.LeftControl))
         {
             Vector3 moveVector = directionPoint - cameraComponent.ScreenToWorldPoint(Input.mousePosition);
 

@@ -1,0 +1,9 @@
+pinMode;Function;2;0
+digitalWrite;Function;2;0
+delay;Function;1;0
+HIGH;Constant;0;1
+LOW;Constant;0;1
+LED_BUILTIN;Constant;0;1
+OUTPUT;Constant;0;1
+declareVariable;Function;1;0
+variable;Variable;0;1
