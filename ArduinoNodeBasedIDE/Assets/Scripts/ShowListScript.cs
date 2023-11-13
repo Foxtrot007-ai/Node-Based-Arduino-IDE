@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,21 +6,13 @@ using UnityEngine;
 public class ShowListScript : MonoBehaviour
 {
     public GameObject searchBarPrefab;
-    public GameObject currentSearchBar;
-
+    public Vector3 clickPoint;
     private void OnMouseOver()
     {
         if (Input.GetMouseButtonDown(2))
         {
-            if(currentSearchBar != null)
-            {
-                Destroy(currentSearchBar);
-            }
-
-            Vector3 cursorPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            cursorPosition.z = 0;
-            currentSearchBar = Instantiate(searchBarPrefab, cursorPosition, Quaternion.identity);
-            
+            clickPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            searchBarPrefab.SetActive(true);
         }
     }
 }
