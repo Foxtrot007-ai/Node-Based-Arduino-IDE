@@ -9,7 +9,8 @@ public class NodeBlockManager : MonoBehaviour
     public List<NodeBlock> languageReferenceList;
 
     public string languageReferenceFile = "Assets/Resources/languageReference.txt";
-
+    public Vector3 nodeBlockSpawnPoint = Vector3.zero;
+    public GameObject nodeBlockPrefab;
     public NodeBlock lineReader(string line)
     {
         var parts = line.Split(';');
@@ -35,8 +36,20 @@ public class NodeBlockManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public void CreateNodeBlock(string name)
     {
-        
+        nodeBlockSpawnPoint.z = 0;
+        GameObject temp = Instantiate(nodeBlockPrefab, nodeBlockSpawnPoint, Quaternion.identity);
+        temp.GetComponent<NodeBlockController>().SetName(name);
+    }
+
+    public List<string> getLanguageReferenceNames()
+    {
+        List<string> temp = new List<string>();
+        foreach(NodeBlock node in languageReferenceList)
+        {
+            temp.Add(node.GetName());
+        }
+        return temp;
     }
 }

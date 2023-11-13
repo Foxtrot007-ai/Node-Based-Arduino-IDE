@@ -221,6 +221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colliding: 0
   holding: 0
+  textField: {fileID: 8907186318280223658}
 --- !u!61 &5708123407340269315
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -274,7 +275,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1609763804198202507}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0

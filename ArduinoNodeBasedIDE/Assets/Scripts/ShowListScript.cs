@@ -12,6 +12,7 @@ public class ShowListScript : MonoBehaviour
         if (Input.GetMouseButtonDown(2))
         {
             clickPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>().nodeBlockSpawnPoint = clickPoint;
             searchBarPrefab.SetActive(true);
         }
     }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using TMPro;
 using UnityEngine;
 
 public class NodeBlockController : MonoBehaviour
@@ -10,15 +11,12 @@ public class NodeBlockController : MonoBehaviour
     private Vector2 directionPoint;
     public bool colliding = false;
     public bool holding = false;
-    void Start()
+    public GameObject textField;
+    public void SetName(string name)
     {
-
+        textField.GetComponent<TMP_Text>().text = name;
     }
-    // Update is called once per frame
-    void Update()
-    {
 
-    }
     private void OnMouseOver()
     {
         if (Input.GetMouseButtonDown(0))
