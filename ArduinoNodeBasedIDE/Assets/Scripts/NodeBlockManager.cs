@@ -2,15 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
 
 public class NodeBlockManager : MonoBehaviour
 {
     public List<NodeBlock> languageReferenceList;
-
     public string languageReferenceFile = "Assets/Resources/languageReference.txt";
+
     public Vector3 nodeBlockSpawnPoint = Vector3.zero;
     public GameObject nodeBlockPrefab;
+    public List<GameObject> nodeBlockObjectsList = new List<GameObject>();
+
     public NodeBlock lineReader(string line)
     {
         var parts = line.Split(';');
@@ -38,9 +41,46 @@ public class NodeBlockManager : MonoBehaviour
     // Update is called once per frame
     public void CreateNodeBlock(string name)
     {
+        NodeBlock nodeBlock = null;
+        foreach(NodeBlock function in languageReferenceList)
+        {
+            if(function.GetName() == name)
+            {
+                nodeBlock = function;
+            }
+        }
+
+        if (nodeBlock == null)
+        {
+            return;
+        }
+            
         nodeBlockSpawnPoint.z = 0;
         GameObject temp = Instantiate(nodeBlockPrefab, nodeBlockSpawnPoint, Quaternion.identity);
-        temp.GetComponent<NodeBlockController>().SetName(name);
+        NodeBlockController controller = temp.GetComponent<NodeBlockController>();
+
+        for(int i = 0; i < nodeBlock.nextBlockListSize; i++)
+        {
+            controller.addNextBlock();
+        }
+
+        for (int i = 0; i < nodeBlock.inputBlockListSize; i++)
+        {
+            controller.addInPoint();
+        }
+
+        if (nodeBlock.hasPreviousBlock)
+        {
+            controller.addPreviousBlock();
+        }
+
+        if (nodeBlock.returnOutputBlock)
+        {
+            controller.addOutPoint();
+        }
+
+        controller.SetName(name);
+        nodeBlockObjectsList.Add(temp);
     }
 
     public List<string> getLanguageReferenceNames()

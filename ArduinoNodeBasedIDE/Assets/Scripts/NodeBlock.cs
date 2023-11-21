@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public enum NodeBlockTypes
 {
@@ -17,6 +18,7 @@ public class NodeBlock {
 
 
     public NodeBlock previousBlock; //previous nodeblock in control flow
+    public bool hasPreviousBlock;
 
     public NodeBlock[] nextBlockList; //next nodeblocks in control flow
     public int nextBlockListSize;
@@ -36,6 +38,22 @@ public class NodeBlock {
         inputBlockList = new NodeBlock[numberOfInput];
 
         returnOutputBlock = (output == 1);
+
+        if (type.Equals(NodeBlockTypes.Function))
+        {
+            hasPreviousBlock = true;
+            nextBlockListSize = 1;
+        }
+
+        if (type.Equals(NodeBlockTypes.Structure))
+        {
+            hasPreviousBlock = true;
+            if (name == "if" || name == "for")
+            {
+                nextBlockListSize = 2;
+            }
+        }
+        
     }
     public void SetName(string name)
     {

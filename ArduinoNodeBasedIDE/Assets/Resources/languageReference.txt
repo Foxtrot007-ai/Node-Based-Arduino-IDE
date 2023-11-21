@@ -7,3 +7,5 @@ LED_BUILTIN;Constant;0;1
 OUTPUT;Constant;0;1
 declareVariable;Function;1;0
 variable;Variable;0;1
+for;Structure;3;2
+if;Structure;1;0

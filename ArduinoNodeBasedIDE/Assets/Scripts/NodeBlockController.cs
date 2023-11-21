@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class NodeBlockController : MonoBehaviour
@@ -12,6 +13,66 @@ public class NodeBlockController : MonoBehaviour
     public bool colliding = false;
     public bool holding = false;
     public GameObject textField;
+
+    public GameObject field;
+
+    public GameObject inPointStartPoint;
+    public GameObject outPointStartPoint;
+    public GameObject nextBlockStartPoint;
+    public GameObject previousBlockStartPoint;
+
+    public Vector3 inPointStartPointIncrease;
+    public Vector3 nextBlockStartPointIncrease;
+      
+    public GameObject inPointPrefab;
+    public GameObject outPointPrefab;
+    public GameObject nextBlockPrefab;
+    public GameObject previousBlockPrefab;
+
+    public List<GameObject> inPointsList = new List<GameObject>();
+    public GameObject outPoint = null;
+    public List<GameObject> nextBlockList = new List<GameObject>();
+    public GameObject previousBlock = null;
+
+    public void addInPoint()
+    {
+        GameObject newPoint = Instantiate(inPointPrefab, inPointStartPoint.transform.position, Quaternion.identity);
+        newPoint.transform.SetParent(this.transform);
+        inPointStartPoint.transform.position += inPointStartPointIncrease;
+        inPointsList.Add(newPoint);
+    }
+
+    public void addOutPoint()
+    {
+        if(outPoint != null)
+        {
+            return;
+        }
+
+        GameObject newPoint = Instantiate(outPointPrefab, outPointStartPoint.transform.position, Quaternion.identity);
+        newPoint.transform.SetParent(this.transform);
+        outPoint = newPoint;
+    }
+
+    public void addNextBlock()
+    {
+        GameObject newPoint = Instantiate(nextBlockPrefab, nextBlockStartPoint.transform.position, Quaternion.identity);
+        newPoint.transform.SetParent(this.transform);
+        nextBlockStartPoint.transform.position += nextBlockStartPointIncrease;
+        nextBlockList.Add(newPoint);
+    }
+    public void addPreviousBlock()
+    {
+        if(previousBlock != null)
+        {
+            return;
+        }
+
+        GameObject newPoint = Instantiate(previousBlockPrefab, previousBlockStartPoint.transform.position, Quaternion.identity);
+        newPoint.transform.SetParent(this.transform);
+        previousBlock = newPoint;
+    }
+
     public void SetName(string name)
     {
         textField.GetComponent<TMP_Text>().text = name;

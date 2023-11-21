@@ -11,7 +11,11 @@ public class ListManager : MonoBehaviour
     public GameObject listContainer;
     public GameObject buttonContent;
     public List<GameObject> contentObjects;
-    // Update is called once per frame
+    void Start()
+    {
+        lastInput = "";
+        AddContent();
+    }
     void Update()
     {
         string readInput = inputField.GetComponent<TMP_InputField>().text;
