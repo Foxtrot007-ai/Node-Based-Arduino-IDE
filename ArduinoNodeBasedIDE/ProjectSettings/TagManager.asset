@@ -8,6 +8,10 @@ TagManager:
   - Background
   - NodeBlocksManager
   - SearchBar
+  - OutPoint
+  - InPoint
+  - NextBlockPoint
+  - PreviousBlockPoint
   layers:
   - Default
   - TransparentFX
