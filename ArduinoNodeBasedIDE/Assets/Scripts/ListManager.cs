@@ -38,6 +38,7 @@ public class ListManager : MonoBehaviour
                 GameObject newContent = Instantiate(buttonContent);
                 newContent.transform.SetParent(listContainer.transform);
                 newContent.GetComponent<ButtonScript>().SetName(s);
+                newContent.GetComponent<ButtonScript>().SetMode("nodeblock");
                 contentObjects.Add(newContent);
                 newContent.transform.localScale = Vector3.one;
             }

@@ -7,13 +7,20 @@ using UnityEngine;
 
 public class NodeBlockManager : MonoBehaviour
 {
+    // language Reference objects
     public List<NodeBlock> languageReferenceList;
     public string languageReferenceFile = "Assets/Resources/languageReference.txt";
 
+    // NodeBlock List objects
     public Vector3 nodeBlockSpawnPoint = Vector3.zero;
     public GameObject nodeBlockPrefab;
     public List<GameObject> nodeBlockObjectsList = new List<GameObject>();
 
+    //Variable List objects
+    public List<NodeBlock> variableList = new List<NodeBlock>();
+
+
+    //Documentation read helper
     public NodeBlock lineReader(string line)
     {
         var parts = line.Split(';');
@@ -38,8 +45,8 @@ public class NodeBlockManager : MonoBehaviour
             Debug.Log(function.GetName());
     }
 
-    // Update is called once per frame
-    public void CreateNodeBlock(string name)
+    //NodeBlock functions
+    public void SpawnNodeBlock(string name)
     {
         NodeBlock nodeBlock = null;
         foreach(NodeBlock function in languageReferenceList)
@@ -91,5 +98,59 @@ public class NodeBlockManager : MonoBehaviour
             temp.Add(node.GetName());
         }
         return temp;
+    }
+
+    // Variable Functions
+    public void AddVariableNodeBlock(string name)
+    {
+        foreach (NodeBlock node in variableList)
+        {
+            if(node.GetName() == name)
+            {
+                return;
+            }
+        }
+
+        NodeBlock block = new NodeBlock(name, NodeBlockTypes.Variable, 0, 1);
+        variableList.Add(block);
+    }
+
+    public List<string> getVariablesNames()
+    {
+        List<string> temp = new List<string>();
+        foreach (NodeBlock node in variableList)
+        {
+            temp.Add(node.GetName());
+        }
+        return temp;
+    }
+
+    public void SpawnVariableNodeBlock(string name)
+    {
+        NodeBlock nodeBlock = null;
+        foreach (NodeBlock variable in variableList)
+        {
+            if (variable.GetName() == name)
+            {
+                nodeBlock = variable;
+            }
+        }
+
+        if (nodeBlock == null)
+        {
+            return;
+        }
+
+        nodeBlockSpawnPoint.z = 0;
+        GameObject temp = Instantiate(nodeBlockPrefab, nodeBlockSpawnPoint, Quaternion.identity);
+        NodeBlockController controller = temp.GetComponent<NodeBlockController>();
+
+        if (nodeBlock.returnOutputBlock)
+        {
+            controller.addOutPoint();
+        }
+
+        controller.SetName(name);
+        nodeBlockObjectsList.Add(temp);
     }
 }

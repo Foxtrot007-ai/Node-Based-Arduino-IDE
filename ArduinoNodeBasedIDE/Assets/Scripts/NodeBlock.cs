@@ -16,7 +16,6 @@ public class NodeBlock {
     private string name;
     private NodeBlockTypes type;
 
-
     public NodeBlock previousBlock; //previous nodeblock in control flow
     public bool hasPreviousBlock;
 
