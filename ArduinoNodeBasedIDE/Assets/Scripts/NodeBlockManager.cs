@@ -14,10 +14,15 @@ public class NodeBlockManager : MonoBehaviour
     // NodeBlock List objects
     public Vector3 nodeBlockSpawnPoint = Vector3.zero;
     public GameObject nodeBlockPrefab;
-    public List<GameObject> nodeBlockObjectsList = new List<GameObject>();
+    //views
+    public string actualView = "none";
+    public Dictionary<string, List<GameObject>> views = new Dictionary<string, List<GameObject>>();
 
     //Variable List objects
     public List<NodeBlock> variableList = new List<NodeBlock>();
+
+    //my FunctionsList objects
+    public List<NodeBlock> myFunctionList = new List<NodeBlock>();
 
 
     //Documentation read helper
@@ -43,6 +48,8 @@ public class NodeBlockManager : MonoBehaviour
 
         foreach(NodeBlock function in languageReferenceList)
             Debug.Log(function.GetName());
+
+        instantiateBasicFunctions();
     }
 
     //NodeBlock functions
@@ -87,7 +94,7 @@ public class NodeBlockManager : MonoBehaviour
         }
 
         controller.SetName(name);
-        nodeBlockObjectsList.Add(temp);
+        views[actualView].Add(temp);
     }
 
     public List<string> getLanguageReferenceNames()
@@ -151,6 +158,61 @@ public class NodeBlockManager : MonoBehaviour
         }
 
         controller.SetName(name);
-        nodeBlockObjectsList.Add(temp);
+        views[actualView].Add(temp);
+    }
+
+    //functions and view
+    public List<string> getFunctionsNames()
+    {
+        List<string> temp = new List<string>();
+        foreach (NodeBlock node in myFunctionList)
+        {
+            temp.Add(node.GetName());
+        }
+        return temp;
+    }
+    public void AddNewFunction(string name)
+    {
+        foreach (NodeBlock node in myFunctionList)
+        {
+            if (node.GetName() == name)
+            {
+                return;
+            }
+        }
+
+        NodeBlock block = new NodeBlock(name, NodeBlockTypes.Function, 0, 0);
+        myFunctionList.Add(block);
+        languageReferenceList.Add(block);
+        views.Add(name, new List<GameObject>());
+        ChangeView(name);
+
+        NodeBlock blockbegin = new NodeBlock(name + "(begin)", NodeBlockTypes.Function, 0, 0);
+        languageReferenceList.Add(blockbegin);
+        SpawnNodeBlock(name + "(begin)");
+    }
+
+    public void instantiateBasicFunctions()
+    {
+        AddNewFunction("setup");
+        AddNewFunction("loop");
+    }
+    public void ChangeView(string name)
+    {
+        if(actualView != "none")
+        {
+            foreach (GameObject block in views[actualView])
+            {
+                block.SetActive(false);
+            }
+        }
+        actualView = name;
+        if (actualView != "none")
+        {
+            foreach (GameObject block in views[actualView])
+            {
+                block.SetActive(true);
+            }
+        }
     }
 }

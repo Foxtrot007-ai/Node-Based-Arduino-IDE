@@ -7,6 +7,7 @@ public class ShowListScript : MonoBehaviour
 {
     public GameObject searchBarPrefab;
     public GameObject variableListPrefab;
+    public GameObject functionListPrefab;
     public Vector3 clickPoint;
     private void OnMouseOver()
     {
@@ -22,6 +23,13 @@ public class ShowListScript : MonoBehaviour
             clickPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>().nodeBlockSpawnPoint = clickPoint;
             variableListPrefab.SetActive(true);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            clickPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>().nodeBlockSpawnPoint = clickPoint;
+            functionListPrefab.SetActive(true);
         }
     }
 }

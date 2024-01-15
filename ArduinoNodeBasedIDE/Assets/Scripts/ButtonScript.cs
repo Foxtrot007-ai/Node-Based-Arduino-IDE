@@ -30,6 +30,10 @@ public class ButtonScript : MonoBehaviour
         {
             manager.GetComponent<NodeBlockManager>().SpawnVariableNodeBlock(nametext);
         }
+        else if (mode == "view")
+        {
+            manager.GetComponent<NodeBlockManager>().ChangeView(nametext);
+        } 
         else
         {
             Debug.Log(mode);
