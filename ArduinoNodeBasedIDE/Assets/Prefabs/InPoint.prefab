@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 512827793433301550}
   - component: {fileID: 8358815908356909415}
   - component: {fileID: 2191734900534864083}
+  - component: {fileID: -8306216558351975490}
   m_Layer: 0
   m_Name: InPoint
-  m_TagString: Untagged
+  m_TagString: InPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -149,6 +150,27 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
+--- !u!114 &-8306216558351975490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6770525806203120026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d996ada1dcf99884f91aade4873cc15f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availableConnections:
+  - InPoint|OutPoint
+  - OutPoint|InPoint
+  - PreviousBlockPoint|NextBlockPoint
+  - NextBlockPoint|PreviousBlockPoint
+  connectedPoint: {fileID: 0}
+  holding: 0
+  line: {fileID: 4105617885017918507}
+  showLine: 0
 --- !u!1001 &5007242805493518426
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -206,6 +228,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dde332eebc65d8b41bc7998d41ccf06d, type: 3}
+--- !u!1 &4105617885017918507 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9045296763936283761, guid: dde332eebc65d8b41bc7998d41ccf06d, type: 3}
+  m_PrefabInstance: {fileID: 5007242805493518426}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4474963813689374333 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8892092672064153127, guid: dde332eebc65d8b41bc7998d41ccf06d, type: 3}

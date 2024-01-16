@@ -1,12 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 public class ConnectionPoint : MonoBehaviour
 {
     Vector3[] points = new Vector3[2];
+    public string[] availableConnections = {"InPoint|OutPoint","OutPoint|InPoint","PreviousBlockPoint|NextBlockPoint","NextBlockPoint|PreviousBlockPoint"};
     public GameObject connectedPoint;
     Vector2 directionPoint;
     public bool holding = false;
@@ -72,6 +75,11 @@ public class ConnectionPoint : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.LeftControl))
         {
+            if(connectedPoint != null)
+            {
+                connectedPoint.GetComponent<ConnectionPoint>().connectedPoint = null;
+            }
+
             connectedPoint = null;
             showLine = false;
             ClearLine();
@@ -87,32 +95,29 @@ public class ConnectionPoint : MonoBehaviour
 
     }
 
+    private bool checkConnectable(string otherTag)
+    {
+        string myConnection = gameObject.tag + "|" + otherTag;
+        return availableConnections.Contains(myConnection);
+    }
+
+
     void OnMouseUp()
     {
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 
-
-        if (hit.collider != null)
+        if (hit.collider != null 
+            && checkConnectable(hit.transform.tag)
+            && hit.collider.gameObject.GetComponent<ConnectionPoint>().connectedPoint == null)
         {
-            Debug.Log("hit something");
-            Debug.Log(hit.transform.name);
-            if(hit.transform.tag != "PreviousBlockPoint")
-            {
-                ClearLine();
-                showLine = false;
-            }
-            else
-            {
-                connectedPoint = hit.collider.gameObject;
-            }
-
+            connectedPoint = hit.collider.gameObject;
+            hit.collider.gameObject.GetComponent<ConnectionPoint>().connectedPoint = gameObject;
         }
         else
         {
             ClearLine();
-            showLine=false;
+            showLine = false;
         }
-
         
         holding = false;
     }
