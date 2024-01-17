@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class NodeBlockController : MonoBehaviour
 {
+    public string name;
+    public NodeBlockTypes type;
 
     private Vector2 originPoint;
     private Vector2 directionPoint;
@@ -76,6 +78,7 @@ public class NodeBlockController : MonoBehaviour
     public void SetName(string name)
     {
         textField.GetComponent<TMP_Text>().text = name;
+        this.name = name;
     }
 
     private void OnMouseOver()

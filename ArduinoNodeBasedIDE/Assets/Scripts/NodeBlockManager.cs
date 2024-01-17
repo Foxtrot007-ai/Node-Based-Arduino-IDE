@@ -94,6 +94,7 @@ public class NodeBlockManager : MonoBehaviour
         }
 
         controller.SetName(name);
+        controller.type = nodeBlock.GetNodeBlockType();
         views[actualView].Add(temp);
     }
 

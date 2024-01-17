@@ -11,7 +11,7 @@ public enum NodeBlockTypes
     Structure, // 0 or more element in nextBlockList (for example for loop has loop body and next function after loop end)
 }
 
-public class NodeBlock {
+public class NodeBlock : ICloneable{
 
     private string name;
     private NodeBlockTypes type;
@@ -42,6 +42,7 @@ public class NodeBlock {
         {
             hasPreviousBlock = true;
             nextBlockListSize = 1;
+            nextBlockList = new NodeBlock[1];
         }
 
         if (type.Equals(NodeBlockTypes.Structure))
@@ -50,10 +51,18 @@ public class NodeBlock {
             if (name == "if" || name == "for")
             {
                 nextBlockListSize = 2;
+                nextBlockList = new NodeBlock[2];
             }
         }
         
     }
+
+    public object Clone()
+    {
+        NodeBlock temp = new NodeBlock(name, type, inputBlockListSize, returnOutputBlock ? 1 : 0);
+        return temp;
+    }
+
     public void SetName(string name)
     {
         this.name = name;
@@ -124,4 +133,8 @@ public class NodeBlock {
         return outputBlock;
     }
 
+    public NodeBlockTypes GetNodeBlockType()
+    {
+        return type;
+    }
 }
