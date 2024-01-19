@@ -49,7 +49,7 @@ public class FunctionListManager : MonoBehaviour
         contentObjects.Clear();
     }
 
-    private void UpdateContent()
+    public void UpdateContent()
     {
         DestroyContent();
         AddContent();

@@ -25,7 +25,7 @@ public class NodeBlockEnviroment
         foreach(GameObject block in blocks)
         {
             NodeBlockController nbController = block.GetComponent<NodeBlockController>();
-            NodeBlock temp = new NodeBlock(nbController.name, 
+            NodeBlock temp = new NodeBlock(nbController.nodeBlockName, 
                                            nbController.type, 
                                            nbController.inPointsList.Count, 
                                            nbController.outPoint != null ? 1 : 0);

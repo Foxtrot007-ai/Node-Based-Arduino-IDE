@@ -49,7 +49,7 @@ public class VariableListManager : MonoBehaviour
         contentObjects.Clear();
     }
 
-    private void UpdateContent()
+    public void UpdateContent()
     {
         DestroyContent();
         AddContent();

@@ -14,7 +14,7 @@ public enum NodeBlockTypes
 public class NodeBlock : ICloneable{
 
     private string name;
-    private NodeBlockTypes type;
+    private NodeBlockTypes nodeBlockType;
 
     public NodeBlock previousBlock; //previous nodeblock in control flow
     public bool hasPreviousBlock;
@@ -23,29 +23,31 @@ public class NodeBlock : ICloneable{
     public int nextBlockListSize;
 
     public NodeBlock[] inputBlockList; //points to nodeblock that give its output or null
+    public string[] inputTypes;
     public int inputBlockListSize;
 
     public NodeBlock outputBlock; //points to nodeblock that take its input or null
+    public string outputType;
     public bool returnOutputBlock;
 
-    public NodeBlock(string name, NodeBlockTypes type, int numberOfInput, int output)
+    public NodeBlock(string name, NodeBlockTypes nbtype, int numberOfInput, int output)
     {
         this.name = name;
-        this.type = type;
+        this.nodeBlockType = nbtype;
 
         inputBlockListSize = numberOfInput;
         inputBlockList = new NodeBlock[numberOfInput];
 
         returnOutputBlock = (output == 1);
 
-        if (type.Equals(NodeBlockTypes.Function))
+        if (nbtype.Equals(NodeBlockTypes.Function))
         {
             hasPreviousBlock = true;
             nextBlockListSize = 1;
             nextBlockList = new NodeBlock[1];
         }
 
-        if (type.Equals(NodeBlockTypes.Structure))
+        if (nbtype.Equals(NodeBlockTypes.Structure))
         {
             hasPreviousBlock = true;
             if (name == "if" || name == "for")
@@ -59,7 +61,7 @@ public class NodeBlock : ICloneable{
 
     public object Clone()
     {
-        NodeBlock temp = new NodeBlock(name, type, inputBlockListSize, returnOutputBlock ? 1 : 0);
+        NodeBlock temp = new NodeBlock(name, nodeBlockType, inputBlockListSize, returnOutputBlock ? 1 : 0);
         return temp;
     }
 
@@ -111,6 +113,14 @@ public class NodeBlock : ICloneable{
         }
     }
 
+    public void SetInputType(string input, int inputIndex)
+    {
+        if (inputIndex >= 0 && inputIndex < inputBlockListSize)
+        {
+            inputTypes[inputIndex] = input;
+        }
+    }
+
     public NodeBlock GetInputBlock(int inputIndex)
     {
         if (inputIndex >= 0 && inputIndex < inputBlockListSize)
@@ -121,6 +131,27 @@ public class NodeBlock : ICloneable{
         {
             return null;
         }
+    }
+
+    public string GetInputType(int inputIndex)
+    {
+        if (inputIndex >= 0 && inputIndex < inputBlockListSize)
+        {
+            return inputTypes[inputIndex];
+        }
+        else
+        {
+            return null;
+        }
+    }
+    public void SetOutputType(string output)
+    {
+        this.outputType = output;
+    }
+
+    public string GetOutputType()
+    {
+        return outputType;
     }
 
     public void SetOutputBlock(NodeBlock output)
@@ -135,6 +166,6 @@ public class NodeBlock : ICloneable{
 
     public NodeBlockTypes GetNodeBlockType()
     {
-        return type;
+        return nodeBlockType;
     }
 }

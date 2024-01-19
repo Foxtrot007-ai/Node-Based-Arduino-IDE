@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class ButtonScript : MonoBehaviour
 {
+    public GameObject text;
     public string nametext;
     public string mode;
 
@@ -17,7 +18,7 @@ public class ButtonScript : MonoBehaviour
     public void SetName(string name)
     {
         nametext = name;
-        GetComponentInChildren<TMP_Text>().text = name;
+        text.GetComponent<TMP_Text>().text = name;
     }
     public void CreateNode()
     {
@@ -37,7 +38,30 @@ public class ButtonScript : MonoBehaviour
         else
         {
             Debug.Log(mode);
+        }    
+    }
+    public void DeleteNode()
+    {
+        GameObject manager = GameObject.FindGameObjectWithTag("NodeBlocksManager");
+        if (mode == "nodeblock")
+        {
+            Debug.Log(mode);
         }
-         
+        else if (mode == "variable")
+        {
+            manager.GetComponent<NodeBlockManager>().DeleteVariable(nametext);
+            GameObject.FindGameObjectWithTag("VariableList").GetComponent<VariableListManager>().UpdateContent();
+
+        }
+        else if (mode == "view")
+        {
+            manager.GetComponent<NodeBlockManager>().DeleteView(nametext);
+            GameObject.FindGameObjectWithTag("FunctionList").GetComponent<FunctionListManager>().UpdateContent();
+        }
+        else
+        {
+            Debug.Log(mode);
+        }
+
     }
 }

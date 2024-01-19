@@ -12,6 +12,8 @@ TagManager:
   - InPoint
   - NextBlockPoint
   - PreviousBlockPoint
+  - VariableList
+  - FunctionList
   layers:
   - Default
   - TransparentFX

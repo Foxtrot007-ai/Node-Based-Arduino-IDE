@@ -132,7 +132,23 @@ public class NodeBlockManager : MonoBehaviour
         }
         return temp;
     }
+    public void DeleteVariable(string name)
+    {
+        variableList.RemoveAll(x => x.GetName() == name);
+        foreach (var view in views)
+        {
+            List<GameObject> toDelete = view.Value.FindAll(x => x.GetComponent<NodeBlockController>().nodeBlockName == name
+                                   || x.GetComponent<NodeBlockController>().nodeBlockName == name + "(begin)");
 
+            view.Value.RemoveAll(x => x.GetComponent<NodeBlockController>().nodeBlockName == name
+                                    || x.GetComponent<NodeBlockController>().nodeBlockName == name + "(begin)");
+
+            foreach (var node in toDelete)
+            {
+                Destroy(node);
+            }
+        }
+    }
     public void SpawnVariableNodeBlock(string name)
     {
         NodeBlock nodeBlock = null;
@@ -197,6 +213,25 @@ public class NodeBlockManager : MonoBehaviour
     {
         AddNewFunction("setup");
         AddNewFunction("loop");
+    }
+
+    public void DeleteView(string name)
+    {
+        myFunctionList.RemoveAll(x => x.GetName() == name);
+        languageReferenceList.RemoveAll(x => x.GetName() == name || x.GetName() == name + "(begin)");
+        foreach (var view in views)
+        {
+            List<GameObject> toDelete = view.Value.FindAll(x => x.GetComponent<NodeBlockController>().nodeBlockName == name
+                                    || x.GetComponent<NodeBlockController>().nodeBlockName == name + "(begin)");
+
+            view.Value.RemoveAll(x => x.GetComponent<NodeBlockController>().nodeBlockName == name
+                                    || x.GetComponent<NodeBlockController>().nodeBlockName == name + "(begin)");
+
+            foreach (var node in toDelete)
+            {
+                Destroy(node);
+            }
+        }
     }
     public void ChangeView(string name)
     {

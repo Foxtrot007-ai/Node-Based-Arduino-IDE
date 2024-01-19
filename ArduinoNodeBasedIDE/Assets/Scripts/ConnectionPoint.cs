@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class ConnectionPoint : MonoBehaviour
 {
+    public string type;
     Vector3[] points = new Vector3[2];
     public string[] availableConnections = {"InPoint|OutPoint","OutPoint|InPoint","PreviousBlockPoint|NextBlockPoint","NextBlockPoint|PreviousBlockPoint"};
     public GameObject connectedPoint;
