@@ -147,9 +147,9 @@ public class NodeBlockManager : MonoBehaviour
         GameObject temp = Instantiate(outNodeBlockPrefab, nodeBlockSpawnPoint, Quaternion.identity);
         OutNodeBlockController controller = temp.GetComponent<OutNodeBlockController>();
 
-        for (int i = 0; i < nodeBlock.nextBlockListSize; i++)
+        if (nodeBlock.hasPreviousBlock)
         {
-            controller.addNextBlock();
+            controller.addPreviousBlock();
         }
 
         for (int i = 0; i < nodeBlock.inputBlockListSize; i++)

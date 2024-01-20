@@ -252,8 +252,8 @@ MonoBehaviour:
   previousBlockStartPoint: {fileID: 7434713317997627739}
   inPointStartPointIncrease: {x: 0, y: -4, z: 0}
   nextBlockStartPointIncrease: {x: 0, y: -4, z: 0}
-  inPointPrefab: {fileID: 0}
-  outPointPrefab: {fileID: 0}
+  inPointPrefab: {fileID: 6770525806203120026, guid: 934703733f7bcf34f85f90cbbba1ad82, type: 3}
+  outPointPrefab: {fileID: 492498176815953137, guid: e5a0434540674fc419e29b83cbf974ab, type: 3}
   nextBlockPrefab: {fileID: 3008653834415790694, guid: 0c9b9777923164540b5e22e640686364, type: 3}
   previousBlockPrefab: {fileID: 6043219403922890002, guid: 2717e02e46cb33242b173eb2bf2aa0e0, type: 3}
   inPointsList: []
