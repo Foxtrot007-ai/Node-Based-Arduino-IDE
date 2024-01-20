@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.MemoryProfiler;
 using UnityEngine;
 
 public class NodeBlockController : MonoBehaviour
@@ -10,8 +12,8 @@ public class NodeBlockController : MonoBehaviour
     public string nodeBlockName;
     public NodeBlockTypes type;
 
-    private Vector2 originPoint;
-    private Vector2 directionPoint;
+    protected Vector2 originPoint;
+    protected Vector2 directionPoint;
     public bool colliding = false;
     public bool holding = false;
     public GameObject textField;
@@ -36,15 +38,19 @@ public class NodeBlockController : MonoBehaviour
     public List<GameObject> nextBlockList = new List<GameObject>();
     public GameObject previousBlock = null;
 
-    public void addInPoint()
+    public virtual void addInPoint(int index, string type)
     {
         GameObject newPoint = Instantiate(inPointPrefab, inPointStartPoint.transform.position, Quaternion.identity);
         newPoint.transform.SetParent(this.transform);
+        ConnectionPoint connection = newPoint.GetComponent<ConnectionPoint>();
+        connection.nodeBlockName = nodeBlockName;
+        connection.SetType(type);
+        connection.connectionIndex = index;
         inPointStartPoint.transform.position += inPointStartPointIncrease;
         inPointsList.Add(newPoint);
     }
 
-    public void addOutPoint()
+    public virtual void addOutPoint(string type)
     {
         if(outPoint != null)
         {
@@ -53,6 +59,10 @@ public class NodeBlockController : MonoBehaviour
 
         GameObject newPoint = Instantiate(outPointPrefab, outPointStartPoint.transform.position, Quaternion.identity);
         newPoint.transform.SetParent(this.transform);
+        ConnectionPoint connection = newPoint.GetComponent<ConnectionPoint>();
+        connection.nodeBlockName = nodeBlockName;
+        connection.SetType(type);
+        connection.connectionIndex = 0;
         outPoint = newPoint;
     }
 
@@ -60,6 +70,10 @@ public class NodeBlockController : MonoBehaviour
     {
         GameObject newPoint = Instantiate(nextBlockPrefab, nextBlockStartPoint.transform.position, Quaternion.identity);
         newPoint.transform.SetParent(this.transform);
+        ConnectionPoint connection = newPoint.GetComponent<ConnectionPoint>();
+        connection.nodeBlockName = nodeBlockName;
+        connection.SetType("");
+        connection.connectionIndex = 0;
         nextBlockStartPoint.transform.position += nextBlockStartPointIncrease;
         nextBlockList.Add(newPoint);
     }
@@ -72,6 +86,10 @@ public class NodeBlockController : MonoBehaviour
 
         GameObject newPoint = Instantiate(previousBlockPrefab, previousBlockStartPoint.transform.position, Quaternion.identity);
         newPoint.transform.SetParent(this.transform);
+        ConnectionPoint connection = newPoint.GetComponent<ConnectionPoint>();
+        connection.nodeBlockName = nodeBlockName;
+        connection.SetType("");
+        connection.connectionIndex = 0;
         previousBlock = newPoint;
     }
 
@@ -81,7 +99,11 @@ public class NodeBlockController : MonoBehaviour
         this.nodeBlockName = name;
     }
 
-    private void OnMouseOver()
+    public virtual void DestroyMe()
+    {
+        Destroy(gameObject);
+    }
+    protected void OnMouseOver()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -92,10 +114,10 @@ public class NodeBlockController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.LeftControl))
         {
-            Destroy(gameObject);
+            DestroyMe();
         }
     }
-    private void OnMouseDrag()
+    protected void OnMouseDrag()
     {
         if (holding)
         {
@@ -105,7 +127,7 @@ public class NodeBlockController : MonoBehaviour
         
     }
 
-    void OnMouseUp()
+    protected void OnMouseUp()
     {
         if (colliding)
         {
@@ -116,7 +138,7 @@ public class NodeBlockController : MonoBehaviour
 
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    protected void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.tag == "NodeBlock")
         {
@@ -124,7 +146,7 @@ public class NodeBlockController : MonoBehaviour
         }  
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    protected void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "NodeBlock")
         {

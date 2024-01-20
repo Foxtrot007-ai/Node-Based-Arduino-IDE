@@ -172,6 +172,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d996ada1dcf99884f91aade4873cc15f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nodeBlockName: 
+  type: 
+  connectionType: PreviousBlockPoint
+  interactiveDefinition: 0
+  typeText: {fileID: 0}
+  connectionIndex: 0
   availableConnections:
   - InPoint|OutPoint
   - OutPoint|InPoint

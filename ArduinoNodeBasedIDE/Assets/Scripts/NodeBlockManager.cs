@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using TMPro;
 using UnityEngine;
 
@@ -14,6 +15,8 @@ public class NodeBlockManager : MonoBehaviour
     // NodeBlock List objects
     public Vector3 nodeBlockSpawnPoint = Vector3.zero;
     public GameObject nodeBlockPrefab;
+    public GameObject inNodeBlockPrefab;
+    public GameObject outNodeBlockPrefab;
     //views
     public string actualView = "none";
     public Dictionary<string, List<GameObject>> views = new Dictionary<string, List<GameObject>>();
@@ -31,9 +34,28 @@ public class NodeBlockManager : MonoBehaviour
         var parts = line.Split(';');
         string name = parts[0];
         NodeBlockTypes type = (NodeBlockTypes)Enum.Parse(typeof(NodeBlockTypes), parts[1], true);
-        int inputListSize = int.Parse(parts[2]);
-        int outputListSize = int.Parse(parts[3]);
+        //input parse
+        var inputparts = parts[2].Split('/');
+        int inputListSize = int.Parse(inputparts[0]);
+        
+        //output parse
+        var outputparts = parts[3].Split('/');
+        int outputListSize = int.Parse(outputparts[0]);
+
         NodeBlock block = new NodeBlock(name, type, inputListSize, outputListSize);
+
+        Debug.Log(outputListSize + "," + outputparts[0]);
+        for (int i = 0; i < inputListSize; i++)
+        {
+            block.SetInputType(inputparts[i + 1], i);
+        }
+
+        if(outputListSize > 0)
+        {
+            block.SetOutputType(outputparts[1]);
+        }
+        
+
         return block;
     }
 
@@ -80,7 +102,7 @@ public class NodeBlockManager : MonoBehaviour
 
         for (int i = 0; i < nodeBlock.inputBlockListSize; i++)
         {
-            controller.addInPoint();
+            controller.addInPoint(i, nodeBlock.GetInputType(i));
         }
 
         if (nodeBlock.hasPreviousBlock)
@@ -90,7 +112,7 @@ public class NodeBlockManager : MonoBehaviour
 
         if (nodeBlock.returnOutputBlock)
         {
-            controller.addOutPoint();
+            controller.addOutPoint(nodeBlock.GetOutputType());
         }
 
         controller.SetName(name);
@@ -98,6 +120,47 @@ public class NodeBlockManager : MonoBehaviour
         views[actualView].Add(temp);
     }
 
+    public void SpawnInNodeBlock(NodeBlock nodeBlock)
+    {
+        nodeBlockSpawnPoint.z = 0;
+        GameObject temp = Instantiate(inNodeBlockPrefab, nodeBlockSpawnPoint, Quaternion.identity);
+        InNodeBlockController controller = temp.GetComponent<InNodeBlockController>();
+
+        for (int i = 0; i < nodeBlock.nextBlockListSize; i++)
+        {
+            controller.addNextBlock();
+        }
+
+        for (int i = 0; i < nodeBlock.inputBlockListSize; i++)
+        {
+            controller.addInPoint(i, nodeBlock.GetInputType(i));
+        }
+
+        controller.SetName(nodeBlock.GetName() + "(Begin)");
+        controller.type = nodeBlock.GetNodeBlockType();
+        views[actualView].Add(temp);
+    }
+
+    public void SpawnOutNodeBlock(NodeBlock nodeBlock)
+    {
+        nodeBlockSpawnPoint.z = 0;
+        GameObject temp = Instantiate(outNodeBlockPrefab, nodeBlockSpawnPoint, Quaternion.identity);
+        OutNodeBlockController controller = temp.GetComponent<OutNodeBlockController>();
+
+        for (int i = 0; i < nodeBlock.nextBlockListSize; i++)
+        {
+            controller.addNextBlock();
+        }
+
+        for (int i = 0; i < nodeBlock.inputBlockListSize; i++)
+        {
+            controller.addOutPoint(nodeBlock.GetOutputType());
+        }
+
+        controller.SetName(nodeBlock.GetName() + "(End)");
+        controller.type = nodeBlock.GetNodeBlockType();
+        views[actualView].Add(temp);
+    }
     public List<string> getLanguageReferenceNames()
     {
         List<string> temp = new List<string>();
@@ -171,7 +234,7 @@ public class NodeBlockManager : MonoBehaviour
 
         if (nodeBlock.returnOutputBlock)
         {
-            controller.addOutPoint();
+            controller.addOutPoint(nodeBlock.GetOutputType());
         }
 
         controller.SetName(name);
@@ -188,7 +251,7 @@ public class NodeBlockManager : MonoBehaviour
         }
         return temp;
     }
-    public void AddNewFunction(string name)
+    public void AddNewFunction(string name, int numberOfInput, int numberOfOutput)
     {
         foreach (NodeBlock node in myFunctionList)
         {
@@ -198,34 +261,31 @@ public class NodeBlockManager : MonoBehaviour
             }
         }
 
-        NodeBlock block = new NodeBlock(name, NodeBlockTypes.Function, 0, 0);
+        NodeBlock block = new NodeBlock(name, NodeBlockTypes.Function, numberOfInput, numberOfOutput);
         myFunctionList.Add(block);
         languageReferenceList.Add(block);
         views.Add(name, new List<GameObject>());
         ChangeView(name);
 
-        NodeBlock blockbegin = new NodeBlock(name + "(begin)", NodeBlockTypes.Function, 0, 0);
-        languageReferenceList.Add(blockbegin);
-        SpawnNodeBlock(name + "(begin)");
+        SpawnInNodeBlock(block);
+        SpawnOutNodeBlock(block);
     }
 
     public void instantiateBasicFunctions()
     {
-        AddNewFunction("setup");
-        AddNewFunction("loop");
+        AddNewFunction("setup", 0, 0);
+        AddNewFunction("loop", 0, 0);
     }
 
     public void DeleteView(string name)
     {
         myFunctionList.RemoveAll(x => x.GetName() == name);
-        languageReferenceList.RemoveAll(x => x.GetName() == name || x.GetName() == name + "(begin)");
+        languageReferenceList.RemoveAll(x => x.GetName() == name);
         foreach (var view in views)
         {
-            List<GameObject> toDelete = view.Value.FindAll(x => x.GetComponent<NodeBlockController>().nodeBlockName == name
-                                    || x.GetComponent<NodeBlockController>().nodeBlockName == name + "(begin)");
+            List<GameObject> toDelete = view.Value.FindAll(x => x.GetComponent<NodeBlockController>().nodeBlockName == name);
 
-            view.Value.RemoveAll(x => x.GetComponent<NodeBlockController>().nodeBlockName == name
-                                    || x.GetComponent<NodeBlockController>().nodeBlockName == name + "(begin)");
+            view.Value.RemoveAll(x => x.GetComponent<NodeBlockController>().nodeBlockName == name);
 
             foreach (var node in toDelete)
             {
@@ -249,6 +309,37 @@ public class NodeBlockManager : MonoBehaviour
             {
                 block.SetActive(true);
             }
+        }
+    }
+
+    public void updateTypes(int index, string name, string newType, NodeBlockTypes nodeBlockType)
+    {
+        NodeBlock temp;
+        if (nodeBlockType.Equals(NodeBlockTypes.Function))
+        {
+            temp = myFunctionList.Find(x => x.GetName() == name);
+        }
+        else if (nodeBlockType.Equals(NodeBlockTypes.Variable))
+        {
+            temp = variableList.Find(x => x.GetName() == name);
+        }
+        else
+        {
+            temp = null;
+            Debug.Log("problem with change definition");
+        }
+        
+        temp.SetInputType(newType, index);
+        foreach (var view in views)
+        {
+           foreach(var node in view.Value)
+           {
+                NodeBlockController controller = node.GetComponent<NodeBlockController>();
+                if (controller != null && controller.nodeBlockName == name)
+                {
+                    controller.inPointsList[index].GetComponent<ConnectionPoint>().changeType(newType);
+                }
+           }
         }
     }
 }

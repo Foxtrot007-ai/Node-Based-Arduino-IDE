@@ -37,6 +37,7 @@ public class NodeBlock : ICloneable{
 
         inputBlockListSize = numberOfInput;
         inputBlockList = new NodeBlock[numberOfInput];
+        inputTypes = new String[numberOfInput];
 
         returnOutputBlock = (output == 1);
 

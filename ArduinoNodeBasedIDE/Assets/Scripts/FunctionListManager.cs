@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,7 +7,9 @@ using UnityEngine.UI;
 
 public class FunctionListManager : MonoBehaviour
 {
+    public GameObject nameField;
     public GameObject inputField;
+    public GameObject outputField;
     public GameObject listContainer;
     public GameObject buttonContent;
     public List<GameObject> contentObjects;
@@ -17,9 +20,24 @@ public class FunctionListManager : MonoBehaviour
 
     public void CreateNewFunction()
     {
+        int numberOfInput = 0;
+        int numberOfOutput = 0;
+
+        try
+        {
+            numberOfInput = Convert.ToInt32(inputField.GetComponent<TMP_InputField>().text);
+            numberOfOutput = Convert.ToInt32(outputField.GetComponent<TMP_InputField>().text);
+        }
+        catch(Exception e)
+        {
+            Debug.Log(e.Message);
+            return;
+        }
+       
         GameObject.FindGameObjectWithTag("NodeBlocksManager")
                     .GetComponent<NodeBlockManager>()
-                        .AddNewFunction(inputField.GetComponent<TMP_InputField>().text);
+                        .AddNewFunction(nameField.GetComponent<TMP_InputField>().text, numberOfInput, numberOfOutput);
+
         UpdateContent();
     }
 
