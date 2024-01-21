@@ -143,17 +143,6 @@ public class ConnectionPoint : MonoBehaviour
         }
     }
 
-    public void changeDefinition()
-    {
-        GameObject
-            .FindGameObjectWithTag("NodeBlocksManager")
-            .GetComponent<NodeBlockManager>()
-            .updateTypes(connectionIndex, 
-                         nodeBlockName,
-                         typeText.GetComponent<TMP_InputField>().text,
-                         NodeBlockTypes.Function);
-    }
-
 
     void OnMouseUp()
     {

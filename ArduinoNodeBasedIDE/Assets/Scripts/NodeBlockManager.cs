@@ -27,6 +27,8 @@ public class NodeBlockManager : MonoBehaviour
     //my FunctionsList objects
     public List<NodeBlock> myFunctionList = new List<NodeBlock>();
 
+    //NodeBlock Editor
+    public GameObject nodeBlockEditor;
 
     //Documentation read helper
     public NodeBlock lineReader(string line)
@@ -312,7 +314,7 @@ public class NodeBlockManager : MonoBehaviour
         }
     }
 
-    public void updateTypes(int index, string name, string newType, NodeBlockTypes nodeBlockType)
+    public void updateInputType(int index, string name, string newType, NodeBlockTypes nodeBlockType)
     {
         NodeBlock temp;
         if (nodeBlockType.Equals(NodeBlockTypes.Function))
@@ -340,6 +342,49 @@ public class NodeBlockManager : MonoBehaviour
                     controller.inPointsList[index].GetComponent<ConnectionPoint>().changeType(newType);
                 }
            }
+        }
+    }
+
+    public void updateOutputType(string name, string newType, NodeBlockTypes nodeBlockType)
+    {
+        NodeBlock temp;
+        if (nodeBlockType.Equals(NodeBlockTypes.Function))
+        {
+            temp = myFunctionList.Find(x => x.GetName() == name);
+        }
+        else if (nodeBlockType.Equals(NodeBlockTypes.Variable))
+        {
+            temp = variableList.Find(x => x.GetName() == name);
+        }
+        else
+        {
+            temp = null;
+            Debug.Log("problem with change definition");
+        }
+
+        temp.SetOutputType(newType);
+        foreach (var view in views)
+        {
+            foreach (var node in view.Value)
+            {
+                NodeBlockController controller = node.GetComponent<NodeBlockController>();
+                if (controller != null && controller.nodeBlockName == name)
+                {
+                    controller.outPoint.GetComponent<ConnectionPoint>().changeType(newType);
+                }
+            }
+        }
+    }
+
+    public void SetNodeBlockToEdit(string name, NodeBlockTypes nodeBlockType)
+    {
+        if (nodeBlockType.Equals(NodeBlockTypes.Function))
+        {
+            nodeBlockEditor.GetComponent<NodeBlockEditor>().SetNodeBlockToEdit(myFunctionList.Find(x => x.GetName() == name));
+        }
+        else if (nodeBlockType.Equals(NodeBlockTypes.Variable))
+        {
+            nodeBlockEditor.GetComponent<NodeBlockEditor>().SetNodeBlockToEdit(variableList.Find(x => x.GetName() == name));
         }
     }
 }

@@ -22,7 +22,6 @@ public class VariableListManager : MonoBehaviour
                         .AddVariableNodeBlock(inputField.GetComponent<TMP_InputField>().text);
         UpdateContent();
     }
-    
 
     private void AddContent()
     {

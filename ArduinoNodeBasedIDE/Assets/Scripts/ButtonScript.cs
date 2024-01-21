@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class ButtonScript : MonoBehaviour
@@ -64,4 +65,26 @@ public class ButtonScript : MonoBehaviour
         }
 
     }
+
+    public void EditMyNodeBlock()
+    {
+        GameObject manager = GameObject.FindGameObjectWithTag("NodeBlocksManager");
+        if (mode == "nodeblock")
+        {
+            Debug.Log(mode);
+        }
+        else if (mode == "variable")
+        {
+            manager.GetComponent<NodeBlockManager>().SetNodeBlockToEdit(nametext, NodeBlockTypes.Variable);
+        }
+        else if (mode == "view")
+        {
+            manager.GetComponent<NodeBlockManager>().SetNodeBlockToEdit(nametext, NodeBlockTypes.Function);
+        }
+        else
+        {
+            Debug.Log(mode);
+        }
+    }
+
 }

@@ -75,6 +75,10 @@ public class NodeBlock : ICloneable{
     {
         return name;
     }
+    public int GetNumberOfInputs()
+    {
+        return inputBlockListSize;
+    }
 
     public void SetPreviousBlock(NodeBlock prev)
     {
