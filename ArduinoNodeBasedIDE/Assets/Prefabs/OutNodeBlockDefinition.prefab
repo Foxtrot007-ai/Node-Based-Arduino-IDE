@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 1080915324242369778}
   - component: {fileID: 5708123407340269315}
   - component: {fileID: 3826301454556287697}
-  - component: {fileID: 1127069385347906282}
+  - component: {fileID: 7481379354358493605}
   m_Layer: 0
   m_Name: OutNodeBlockDefinition
   m_TagString: NodeBlock
@@ -228,7 +228,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
---- !u!114 &1127069385347906282
+--- !u!114 &7481379354358493605
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -237,7 +237,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1609763804198202507}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55fd3f275560a564b8df2b176815aa9c, type: 3}
+  m_Script: {fileID: 11500000, guid: d2c33f021d5e8ff43ae21fcfff5dafeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   nodeBlockName: 

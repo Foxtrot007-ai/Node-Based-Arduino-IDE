@@ -36,6 +36,8 @@ public class NodeBlockEditor : MonoBehaviour
         for(int i = 0; i < numberOfInputs; i++)
         {
             GameObject temp = Instantiate(inputEditorPrefab, inputStartPoint.transform.position + i * inputPointIncrease, Quaternion.identity);
+            temp.transform.SetParent(this.transform);
+            temp.transform.localScale = Vector3.one;
             temp.GetComponentInChildren<TMP_InputField>().text = nodeBlock.GetInputType(i);
             inputs[i] = temp;
         }
@@ -44,6 +46,8 @@ public class NodeBlockEditor : MonoBehaviour
         if (nodeBlock.returnOutputBlock)
         {
             GameObject temp = Instantiate(outputEditorPrefab, outputStartPoint.transform.position, Quaternion.identity);
+            temp.transform.SetParent(this.transform);
+            temp.transform.localScale = Vector3.one;
             temp.GetComponentInChildren<TMP_InputField>().text = nodeBlock.GetOutputType();
             output = temp;
         }

@@ -361,6 +361,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6671570779203893367}
   - component: {fileID: 3231216482274332248}
+  - component: {fileID: 7434640992748377290}
   m_Layer: 5
   m_Name: NodeBlockEditor
   m_TagString: SearchBar
@@ -407,6 +408,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 122d2e92d17219e40a416d5bd052a594, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7434640992748377290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2375382023680369970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab54295ab6315094f99a54a105f32cac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputStartPoint: {fileID: 7159916511031176004}
+  outputStartPoint: {fileID: 2652326095934595285}
+  field: {fileID: 330928746618684597}
+  nbName: 
+  nodeBlockName: {fileID: 6017059450390491143}
+  inputEditorPrefab: {fileID: 1222616574164538317, guid: 2db1b77cabc05e845823d7f73b3e8c66, type: 3}
+  outputEditorPrefab: {fileID: 6016326570795073904, guid: b37e311885ea8034b8d8994dfec70375, type: 3}
+  inputPointIncrease: {x: 0, y: -10, z: 0}
+  numberOfInputs: 0
+  inputs: []
+  output: {fileID: 0}
 --- !u!1 &2652326095934595285
 GameObject:
   m_ObjectHideFlags: 0
@@ -822,7 +846,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -38}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6602176180990100372
 CanvasRenderer:
@@ -905,7 +929,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3730006583196016118}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7434640992748377290}
+        m_TargetAssemblyTypeName: NodeBlockEditor, Assembly-CSharp
+        m_MethodName: UpdateNodeBlockConnectionsTypes
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7159916511031176004
 GameObject:
   m_ObjectHideFlags: 0

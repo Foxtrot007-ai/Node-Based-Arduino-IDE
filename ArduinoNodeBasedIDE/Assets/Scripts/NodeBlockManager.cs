@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class NodeBlockManager : MonoBehaviour
@@ -97,7 +99,10 @@ public class NodeBlockManager : MonoBehaviour
         GameObject temp = Instantiate(nodeBlockPrefab, nodeBlockSpawnPoint, Quaternion.identity);
         NodeBlockController controller = temp.GetComponent<NodeBlockController>();
 
-        for(int i = 0; i < nodeBlock.nextBlockListSize; i++)
+        controller.SetName(name);
+        controller.type = nodeBlock.GetNodeBlockType();
+
+        for (int i = 0; i < nodeBlock.nextBlockListSize; i++)
         {
             controller.addNextBlock();
         }
@@ -117,8 +122,7 @@ public class NodeBlockManager : MonoBehaviour
             controller.addOutPoint(nodeBlock.GetOutputType());
         }
 
-        controller.SetName(name);
-        controller.type = nodeBlock.GetNodeBlockType();
+        
         views[actualView].Add(temp);
     }
 
@@ -127,6 +131,11 @@ public class NodeBlockManager : MonoBehaviour
         nodeBlockSpawnPoint.z = 0;
         GameObject temp = Instantiate(inNodeBlockPrefab, nodeBlockSpawnPoint, Quaternion.identity);
         InNodeBlockController controller = temp.GetComponent<InNodeBlockController>();
+
+        if (nodeBlock == null) Debug.Log("null");
+
+        controller.SetName(nodeBlock.GetName() + "(Begin)");
+        controller.type = nodeBlock.GetNodeBlockType();
 
         for (int i = 0; i < nodeBlock.nextBlockListSize; i++)
         {
@@ -138,8 +147,7 @@ public class NodeBlockManager : MonoBehaviour
             controller.addInPoint(i, nodeBlock.GetInputType(i));
         }
 
-        controller.SetName(nodeBlock.GetName() + "(Begin)");
-        controller.type = nodeBlock.GetNodeBlockType();
+        
         views[actualView].Add(temp);
     }
 
@@ -148,6 +156,9 @@ public class NodeBlockManager : MonoBehaviour
         nodeBlockSpawnPoint.z = 0;
         GameObject temp = Instantiate(outNodeBlockPrefab, nodeBlockSpawnPoint, Quaternion.identity);
         OutNodeBlockController controller = temp.GetComponent<OutNodeBlockController>();
+
+        controller.SetName(nodeBlock.GetName() + "(End)");
+        controller.type = nodeBlock.GetNodeBlockType();
 
         if (nodeBlock.hasPreviousBlock)
         {
@@ -159,8 +170,7 @@ public class NodeBlockManager : MonoBehaviour
             controller.addOutPoint(nodeBlock.GetOutputType());
         }
 
-        controller.SetName(nodeBlock.GetName() + "(End)");
-        controller.type = nodeBlock.GetNodeBlockType();
+       
         views[actualView].Add(temp);
     }
     public List<string> getLanguageReferenceNames()
@@ -185,6 +195,7 @@ public class NodeBlockManager : MonoBehaviour
         }
 
         NodeBlock block = new NodeBlock(name, NodeBlockTypes.Variable, 0, 1);
+        block.SetOutputType("int");
         variableList.Add(block);
     }
 
@@ -264,6 +275,16 @@ public class NodeBlockManager : MonoBehaviour
         }
 
         NodeBlock block = new NodeBlock(name, NodeBlockTypes.Function, numberOfInput, numberOfOutput);
+        for (int i = 0; i < block.inputBlockListSize; i++)
+        {
+            block.SetInputType("int", i);
+        }
+
+        if (block.returnOutputBlock)
+        {
+            block.SetOutputType("int");
+        }
+
         myFunctionList.Add(block);
         languageReferenceList.Add(block);
         views.Add(name, new List<GameObject>());
@@ -281,7 +302,6 @@ public class NodeBlockManager : MonoBehaviour
 
     public void DeleteView(string name)
     {
-        myFunctionList.RemoveAll(x => x.GetName() == name);
         languageReferenceList.RemoveAll(x => x.GetName() == name);
         foreach (var view in views)
         {
@@ -294,6 +314,11 @@ public class NodeBlockManager : MonoBehaviour
                 Destroy(node);
             }
         }
+        foreach(var obj in views[name])
+        {
+            Destroy(obj);
+        }
+        myFunctionList.RemoveAll(x => x.GetName() == name);
     }
     public void ChangeView(string name)
     {
@@ -337,9 +362,12 @@ public class NodeBlockManager : MonoBehaviour
            foreach(var node in view.Value)
            {
                 NodeBlockController controller = node.GetComponent<NodeBlockController>();
-                if (controller != null && controller.nodeBlockName == name)
+                if (controller != null)
                 {
-                    controller.inPointsList[index].GetComponent<ConnectionPoint>().changeType(newType);
+                    if (controller.nodeBlockName == name || controller.nodeBlockName == name + "(Begin)")
+                    {
+                        controller.inPointsList[index].GetComponent<ConnectionPoint>().changeType(newType);
+                    }
                 }
            }
         }
@@ -368,9 +396,13 @@ public class NodeBlockManager : MonoBehaviour
             foreach (var node in view.Value)
             {
                 NodeBlockController controller = node.GetComponent<NodeBlockController>();
-                if (controller != null && controller.nodeBlockName == name)
+                if(controller != null)
                 {
-                    controller.outPoint.GetComponent<ConnectionPoint>().changeType(newType);
+                    if (controller.nodeBlockName == name || controller.nodeBlockName == name + "(End)")
+                    {
+                        Debug.Log("changing");
+                        controller.outPoint.GetComponent<ConnectionPoint>().changeType(newType);
+                    }
                 }
             }
         }
@@ -386,5 +418,6 @@ public class NodeBlockManager : MonoBehaviour
         {
             nodeBlockEditor.GetComponent<NodeBlockEditor>().SetNodeBlockToEdit(variableList.Find(x => x.GetName() == name));
         }
+        nodeBlockEditor.SetActive(true);
     }
 }

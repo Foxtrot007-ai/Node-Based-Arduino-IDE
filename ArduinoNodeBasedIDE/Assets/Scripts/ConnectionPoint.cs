@@ -133,14 +133,12 @@ public class ConnectionPoint : MonoBehaviour
 
     public void changeType(string newType)
     {
-        if(interactiveDefinition == false)
+        typeText.GetComponent<TMP_Text>().text = newType;
+        if(connectedPoint != null && connectedPoint.GetComponent<ConnectionPoint>().type != newType)
         {
-            typeText.GetComponent<TMP_Text>().text = name;
-            if(connectedPoint.GetComponent<ConnectionPoint>().type != newType)
-            {
-                unconnect();
-            }
+            unconnect();
         }
+        
     }
 
 

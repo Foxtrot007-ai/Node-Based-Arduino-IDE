@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OutNodeBlockController : NodeBlockController
+public class InNodeBlockController : NodeBlockController
 {
     public override void addInPoint(int index, string type)
     {
