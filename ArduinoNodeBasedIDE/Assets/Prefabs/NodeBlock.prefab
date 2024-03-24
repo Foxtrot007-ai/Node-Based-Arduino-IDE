@@ -127,6 +127,7 @@ GameObject:
   - component: {fileID: 8455389059470596517}
   - component: {fileID: 5708123407340269315}
   - component: {fileID: 3826301454556287697}
+  - component: {fileID: 304676089818126332}
   m_Layer: 0
   m_Name: NodeBlock
   m_TagString: NodeBlock
@@ -168,8 +169,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee32dc2ae3026b04881ca41d69b75277, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colliding: 0
-  holding: 0
   textField: {fileID: 8907186318280223658}
   field: {fileID: 286634796701652884}
   inPointStartPoint: {fileID: 7917539778002841759}
@@ -186,6 +185,7 @@ MonoBehaviour:
   outPoint: {fileID: 0}
   nextBlockList: []
   previousBlock: {fileID: 0}
+  instantiated: 0
 --- !u!61 &5708123407340269315
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -258,6 +258,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
+--- !u!114 &304676089818126332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1609763804198202507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c41b50a1e3612b1498eca1b3020942e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colliding: 0
+  holding: 0
 --- !u!1 &1936198860718345772
 GameObject:
   m_ObjectHideFlags: 0

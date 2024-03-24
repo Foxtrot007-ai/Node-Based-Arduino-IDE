@@ -5,31 +5,39 @@ using UnityEngine;
 
 public class ShowListScript : MonoBehaviour
 {
-    public GameObject searchBarPrefab;
+    public GameObject referenceListPrefab;
     public GameObject variableListPrefab;
     public GameObject functionListPrefab;
+    public NodeBlockManager nodeBlockManager;
     public Vector3 clickPoint;
+
+    public void Start()
+    {
+        nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
+    }
+
+    private void setListActive(GameObject list)
+    {
+        clickPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        nodeBlockManager.nodeBlockSpawnPoint = clickPoint;
+        list.SetActive(true);
+    }
+
     private void OnMouseOver()
     {
         if (Input.GetKeyDown(KeyCode.D))
         {
-            clickPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>().nodeBlockSpawnPoint = clickPoint;
-            searchBarPrefab.SetActive(true);
+            setListActive(referenceListPrefab);
         }
 
         if (Input.GetKeyDown(KeyCode.V))
         {
-            clickPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>().nodeBlockSpawnPoint = clickPoint;
-            variableListPrefab.SetActive(true);
+            setListActive(variableListPrefab);
         }
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            clickPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>().nodeBlockSpawnPoint = clickPoint;
-            functionListPrefab.SetActive(true);
+            setListActive(functionListPrefab);
         }
     }
 }

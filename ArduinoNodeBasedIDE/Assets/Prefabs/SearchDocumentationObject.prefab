@@ -1381,7 +1381,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5201300307414339953}
   - component: {fileID: 2676232153480152049}
-  - component: {fileID: 7017177070521369689}
+  - component: {fileID: 2633945749513047709}
   m_Layer: 5
   m_Name: SearchDocumentationObject
   m_TagString: SearchBar
@@ -1425,7 +1425,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 122d2e92d17219e40a416d5bd052a594, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7017177070521369689
+--- !u!114 &2633945749513047709
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1434,7 +1434,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8401217613786574437}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ef7ade47e511764b9be8ce82ff3bba7, type: 3}
+  m_Script: {fileID: 11500000, guid: c0d61f89d34c11d4481fbdb71016632f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   lastInput: 
@@ -1442,6 +1442,7 @@ MonoBehaviour:
   listContainer: {fileID: 2826599741821864565}
   buttonContent: {fileID: 6683723637829887773, guid: ca19610af70cc8743b72bbb0ea4ba1f4, type: 3}
   contentObjects: []
+  nodeBlockManager: {fileID: 0}
 --- !u!1 &8440534470342536182
 GameObject:
   m_ObjectHideFlags: 0

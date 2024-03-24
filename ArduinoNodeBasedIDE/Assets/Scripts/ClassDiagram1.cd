@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ListManager">
+    <Position X="7.25" Y="12.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEEEAiAAAIAABAAACCAAAAAAAAACAAAAAAAAAIA=</HashCode>
+      <FileName>Assets\Scripts\ListManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ReferenceListManager">
+    <Position X="9.5" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\ReferenceListManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VariableListManager">
+    <Position X="7.25" Y="16.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAIAAACAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\VariableListManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FunctionListManager">
+    <Position X="5" Y="16.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAQIABACAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\FunctionListManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ButtonScript">
+    <Position X="13.75" Y="12.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAUAACAAAAAEAAAAAAAAAAAAAAAIAAAAAYAAAAA=</HashCode>
+      <FileName>Assets\Scripts\ButtonScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VariableButtonScript">
+    <Position X="16.25" Y="16.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Assets\Scripts\VariableButtonScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ReferenceButtonScript">
+    <Position X="14" Y="16.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Assets\Scripts\ReferenceButtonScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FunctionButtonScript">
+    <Position X="11.75" Y="16.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Assets\Scripts\FunctionButtonScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NodeBlockManager">
+    <Position X="2.25" Y="1.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAgAQAQAMCAAAAEAQACAIAAAAACAAAAAAAJAAICgQAA=</HashCode>
+      <FileName>Assets\Scripts\NodeBlockManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LanguageReferenceParser">
+    <Position X="6" Y="1.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAIQAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\LanguageReferenceParser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraController">
+    <Position X="20.75" Y="1.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAgABCAAAAAAAAAEAFAAAAAAAEAEAAAgAACgAEA=</HashCode>
+      <FileName>Assets\Scripts\CameraController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConnectionPoint">
+    <Position X="13.5" Y="3.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAUAAICBAiEABAAgAAIAAAABAAAJCQQUAEBAAQASAAA=</HashCode>
+      <FileName>Assets\Scripts\ConnectionPoint.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DisableSelf">
+    <Position X="10.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\DisableSelf.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Dragable">
+    <Position X="10.25" Y="1.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAQAAAAABAAEAAIAAQEAAAgAAASAAA=</HashCode>
+      <FileName>Assets\Scripts\Draggable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NodeBlock">
+    <Position X="16.25" Y="1" Width="2" />
+    <TypeIdentifier>
+      <HashCode>IAAAEKAAAQAgAEAAAAAAAAQHIAIEAAAAAgigQAAEJBk=</HashCode>
+      <FileName>Assets\Scripts\NodeBlock.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="NodeBlockController">
+    <Position X="10.25" Y="4.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AACAAEBABQAgBBIBAQAACAIBBAEBGAAAAAAAAQkAAIA=</HashCode>
+      <FileName>Assets\Scripts\NodeBlockController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NodeBlockEditor">
+    <Position X="2.25" Y="6.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>ACCAEAEAACAAAQAIAAABAQAECIAAABAAAABFABAAQAA=</HashCode>
+      <FileName>Assets\Scripts\NodeBlockEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NodeBlockEnviroment">
+    <Position X="5.5" Y="6.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>QAAEAAAAEAAAAAAAAAAAAAAEQAAAgCAAAAAAAAAgAAg=</HashCode>
+      <FileName>Assets\Scripts\NodeBlockEnviroment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ShowListScript">
+    <Position X="4.25" Y="12.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAEAACAAAIAABAAAAAAAAAAAAAAAEAAgAAAQAAA=</HashCode>
+      <FileName>Assets\Scripts\ShowListScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ViewsManager">
+    <Position X="6" Y="3.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAQAAAAAAAEAAAAAAAAAAAAAAAAAABSAAAIAAAA=</HashCode>
+      <FileName>Assets\Scripts\ViewsManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="NodeBlockTypes">
+    <Position X="16.25" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAIEAAAAAAgAAAQAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\NodeBlock.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

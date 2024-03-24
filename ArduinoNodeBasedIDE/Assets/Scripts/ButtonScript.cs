@@ -1,90 +1,34 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 using TMPro;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class ButtonScript : MonoBehaviour
 {
     public GameObject text;
-    public string nametext;
-    public string mode;
+    public NodeBlock node;
+    public NodeBlockManager nodeBlockManager;
 
-    public void SetMode(string mode)
+    public void Start()
     {
-        this.mode = mode;
-    }
-    public void SetName(string name)
-    {
-        nametext = name;
-        text.GetComponent<TMP_Text>().text = name;
-    }
-    public void CreateNode()
-    {
-        GameObject manager = GameObject.FindGameObjectWithTag("NodeBlocksManager");
-        if (mode == "nodeblock")
-        {
-            manager.GetComponent<NodeBlockManager>().SpawnNodeBlock(nametext);
-        }
-        else if (mode == "variable")
-        {
-            manager.GetComponent<NodeBlockManager>().SpawnVariableNodeBlock(nametext);
-        }
-        else if (mode == "view")
-        {
-            manager.GetComponent<NodeBlockManager>().ChangeView(nametext);
-        } 
-        else
-        {
-            Debug.Log(mode);
-        }    
-    }
-    public void DeleteNode()
-    {
-        GameObject manager = GameObject.FindGameObjectWithTag("NodeBlocksManager");
-        if (mode == "nodeblock")
-        {
-            Debug.Log(mode);
-        }
-        else if (mode == "variable")
-        {
-            manager.GetComponent<NodeBlockManager>().DeleteVariable(nametext);
-            GameObject.FindGameObjectWithTag("VariableList").GetComponent<VariableListManager>().UpdateContent();
-
-        }
-        else if (mode == "view")
-        {
-            manager.GetComponent<NodeBlockManager>().DeleteView(nametext);
-            GameObject.FindGameObjectWithTag("FunctionList").GetComponent<FunctionListManager>().UpdateContent();
-        }
-        else
-        {
-            Debug.Log(mode);
-        }
-
+        nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
     }
 
-    public void EditMyNodeBlock()
+    public void SetNodeBlock(NodeBlock node)
     {
-        GameObject manager = GameObject.FindGameObjectWithTag("NodeBlocksManager");
-        if (mode == "nodeblock")
-        {
-            Debug.Log(mode);
-        }
-        else if (mode == "variable")
-        {
-            manager.GetComponent<NodeBlockManager>().SetNodeBlockToEdit(nametext, NodeBlockTypes.Variable);
-        }
-        else if (mode == "view")
-        {
-            manager.GetComponent<NodeBlockManager>().SetNodeBlockToEdit(nametext, NodeBlockTypes.Function);
-        }
-        else
-        {
-            Debug.Log(mode);
-        }
+        this.node = node;
+        text.GetComponent<TMP_Text>().text = node.GetName();
+    }
+    public virtual void SpawnNodeBlock()
+    {
+        nodeBlockManager.SpawnNodeBlock(this, node);
+    }
+    public virtual void DeleteNodeBlock()
+    {
+        nodeBlockManager.DeleteNodeBlock(this, node);
+    }
+
+    public virtual void EditMyNodeBlock()
+    {
+        nodeBlockManager.SetNodeBlockToEdit(this, node);
     }
 
 }

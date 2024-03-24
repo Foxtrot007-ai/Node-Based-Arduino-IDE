@@ -19,16 +19,15 @@ public class NodeBlockEnviroment
 
     private void fillFunction(ref NodeBlock function)
     {
-        string functionName = function.GetName();
-        List<GameObject> blocks = manager.views[functionName];
+        List<GameObject> blocks = manager.viewsManager.views[function];
         List<NodeBlock> nodeblocks = new List<NodeBlock>();
         foreach(GameObject block in blocks)
         {
-            NodeBlockController nbController = block.GetComponent<NodeBlockController>();
-            NodeBlock temp = new NodeBlock(nbController.nodeBlockName, 
-                                           nbController.type, 
-                                           nbController.inPointsList.Count, 
-                                           nbController.outPoint != null ? 1 : 0);
+            NodeBlock node = block.GetComponent<NodeBlockController>().nodeBlock;
+            NodeBlock temp = new NodeBlock(node.GetName(),
+                                           node.GetNodeBlockType(),
+                                           node.GetNumberOfInputs(),
+                                           node.GetOutputBlock() != null ? 1 : 0);
             nodeblocks.Add(temp);
         }
         

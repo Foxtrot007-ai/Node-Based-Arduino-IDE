@@ -1,37 +1,35 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using TMPro;
+using UnityEditor.MemoryProfiler;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class ConnectionPoint : MonoBehaviour
 {
-    public string nodeBlockName;
+    public NodeBlockController nodeBlockController;
+
     public string type;
     public string connectionType;
-    public bool interactiveDefinition = false;
-    public GameObject typeText;
+    
     public int connectionIndex;
-    Vector3[] points = new Vector3[2];
+  
     public string[] availableConnections = {"InPoint|OutPoint","OutPoint|InPoint","PreviousBlockPoint|NextBlockPoint","NextBlockPoint|PreviousBlockPoint"};
     string[] tags = { "InPoint", "OutPoint", "PreviousBlockPoint", "NextBlockPoint" };
+
     public GameObject connectedPoint;
+    public GameObject typeText;
+    public GameObject line;
+
+    Vector3[] points = new Vector3[2];
     Vector2 directionPoint;
     public bool holding = false;
-    public GameObject line;
     public bool showLine;
-    // Start is called before the first frame update
+
     void Start()
     {
         showLine = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(transform.position != points[0])
@@ -58,6 +56,13 @@ public class ConnectionPoint : MonoBehaviour
         }
 
     }
+    public void InstantiateConnection(NodeBlockController nodeBlockController, string type, int connectionIndex)
+    {
+        this.nodeBlockController = nodeBlockController;
+        SetType(type);
+        this.connectionIndex = connectionIndex;
+    }
+
 
     public void SetType(string type)
     {
@@ -84,14 +89,12 @@ public class ConnectionPoint : MonoBehaviour
     }
     private void OnMouseOver()
     {
-        Debug.Log("MouseOver");
         if (Input.GetMouseButtonDown(0) && connectedPoint == null)
         {
             points[0] = transform.position;
             directionPoint = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;
             holding = true;
             showLine = true;
-            Debug.Log("Clicked");
         }
 
         if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.LeftControl))
@@ -142,7 +145,7 @@ public class ConnectionPoint : MonoBehaviour
     }
 
 
-    void OnMouseUp()
+    private void OnMouseUp()
     {
         if(connectedPoint != null)
         {

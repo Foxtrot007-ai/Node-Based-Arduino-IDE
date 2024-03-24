@@ -228,6 +228,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &554437252 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5816052060480119176, guid: 6bd3dd7732430614c9b9f72372a47af7, type: 3}
+  m_PrefabInstance: {fileID: 4410092983361268515}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1067419433 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3719265631846773163, guid: 997ba3b2adc64c449bc1e05e756caaef, type: 3}
@@ -1026,6 +1031,14 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3905177173411270212, guid: 6bd3dd7732430614c9b9f72372a47af7, type: 3}
+      propertyPath: nameField
+      value: 
+      objectReference: {fileID: 554437252}
+    - target: {fileID: 3905177173411270212, guid: 6bd3dd7732430614c9b9f72372a47af7, type: 3}
+      propertyPath: buttonContent
+      value: 
+      objectReference: {fileID: 6683723637829887773, guid: 589de8d2bccfebd4c8f36dbefafd0c76, type: 3}
     - target: {fileID: 5556462246644262484, guid: 6bd3dd7732430614c9b9f72372a47af7, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

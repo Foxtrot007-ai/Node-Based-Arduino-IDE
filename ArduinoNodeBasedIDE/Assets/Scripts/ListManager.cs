@@ -7,51 +7,61 @@ public class ListManager : MonoBehaviour
 {
 
     public string lastInput = "";
+
     public GameObject inputField;
     public GameObject listContainer;
     public GameObject buttonContent;
     public List<GameObject> contentObjects;
-    void Start()
+    public NodeBlockManager nodeBlockManager;
+
+    public void Start()
     {
+        nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
         lastInput = "";
         AddContent();
     }
-    void Update()
+    public void Update()
     {
         string readInput = inputField.GetComponent<TMP_InputField>().text;
 
         if(readInput != lastInput)
         {
             lastInput = readInput;
-            DestroyContent();
-            AddContent();
+            UpdateContent();
         }
     }
-    private void AddContent()
+    protected virtual List<NodeBlock> GetNodeBlocks()
     {
-        List<string> namesList = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>().getLanguageReferenceNames();
-        
-        foreach(string s in namesList)
+        return nodeBlockManager.SearchNodeBlocks(this, lastInput);
+    }
+    protected void AddContent()
+    {
+        List<NodeBlock> containsList = GetNodeBlocks();
+
+        foreach(NodeBlock node in containsList)
         {
-            if (s.Contains(lastInput))
-            {
-                GameObject newContent = Instantiate(buttonContent);
-                newContent.transform.SetParent(listContainer.transform);
-                newContent.GetComponent<ButtonScript>().SetName(s);
-                newContent.GetComponent<ButtonScript>().SetMode("nodeblock");
-                contentObjects.Add(newContent);
-                newContent.transform.localScale = Vector3.one;
-            }
+            GameObject newContent = Instantiate(buttonContent);
+            newContent.transform.SetParent(listContainer.transform);
+            newContent.GetComponent<ButtonScript>().SetNodeBlock(node);
+            contentObjects.Add(newContent);
+            newContent.transform.localScale = Vector3.one;
         }
+
     }
 
-    private void DestroyContent()
+    protected void DestroyContent()
     {
-        foreach(var content in contentObjects)
+        foreach(GameObject content in contentObjects)
         {
             Destroy(content);
         }
 
         contentObjects.Clear();
+    }
+
+    protected void UpdateContent()
+    {
+        DestroyContent();
+        AddContent();
     }
 }

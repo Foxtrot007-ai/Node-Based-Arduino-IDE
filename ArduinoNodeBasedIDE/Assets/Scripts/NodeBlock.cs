@@ -57,7 +57,18 @@ public class NodeBlock : ICloneable{
                 nextBlockList = new NodeBlock[2];
             }
         }
-        
+
+        //setdefaults types
+        for (int i = 0; i < inputBlockListSize; i++)
+        {
+            SetInputType("int", i);
+        }
+
+        if (returnOutputBlock)
+        {
+            SetOutputType("int");
+        }
+
     }
 
     public object Clone()

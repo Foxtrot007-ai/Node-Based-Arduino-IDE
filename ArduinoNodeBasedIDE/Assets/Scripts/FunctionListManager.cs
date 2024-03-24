@@ -5,17 +5,15 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FunctionListManager : MonoBehaviour
+public class FunctionListManager : ListManager
 {
     public GameObject nameField;
-    public GameObject inputField;
+    public GameObject numberOfInputField;
     public GameObject outputField;
-    public GameObject listContainer;
-    public GameObject buttonContent;
-    public List<GameObject> contentObjects;
-    void Start()
+
+    protected override List<NodeBlock> GetNodeBlocks()
     {
-        AddContent();
+        return nodeBlockManager.SearchNodeBlocks(this, lastInput);
     }
 
     public void CreateNewFunction()
@@ -25,7 +23,7 @@ public class FunctionListManager : MonoBehaviour
 
         try
         {
-            numberOfInput = Convert.ToInt32(inputField.GetComponent<TMP_InputField>().text);
+            numberOfInput = Convert.ToInt32(numberOfInputField.GetComponent<TMP_InputField>().text);
             numberOfOutput = Convert.ToInt32(outputField.GetComponent<TMP_InputField>().text);
         }
         catch(Exception e)
@@ -34,43 +32,9 @@ public class FunctionListManager : MonoBehaviour
             return;
         }
        
-        GameObject.FindGameObjectWithTag("NodeBlocksManager")
-                    .GetComponent<NodeBlockManager>()
-                        .AddNewFunction(nameField.GetComponent<TMP_InputField>().text, numberOfInput, numberOfOutput);
+        nodeBlockManager.AddNodeBlock(nameField.GetComponent<TMP_InputField>().text, numberOfInput, numberOfOutput);
 
         UpdateContent();
-    }
-
-
-    private void AddContent()
-    {
-        List<string> namesList = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>().getFunctionsNames();
-
-        foreach (string s in namesList)
-        {
-            GameObject newContent = Instantiate(buttonContent);
-            newContent.transform.SetParent(listContainer.transform);
-            newContent.GetComponent<ButtonScript>().SetName(s);
-            newContent.GetComponent<ButtonScript>().SetMode("view");
-            contentObjects.Add(newContent);
-            newContent.transform.localScale = Vector3.one;
-        }
-    }
-
-    private void DestroyContent()
-    {
-        foreach (var content in contentObjects)
-        {
-            Destroy(content);
-        }
-
-        contentObjects.Clear();
-    }
-
-    public void UpdateContent()
-    {
-        DestroyContent();
-        AddContent();
     }
 }
 

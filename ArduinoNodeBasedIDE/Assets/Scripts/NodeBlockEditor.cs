@@ -7,52 +7,69 @@ using UnityEngine.UI;
 
 public class NodeBlockEditor : MonoBehaviour
 {
-    public GameObject inputStartPoint;
-    public GameObject outputStartPoint;
-    public GameObject field;
-
     public NodeBlock currentNodeBlock;
 
-    public string nbName;
     public GameObject nodeBlockName;
 
     public GameObject inputEditorPrefab;
     public GameObject outputEditorPrefab;
+
+    public GameObject inputStartPoint;
+    public GameObject outputStartPoint;
+
     public Vector3 inputPointIncrease;
-    public int numberOfInputs;
+
     public GameObject[] inputs;
+
     public GameObject output;
+
+    public NodeBlockManager nodeBlockManager;
+
+    public void Start()
+    {
+        nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
+    }
     public void SetNodeBlockToEdit(NodeBlock nodeBlock)
     {
-        nbName = nodeBlock.GetName();
-        nodeBlockName.GetComponent<TMP_Text>().text = nbName;
-
+        currentNodeBlock = nodeBlock;
+        UpdateField();
         CleanEditor();
+        InstantiateInputs();
+        InstantiateOutput();
+    }
 
-        numberOfInputs = nodeBlock.GetNumberOfInputs();
+    public void UpdateField()
+    {
+        nodeBlockName.GetComponent<TMP_Text>().text = currentNodeBlock.GetName();
+    }
+
+    public void InstantiateInputs() 
+    {
+        int numberOfInputs = currentNodeBlock.GetNumberOfInputs();
 
         inputs = new GameObject[numberOfInputs];
 
-        for(int i = 0; i < numberOfInputs; i++)
+        for (int i = 0; i < numberOfInputs; i++)
         {
-            GameObject temp = Instantiate(inputEditorPrefab, inputStartPoint.transform.position + i * inputPointIncrease, Quaternion.identity);
-            temp.transform.SetParent(this.transform);
-            temp.transform.localScale = Vector3.one;
-            temp.GetComponentInChildren<TMP_InputField>().text = nodeBlock.GetInputType(i);
-            inputs[i] = temp;
+            inputs[i] = CreatePort(inputEditorPrefab, inputStartPoint.transform.position + i * inputPointIncrease, currentNodeBlock.GetInputType(i));
         }
+    }
 
-
-        if (nodeBlock.returnOutputBlock)
+    public void InstantiateOutput()
+    {
+        if (currentNodeBlock.returnOutputBlock)
         {
-            GameObject temp = Instantiate(outputEditorPrefab, outputStartPoint.transform.position, Quaternion.identity);
-            temp.transform.SetParent(this.transform);
-            temp.transform.localScale = Vector3.one;
-            temp.GetComponentInChildren<TMP_InputField>().text = nodeBlock.GetOutputType();
-            output = temp;
+            output = CreatePort(outputEditorPrefab, outputStartPoint.transform.position, currentNodeBlock.GetOutputType());
         }
+    }
 
-        currentNodeBlock = nodeBlock;
+    public GameObject CreatePort(GameObject prefab, Vector3 point, string type)
+    { 
+        GameObject temp = Instantiate(prefab, point, Quaternion.identity);
+        temp.transform.SetParent(this.transform);
+        temp.transform.localScale = Vector3.one;
+        temp.GetComponentInChildren<TMP_InputField>().text = type;
+        return temp;
     }
 
     public void CleanEditor()
@@ -70,22 +87,20 @@ public class NodeBlockEditor : MonoBehaviour
 
     public void UpdateNodeBlockConnectionsTypes()
     {
-        NodeBlockManager manager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
-        for (int i = 0; i < numberOfInputs; i++)
+        for (int i = 0; i < currentNodeBlock.GetNumberOfInputs(); i++)
         {
             string newType = inputs[i].GetComponentInChildren<TMP_InputField>().text;
             if (newType != currentNodeBlock.GetInputType(i)) {
-                manager.updateInputType(i, nbName, newType, currentNodeBlock.GetNodeBlockType());
+                nodeBlockManager.updateInputType(i, newType, currentNodeBlock);
             } 
         }
-
 
         if (currentNodeBlock.returnOutputBlock)
         {
             string newType = output.GetComponentInChildren<TMP_InputField>().text;
             if (newType != currentNodeBlock.GetOutputType())
             {
-                manager.updateOutputType(nbName, newType, currentNodeBlock.GetNodeBlockType());
+                nodeBlockManager.updateOutputType(newType, currentNodeBlock);
             }
         }
     }

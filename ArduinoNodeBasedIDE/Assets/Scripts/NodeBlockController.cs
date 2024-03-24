@@ -9,13 +9,8 @@ using UnityEngine;
 
 public class NodeBlockController : MonoBehaviour
 {
-    public string nodeBlockName;
-    public NodeBlockTypes type;
+    public NodeBlock nodeBlock;
 
-    protected Vector2 originPoint;
-    protected Vector2 directionPoint;
-    public bool colliding = false;
-    public bool holding = false;
     public GameObject textField;
 
     public GameObject field;
@@ -38,120 +33,65 @@ public class NodeBlockController : MonoBehaviour
     public List<GameObject> nextBlockList = new List<GameObject>();
     public GameObject previousBlock = null;
 
-    public virtual void addInPoint(int index, string type)
-    {
-        GameObject newPoint = Instantiate(inPointPrefab, inPointStartPoint.transform.position, Quaternion.identity);
-        newPoint.transform.SetParent(this.transform);
-        ConnectionPoint connection = newPoint.GetComponent<ConnectionPoint>();
-        connection.nodeBlockName = nodeBlockName;
-        connection.SetType(type);
-        connection.connectionIndex = index;
-        inPointStartPoint.transform.position += inPointStartPointIncrease;
-        inPointsList.Add(newPoint);
-    }
+    public bool instantiated = false;
 
-    public virtual void addOutPoint(string type)
+    public void InstantiateNodeBlockController(NodeBlock node)
     {
-        if(outPoint != null)
+        if(instantiated)
         {
             return;
         }
 
-        GameObject newPoint = Instantiate(outPointPrefab, outPointStartPoint.transform.position, Quaternion.identity);
-        newPoint.transform.SetParent(this.transform);
+        instantiated = true;
+
+        SetNodeBlock(node);
+        AddInPoints();
+        AddOutPoint();
+        AddNextBlocks();
+        AddPreviousBlock();
+    }
+
+    private GameObject CreatePoint(GameObject prefab, Vector3 spawnPoint, NodeBlock nodeBlock, string type, int connectionIndex, Transform parent)
+    {
+        GameObject newPoint = Instantiate(prefab, spawnPoint, Quaternion.identity);
+        newPoint.transform.SetParent(parent);
         ConnectionPoint connection = newPoint.GetComponent<ConnectionPoint>();
-        connection.nodeBlockName = nodeBlockName;
-        connection.SetType(type);
-        connection.connectionIndex = 0;
-        outPoint = newPoint;
+        connection.InstantiateConnection(this, type, connectionIndex);
+        return newPoint;
     }
-
-    public void addNextBlock()
+    private void AddInPoints()
     {
-        GameObject newPoint = Instantiate(nextBlockPrefab, nextBlockStartPoint.transform.position, Quaternion.identity);
-        newPoint.transform.SetParent(this.transform);
-        ConnectionPoint connection = newPoint.GetComponent<ConnectionPoint>();
-        connection.nodeBlockName = nodeBlockName;
-        connection.SetType("");
-        connection.connectionIndex = 0;
-        nextBlockStartPoint.transform.position += nextBlockStartPointIncrease;
-        nextBlockList.Add(newPoint);
-    }
-    public void addPreviousBlock()
-    {
-        if(previousBlock != null)
+        for(int i = 0; i < nodeBlock.GetNumberOfInputs(); i++)
         {
-            return;
-        }
-
-        GameObject newPoint = Instantiate(previousBlockPrefab, previousBlockStartPoint.transform.position, Quaternion.identity);
-        newPoint.transform.SetParent(this.transform);
-        ConnectionPoint connection = newPoint.GetComponent<ConnectionPoint>();
-        connection.nodeBlockName = nodeBlockName;
-        connection.SetType("");
-        connection.connectionIndex = 0;
-        previousBlock = newPoint;
-    }
-
-    public void SetName(string name)
-    {
-        textField.GetComponent<TMP_Text>().text = name;
-        this.nodeBlockName = name;
-    }
-
-    public virtual void DestroyMe()
-    {
-        Destroy(gameObject);
-    }
-    protected void OnMouseOver()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            originPoint = transform.position;
-            directionPoint = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;
-            holding = true;
-        }
-
-        if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.LeftControl))
-        {
-            DestroyMe();
+            GameObject newInPoint = CreatePoint(inPointPrefab, inPointStartPoint.transform.position, nodeBlock, nodeBlock.GetInputType(i), i, this.transform);
+            inPointsList.Add(newInPoint);
+            inPointStartPoint.transform.position += inPointStartPointIncrease;
         }
     }
-    protected void OnMouseDrag()
+
+    private void AddOutPoint()
     {
-        if (holding)
-        {
-            Vector2 moveVector = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - directionPoint;
-            transform.position = moveVector;
-        }
-        
+        outPoint = CreatePoint(outPointPrefab, outPointStartPoint.transform.position, nodeBlock, nodeBlock.GetOutputType(), 0, this.transform);
     }
 
-    protected void OnMouseUp()
+    private void AddNextBlocks()
     {
-        if (colliding)
+        for (int i = 0; i < nodeBlock.GetNumberOfInputs(); i++)
         {
-            transform.position = originPoint;
-        }
-
-        holding = false;
-
-    }
-
-    protected void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(collision.gameObject.tag == "NodeBlock")
-        {
-            colliding = true;
+            GameObject newNextPoint = CreatePoint(nextBlockPrefab, nextBlockStartPoint.transform.position, nodeBlock, "", 0, this.transform);
+            nextBlockList.Add(newNextPoint);
+            nextBlockStartPoint.transform.position += nextBlockStartPointIncrease;
         }  
     }
-
-    protected void OnCollisionExit2D(Collision2D collision)
+    private void AddPreviousBlock()
     {
-        if (collision.gameObject.tag == "NodeBlock")
-        {
-            colliding = false;
-        }
+        previousBlock = CreatePoint(previousBlockPrefab, previousBlockStartPoint.transform.position, nodeBlock, "", 0, this.transform);
+    }
+
+    private void SetNodeBlock(NodeBlock node)
+    {
+        this.nodeBlock = node;
+        textField.GetComponent<TMP_Text>().text = nodeBlock.GetName();
     }
 }
 
