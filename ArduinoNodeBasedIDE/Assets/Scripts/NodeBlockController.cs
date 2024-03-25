@@ -10,6 +10,7 @@ using UnityEngine;
 public class NodeBlockController : MonoBehaviour
 {
     public NodeBlock nodeBlock;
+    public List<NodeBlock> list;
 
     public GameObject textField;
 
@@ -35,7 +36,12 @@ public class NodeBlockController : MonoBehaviour
 
     public bool instantiated = false;
 
-    public void InstantiateNodeBlockController(NodeBlock node)
+    public NodeBlockManager nodeBlockManager;
+    public void Start()
+    {
+        nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
+    }
+    public void InstantiateNodeBlockController(NodeBlock node, List<NodeBlock> list)
     {
         if(instantiated)
         {
@@ -44,11 +50,49 @@ public class NodeBlockController : MonoBehaviour
 
         instantiated = true;
 
+        this.list = list;
         SetNodeBlock(node);
         AddInPoints();
         AddOutPoint();
         AddNextBlocks();
         AddPreviousBlock();
+    }
+    private void Unconnect(GameObject point)
+    {
+        ConnectionPoint connection = point.GetComponent<ConnectionPoint>();
+        if (connection.connectedPoint != null)
+        {
+            connection.Unconnect();
+        }
+        
+    }
+    public void UnconnectAll()
+    {
+        foreach(var point in inPointsList)
+        {
+            Unconnect(point);
+        }
+
+        if(outPoint != null)
+        {
+            Unconnect(outPoint);
+        }
+
+        foreach (var point in nextBlockList)
+        {
+            Unconnect(point);
+        }
+
+        if (previousBlock != null)
+        {
+            Unconnect(previousBlock);
+        }
+    }
+    public void TurnOffMe()
+    {
+        UnconnectAll();
+        nodeBlockManager.originator.State = new DeleteAction(gameObject);
+        gameObject.SetActive(false);
     }
 
     private GameObject CreatePoint(GameObject prefab, Vector3 spawnPoint, NodeBlock nodeBlock, string type, int connectionIndex, Transform parent)

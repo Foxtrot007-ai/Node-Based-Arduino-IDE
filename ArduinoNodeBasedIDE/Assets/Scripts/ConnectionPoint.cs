@@ -7,6 +7,7 @@ using UnityEngine;
 public class ConnectionPoint : MonoBehaviour
 {
     public NodeBlockController nodeBlockController;
+    public NodeBlockManager nodeBlockManager;
 
     public string type;
     public string connectionType;
@@ -27,12 +28,40 @@ public class ConnectionPoint : MonoBehaviour
 
     void Start()
     {
+        nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
         showLine = false;
+    }
+
+    private string GetTypeFromController()
+    {
+        if(connectionType == "InPoint")
+        {
+            return nodeBlockController.nodeBlock.GetInputType(connectionIndex);
+        }
+        else if (connectionType == "OutPoint")
+        {
+            return nodeBlockController.nodeBlock.GetOutputType();
+        }
+        else
+        {
+            return "";
+        }
+    }
+    private void UpdateType()
+    {
+        string currentType = GetTypeFromController();
+        if (currentType != type)
+        {
+            SetType(currentType);
+
+        }
     }
 
     void Update()
     {
-        if(transform.position != points[0])
+        UpdateType();
+
+        if (transform.position != points[0])
         {
             points[0] = transform.position;
             DrawLine();
@@ -70,6 +99,10 @@ public class ConnectionPoint : MonoBehaviour
         if(connectionType == "InPoint" || connectionType == "OutPoint")
         {
             typeText.GetComponent<TMP_Text>().text = type;
+            if (connectedPoint != null && connectedPoint.GetComponent<ConnectionPoint>().type != type)
+            {
+                Unconnect();
+            }
         }
         
     }
@@ -99,20 +132,21 @@ public class ConnectionPoint : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.LeftControl))
         {
-            unconnect();
+            Unconnect();
         }
     }
 
-    private void unconnect()
+    public void Unconnect()
     {
         if (connectedPoint != null)
         {
             connectedPoint.GetComponent<ConnectionPoint>().connectedPoint = null;
         }
-
+        nodeBlockManager.originator.State = new UnconnectAction(this, connectedPoint);
         connectedPoint = null;
         showLine = false;
         ClearLine();
+        
     }
 
     private void OnMouseDrag()
@@ -134,17 +168,6 @@ public class ConnectionPoint : MonoBehaviour
         return availableConnections.Contains(myConnection) && type == otherType;
     }
 
-    public void changeType(string newType)
-    {
-        typeText.GetComponent<TMP_Text>().text = newType;
-        if(connectedPoint != null && connectedPoint.GetComponent<ConnectionPoint>().type != newType)
-        {
-            unconnect();
-        }
-        
-    }
-
-
     private void OnMouseUp()
     {
         if(connectedPoint != null)
@@ -162,6 +185,7 @@ public class ConnectionPoint : MonoBehaviour
         {
             connectedPoint = hit.collider.gameObject;
             hit.collider.gameObject.GetComponent<ConnectionPoint>().connectedPoint = gameObject;
+            nodeBlockManager.originator.State = new ConnectAction(this, connectedPoint);
         }
         else
         {

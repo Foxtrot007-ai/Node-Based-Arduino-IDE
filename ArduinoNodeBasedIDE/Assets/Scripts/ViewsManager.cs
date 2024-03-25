@@ -61,29 +61,4 @@ public class ViewsManager
             }
         }
     }
-    public void UpdateTypes(int index, string newType, NodeBlock node)
-    {
-        foreach (var view in views)
-        {
-            foreach (var obj in view.Value)
-            {
-                NodeBlockController controller = obj.GetComponent<NodeBlockController>();
-                if (controller != null)
-                {
-                    if (controller.nodeBlock.Equals(node))
-                    {
-                        if (index != -1)
-                        {
-                            controller.nodeBlock.SetInputType(newType, index);
-                            controller.inPointsList[index].GetComponent<ConnectionPoint>().changeType(newType);
-                        }else {
-                            controller.nodeBlock.SetOutputType(newType);
-                            controller.outPoint.GetComponent<ConnectionPoint>().changeType(newType);
-                        }
-                        
-                    }
-                }
-            }
-        }
-    }
 }

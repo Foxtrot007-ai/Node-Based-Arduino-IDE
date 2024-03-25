@@ -25,9 +25,13 @@ public class NodeBlockManager : MonoBehaviour
     //NodeBlock Editor
     public GameObject nodeBlockEditor;
 
+    //Memento
+    public Originator originator;
+
     // Start is called before the first frame update
     void Start()
     {
+        originator = GameObject.FindGameObjectWithTag("UndoRedo").GetComponent<UndoRedoManager>().originator;
         languageReferenceList = languageReferenceParser.loadReferenceList();
         instantiateBasicFunctions();
     }
@@ -75,18 +79,20 @@ public class NodeBlockManager : MonoBehaviour
     }
 
     //SpawnNodeBlock section
-    public void SpawnNodeBlock(List<NodeBlock> list, NodeBlock node)
+    public GameObject SpawnNodeBlock(List<NodeBlock> list, NodeBlock node)
     {
         if (!list.Contains(node))
         {
-            return;
+            return null;
         }
 
         nodeBlockSpawnPoint.z = 0;
         GameObject nodeBlockObject = Instantiate(nodeBlockPrefab, nodeBlockSpawnPoint, Quaternion.identity);
-        nodeBlockObject.GetComponent<NodeBlockController>().InstantiateNodeBlockController(node);
+        nodeBlockObject.GetComponent<NodeBlockController>().InstantiateNodeBlockController(node, list);
 
         viewsManager.AddToView(nodeBlockObject);
+        originator.State = new SpawnAction(nodeBlockObject);
+        return nodeBlockObject;
     }
     public void SpawnNodeBlock(ButtonScript button, NodeBlock node)
     {
@@ -103,7 +109,9 @@ public class NodeBlockManager : MonoBehaviour
     }
     public void SpawnNodeBlock(FunctionButtonScript button, NodeBlock node)
     {
+        NodeBlock oldView = viewsManager.actualView;
         viewsManager.ChangeView(node);
+        originator.State = new ChangeViewAction(oldView, node);
         //SpawnNodeBlock(myFunctionList, node);
     }
 
@@ -161,14 +169,16 @@ public class NodeBlockManager : MonoBehaviour
 
     public void updateInputType(int index, string newType, NodeBlock node)
     {
+        string oldType = node.GetInputType(index);
         node.SetInputType(newType, index);
-        viewsManager.UpdateTypes(index, newType, node);
+        originator.State = new EditAction(node, oldType, newType, index);
     }
 
     public void updateOutputType(string newType, NodeBlock node)
     {
+        string oldType = node.GetOutputType();
         node.SetOutputType(newType);
-        viewsManager.UpdateTypes(-1, newType, node);
+        originator.State = new EditAction(node, oldType, newType, -1);
     }
 
 

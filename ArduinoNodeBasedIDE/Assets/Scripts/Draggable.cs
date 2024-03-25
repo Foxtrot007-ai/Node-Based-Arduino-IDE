@@ -10,7 +10,7 @@ public class Dragable : MonoBehaviour
     public bool holding = false;
     public void DestroyMe()
     {
-        Destroy(gameObject);
+        gameObject.GetComponent<NodeBlockController>().TurnOffMe();
     }
     private void OnMouseOver()
     {
