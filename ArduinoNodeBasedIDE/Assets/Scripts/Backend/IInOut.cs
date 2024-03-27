@@ -13,5 +13,6 @@ namespace Backend
         public void Connect(IInOut iInOut);
         public void Disconnect();
         public void ChangeType(IType iType);
+        public ConnectionPoint UIPoint { get; set; }
     }
 }
