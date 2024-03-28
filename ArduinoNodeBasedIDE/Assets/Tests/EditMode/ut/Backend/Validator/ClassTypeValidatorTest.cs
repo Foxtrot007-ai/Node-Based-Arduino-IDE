@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using Backend.Validator;
 using NUnit.Framework;
 
-namespace ut.Type
+namespace Tests.EditMode.ut.Backend.Validator
 {
-    public class ClassTypeValidatorTests
+    [TestFixture]
+    [TestOf(typeof(ClassTypeValidator))]
+    [Category("Type")]
+    public class ClassTypeValidatorTest
     {
         [Test]
         public void IsClassTypeEmptySet()
@@ -13,7 +16,7 @@ namespace ut.Type
             //given
             //when
             //then
-            Assert.False(ClassTypeValidator.IsClassType("test"));
+            Assert.False(ClassTypeValidator.Instance.IsClassType("test"));
         }
 
         [Test]
@@ -21,7 +24,7 @@ namespace ut.Type
         {
             //given
             //when
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => ClassTypeValidator.AddClassType(null));
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => ClassTypeValidator.Instance.AddClassType(null));
             //then
 
         }
@@ -33,7 +36,7 @@ namespace ut.Type
             //given
             //when
             //then
-            Assert.IsEmpty(ClassTypeValidator.GetAllClassTypes());
+            Assert.IsEmpty(ClassTypeValidator.Instance.GetAllClassTypes());
         }
         
         [Test]
@@ -41,10 +44,10 @@ namespace ut.Type
         public void IsClassTypeSuccess()
         {
             //given
-            ClassTypeValidator.AddClassType("test1");
+            ClassTypeValidator.Instance.AddClassType("test1");
             //when
             //then
-            Assert.True(ClassTypeValidator.IsClassType("test1"));
+            Assert.True(ClassTypeValidator.Instance.IsClassType("test1"));
         }
 
         [Test]
@@ -52,11 +55,11 @@ namespace ut.Type
         public void GetClassTypes()
         {
             //given
-            HashSet<String> expectTypes = new HashSet<string>() { "test1", "test2", "test3"};
-            ClassTypeValidator.AddClassType("test2");
-            ClassTypeValidator.AddClassType("test3");
+            var expectTypes = new HashSet<string>() { "test1", "test2", "test3"};
+            ClassTypeValidator.Instance.AddClassType("test2");
+            ClassTypeValidator.Instance.AddClassType("test3");
             //when
-            HashSet<String> classTypes = ClassTypeValidator.GetAllClassTypes();
+            var classTypes = ClassTypeValidator.Instance.GetAllClassTypes();
             //then
             Assert.AreEqual(3, classTypes.Count);
             Assert.AreEqual(classTypes, expectTypes);

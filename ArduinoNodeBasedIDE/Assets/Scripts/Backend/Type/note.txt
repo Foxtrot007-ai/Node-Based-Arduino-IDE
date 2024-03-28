@@ -1,0 +1,2 @@
+Add adapter check + ut
+Maybe rewrite this to singleton types?

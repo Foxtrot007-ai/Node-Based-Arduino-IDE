@@ -3,22 +3,35 @@ using System.Collections.Generic;
 
 namespace Backend.Validator
 {
-    public static class ClassTypeValidator
+    public sealed class ClassTypeValidator : IClassTypeValidator
     {
-        private static HashSet<String> _allClassTypes = new HashSet<string>();
+        private readonly HashSet<string> _allClassTypes = new();
+        private static ClassTypeValidator _instance = new();
 
-        public static bool IsClassType(String className)
+        private ClassTypeValidator()
+        {
+            
+        }
+
+        static ClassTypeValidator()
+        {
+            
+        }
+
+        public static ClassTypeValidator Instance => _instance;
+
+        public bool IsClassType(string className)
         {
             return _allClassTypes.Contains(className);
         
         }
 
-        public static HashSet<String> GetAllClassTypes()
+        public HashSet<string> GetAllClassTypes()
         {
             return _allClassTypes;
         }
 
-        public static void AddClassType(String classType)
+        public void AddClassType(string classType)
         {
             if (classType is null)
             {

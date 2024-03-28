@@ -1,9 +1,12 @@
 ﻿using System;
+using Backend.Type;
 
 namespace Backend
 {
     public interface IType
     {
-        public String TypeName { get; }
+        public EType GetEType { get; }
+        public string TypeName { get; }
+        
     }
 }
