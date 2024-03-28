@@ -1,5 +1,4 @@
-﻿using System;
-using Backend.InOut;
+﻿using Backend.InOut;
 
 namespace Backend
 {
@@ -10,10 +9,10 @@ namespace Backend
         public IType MyType { get; } //is need for UI??
         public InOutSide Side { get; } //is need for UI??
         public InOutType InOutType { get; }
-        public String InOutName { get; }
+        public string InOutName { get; }
         public void Connect(IConnection iConnection); //Make connection between IInOut
         public void Disconnect(); //Remove connection between IInOut
-        public void ChangeType(IType iType); 
+        public void ChangeType(IType iType); //Change type of InOut
         
     }
 }

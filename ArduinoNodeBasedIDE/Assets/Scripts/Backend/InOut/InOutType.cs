@@ -3,11 +3,11 @@
     public enum InOutType
     {
         Flow,
-        String,
+        Void,
         Class,
         Primitive,
-        Any,
-        NoClass,
-        Void
+        String,
+        Dynamic,
+        Auto
     }
 }
