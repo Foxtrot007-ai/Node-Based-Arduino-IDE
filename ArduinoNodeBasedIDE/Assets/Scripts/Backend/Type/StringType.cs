@@ -1,8 +1,10 @@
-﻿namespace Backend.Type
+using Backend.API;
+
+namespace Backend.Type
 {
-    public class StringType : IType
+    public class StringType : IMyType
     {
-        public EType GetEType => EType.String;
+        public EType EType => EType.String;
         public string TypeName => "string";
 
         protected bool Equals(StringType other)
@@ -26,6 +28,11 @@
         public static bool operator !=(StringType left, StringType right)
         {
             return !Equals(left, right);
+        }
+        
+        public override int GetHashCode()
+        {
+            return GetType().GetHashCode();
         }
     }
 }

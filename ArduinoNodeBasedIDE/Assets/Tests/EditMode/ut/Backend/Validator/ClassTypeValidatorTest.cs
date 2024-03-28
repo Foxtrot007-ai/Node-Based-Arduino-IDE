@@ -26,9 +26,9 @@ namespace Tests.EditMode.ut.Backend.Validator
         {
             //given
             //when
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => ClassTypeValidator.Instance.AddClassType(null));
+            var exception = Assert.Throws<ArgumentNullException>(() => ClassTypeValidator.Instance.AddClassType(null));
             //then
-
+            Assert.AreEqual("classType cannot be null.", exception.Message);
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace Tests.EditMode.ut.Backend.Validator
         public void GetClassTypes()
         {
             //given
-            var expectTypes = new HashSet<string>() { "test1", "test2", "test3"};
+            var expectTypes = new HashSet<string> { "test1", "test2", "test3"};
             ClassTypeValidator.Instance.AddClassType("test2");
             ClassTypeValidator.Instance.AddClassType("test3");
             //when

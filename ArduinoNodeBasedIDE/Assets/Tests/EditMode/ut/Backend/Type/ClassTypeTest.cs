@@ -29,8 +29,9 @@ namespace Tests.EditMode.ut.Backend.Type
             //given
             //when
             var exception =
-                Assert.Throws<NotClassNameException>(() => new ClassTypeMock("NotTest", _validator));
+                Assert.Throws<NotClassTypeException>(() => _ = new ClassTypeMock("NotTest", _validator));
             //then
+            Assert.AreEqual("\"NotTest\" is not class type.", exception.Message);
         }
 
         [Test]

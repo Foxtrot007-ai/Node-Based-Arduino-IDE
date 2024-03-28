@@ -1,11 +1,12 @@
-﻿using Backend.Exceptions.InOut;
+using Backend.API;
+using Backend.Exceptions;
 
 namespace Backend.Type
 {
-    public class PrimitiveType : IType
+    public class PrimitiveType : IMyType
     {
-        public EType GetEType { get; }
-        public string TypeName => GetEType.ToString().ToLower();
+        public EType EType { get; }
+        public string TypeName => EType.ToString().ToLower();
 
         public static bool IsPrimitive(EType eType)
         {
@@ -17,15 +18,15 @@ namespace Backend.Type
         {
             if (!IsPrimitive(primitiveType))
             {
-                throw new WrongTypeException();
+                throw new NotPrimitiveTypeException(primitiveType);
             }
 
-            GetEType = primitiveType;
+            EType = primitiveType;
         }
 
         protected bool Equals(PrimitiveType other)
         {
-            return GetEType == other.GetEType;
+            return EType == other.EType;
         }
 
         public override bool Equals(object obj)
@@ -44,6 +45,11 @@ namespace Backend.Type
         public static bool operator !=(PrimitiveType left, PrimitiveType right)
         {
             return !Equals(left, right);
+        }
+        
+        public override int GetHashCode()
+        {
+            return (int)EType;
         }
     }
 }

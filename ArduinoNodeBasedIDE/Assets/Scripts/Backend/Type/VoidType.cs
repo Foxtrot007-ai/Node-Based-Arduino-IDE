@@ -1,10 +1,11 @@
 ﻿using System;
+using Backend.API;
 
 namespace Backend.Type
 {
-    public class VoidType : IType
+    public class VoidType : IMyType
     {
-        public EType GetEType => EType.Void;
+        public EType EType => EType.Void;
         public string TypeName => "void";
 
         protected bool Equals(VoidType other)
@@ -28,6 +29,11 @@ namespace Backend.Type
         public static bool operator !=(VoidType left, VoidType right)
         {
             return !Equals(left, right);
+        }
+        
+        public override int GetHashCode()
+        {
+            return GetType().GetHashCode();
         }
     }
 }

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Backend.Exceptions.InOut;
+using Backend.Exceptions;
 using Backend.Type;
 using NUnit.Framework;
 
@@ -24,8 +24,9 @@ namespace Tests.EditMode.ut.Backend.Type
         {
             //given
             //when
-            WrongTypeException exception = Assert.Throws<WrongTypeException>(() => new PrimitiveType(type));
+            var exception = Assert.Throws<NotPrimitiveTypeException>(() => _ = new PrimitiveType(type));
             //then
+            Assert.AreEqual(type + " is not primitive type.", exception.Message);
         }
 
         private static List<EType> _okPrimitive = new()
@@ -36,7 +37,7 @@ namespace Tests.EditMode.ut.Backend.Type
             EType.Long,
             EType.LongLong,
             EType.Double,
-            EType.Float
+            EType.Float,
         };
 
         [Test]
@@ -47,7 +48,7 @@ namespace Tests.EditMode.ut.Backend.Type
             //when
             var primitiveType = new PrimitiveType(type);
             //then
-            Assert.AreEqual(type, primitiveType.GetEType);
+            Assert.AreEqual(type, primitiveType.EType);
         }
 
         [Test] 

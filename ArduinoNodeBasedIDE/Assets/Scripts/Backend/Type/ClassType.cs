@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Backend.API;
 using Backend.Exceptions;
 using Backend.Validator;
 
 namespace Backend.Type
 {
-    public class ClassType : IType
+    public class ClassType : IMyType
     {
-        public EType GetEType => EType.Class;
+        public EType EType => EType.Class;
         public string TypeName { get; }
 
         public ClassType(string classType) : this(classType, ClassTypeValidator.Instance)
@@ -17,7 +17,7 @@ namespace Backend.Type
         {
             if (!validator.IsClassType(classType))
             {
-                throw new NotClassNameException();
+                throw new NotClassTypeException(classType);
             }
 
             TypeName = classType;
@@ -44,6 +44,11 @@ namespace Backend.Type
         public static bool operator !=(ClassType left, ClassType right)
         {
             return !Equals(left, right);
+        }
+        
+        public override int GetHashCode()
+        {
+            return (TypeName != null ? TypeName.GetHashCode() : 0);
         }
     }
 }

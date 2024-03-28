@@ -6,7 +6,6 @@ namespace Backend.Validator
     public sealed class ClassTypeValidator : IClassTypeValidator
     {
         private readonly HashSet<string> _allClassTypes = new();
-        private static ClassTypeValidator _instance = new();
 
         private ClassTypeValidator()
         {
@@ -18,7 +17,7 @@ namespace Backend.Validator
             
         }
 
-        public static ClassTypeValidator Instance => _instance;
+        public static ClassTypeValidator Instance { get; } = new();
 
         public bool IsClassType(string className)
         {
@@ -35,7 +34,7 @@ namespace Backend.Validator
         {
             if (classType is null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(null,"classType cannot be null.");
             }
             
             _allClassTypes.Add(classType);
