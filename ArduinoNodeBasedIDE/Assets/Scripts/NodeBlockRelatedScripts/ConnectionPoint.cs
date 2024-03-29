@@ -142,7 +142,6 @@ public class ConnectionPoint : MonoBehaviour
         {
             connectedPoint.GetComponent<ConnectionPoint>().connectedPoint = null;
         }
-        nodeBlockManager.originator.State = new UnconnectAction(this, connectedPoint);
         connectedPoint = null;
         showLine = false;
         ClearLine();
@@ -185,7 +184,6 @@ public class ConnectionPoint : MonoBehaviour
         {
             connectedPoint = hit.collider.gameObject;
             hit.collider.gameObject.GetComponent<ConnectionPoint>().connectedPoint = gameObject;
-            nodeBlockManager.originator.State = new ConnectAction(this, connectedPoint);
         }
         else
         {

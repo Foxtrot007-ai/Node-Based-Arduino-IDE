@@ -25,13 +25,10 @@ public class NodeBlockManager : MonoBehaviour
     //NodeBlock Editor
     public GameObject nodeBlockEditor;
 
-    //Memento
-    public Originator originator;
 
     // Start is called before the first frame update
     void Start()
     {
-        originator = GameObject.FindGameObjectWithTag("UndoRedo").GetComponent<UndoRedoManager>().originator;
         languageReferenceList = languageReferenceParser.loadReferenceList();
         instantiateBasicFunctions();
     }
@@ -91,7 +88,6 @@ public class NodeBlockManager : MonoBehaviour
         nodeBlockObject.GetComponent<NodeBlockController>().InstantiateNodeBlockController(node, list);
 
         viewsManager.AddToView(nodeBlockObject);
-        originator.State = new SpawnAction(nodeBlockObject);
         return nodeBlockObject;
     }
     public void SpawnNodeBlock(ButtonScript button, NodeBlock node)
@@ -109,10 +105,7 @@ public class NodeBlockManager : MonoBehaviour
     }
     public void SpawnNodeBlock(FunctionButtonScript button, NodeBlock node)
     {
-        NodeBlock oldView = viewsManager.actualView;
-        viewsManager.ChangeView(node);
-        originator.State = new ChangeViewAction(oldView, node);
-        //SpawnNodeBlock(myFunctionList, node);
+        SpawnNodeBlock(myFunctionList, node);
     }
 
     //DeleteNodeBlock Section
@@ -169,16 +162,12 @@ public class NodeBlockManager : MonoBehaviour
 
     public void updateInputType(int index, string newType, NodeBlock node)
     {
-        string oldType = node.GetInputType(index);
         node.SetInputType(newType, index);
-        originator.State = new EditAction(node, oldType, newType, index);
     }
 
     public void updateOutputType(string newType, NodeBlock node)
     {
-        string oldType = node.GetOutputType();
         node.SetOutputType(newType);
-        originator.State = new EditAction(node, oldType, newType, -1);
     }
 
 
@@ -208,5 +197,10 @@ public class NodeBlockManager : MonoBehaviour
     public void SetNodeBlockToEdit(FunctionButtonScript button, NodeBlock nodeBlock)
     {
         SetNodeBlockToEdit(myFunctionList, nodeBlock);
+    }
+
+    public void ChangeView(FunctionButtonScript button, NodeBlock nodeBlock)
+    {
+        viewsManager.ChangeView(nodeBlock);
     }
 }

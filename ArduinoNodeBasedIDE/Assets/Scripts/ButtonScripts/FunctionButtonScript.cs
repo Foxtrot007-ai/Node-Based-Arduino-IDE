@@ -16,4 +16,8 @@ public class FunctionButtonScript : ButtonScript
     {
         nodeBlockManager.SetNodeBlockToEdit(this, node);
     }
+    public void ChangeView()
+    {
+        nodeBlockManager.ChangeView(this, node);
+    }
 }

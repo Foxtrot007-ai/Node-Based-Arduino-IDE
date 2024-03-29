@@ -57,6 +57,7 @@ public class NodeBlockController : MonoBehaviour
         AddNextBlocks();
         AddPreviousBlock();
     }
+    /*
     private void Unconnect(GameObject point)
     {
         ConnectionPoint connection = point.GetComponent<ConnectionPoint>();
@@ -66,8 +67,10 @@ public class NodeBlockController : MonoBehaviour
         }
         
     }
+    */
     public void UnconnectAll()
     {
+        /*
         foreach(var point in inPointsList)
         {
             Unconnect(point);
@@ -87,14 +90,9 @@ public class NodeBlockController : MonoBehaviour
         {
             Unconnect(previousBlock);
         }
+        */
     }
-    public void TurnOffMe()
-    {
-        UnconnectAll();
-        nodeBlockManager.originator.State = new DeleteAction(gameObject);
-        gameObject.SetActive(false);
-    }
-
+    
     private GameObject CreatePoint(GameObject prefab, Vector3 spawnPoint, NodeBlock nodeBlock, string type, int connectionIndex, Transform parent)
     {
         GameObject newPoint = Instantiate(prefab, spawnPoint, Quaternion.identity);
