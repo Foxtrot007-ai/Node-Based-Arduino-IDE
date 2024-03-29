@@ -34,17 +34,22 @@ public class ListManager : MonoBehaviour
     {
         return nodeBlockManager.SearchNodeBlocks(this, lastInput);
     }
+
+    protected GameObject CreateButton(NodeBlock node)
+    {
+        GameObject newContent = Instantiate(buttonContent);
+        newContent.transform.SetParent(listContainer.transform);
+        newContent.GetComponent<ButtonScript>().SetNodeBlock(node);
+        newContent.transform.localScale = Vector3.one;
+        return newContent;
+    }
     protected void AddContent()
     {
         List<NodeBlock> containsList = GetNodeBlocks();
 
         foreach(NodeBlock node in containsList)
         {
-            GameObject newContent = Instantiate(buttonContent);
-            newContent.transform.SetParent(listContainer.transform);
-            newContent.GetComponent<ButtonScript>().SetNodeBlock(node);
-            contentObjects.Add(newContent);
-            newContent.transform.localScale = Vector3.one;
+            contentObjects.Add(CreateButton(node));
         }
 
     }

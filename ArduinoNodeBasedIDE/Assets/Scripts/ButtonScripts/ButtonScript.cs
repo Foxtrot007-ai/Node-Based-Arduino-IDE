@@ -12,7 +12,7 @@ public class ButtonScript : MonoBehaviour
         nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
     }
 
-    public void SetNodeBlock(NodeBlock node)
+    public virtual void SetNodeBlock(NodeBlock node)
     {
         this.node = node;
         text.GetComponent<TMP_Text>().text = node.GetName();

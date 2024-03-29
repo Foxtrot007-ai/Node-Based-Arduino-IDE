@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class NodeBlockManager : MonoBehaviour
 {
@@ -76,6 +77,15 @@ public class NodeBlockManager : MonoBehaviour
     }
 
     //SpawnNodeBlock section
+    public GameObject SpawnNodeBlockWithoutValidation(NodeBlock node)
+    {
+        nodeBlockSpawnPoint.z = 0;
+        GameObject nodeBlockObject = Instantiate(nodeBlockPrefab, nodeBlockSpawnPoint, Quaternion.identity);
+        nodeBlockObject.GetComponent<NodeBlockController>().InstantiateNodeBlockController(node);
+
+        viewsManager.AddToView(nodeBlockObject);
+        return nodeBlockObject;
+    }
     public GameObject SpawnNodeBlock(List<NodeBlock> list, NodeBlock node)
     {
         if (!list.Contains(node))
@@ -83,12 +93,7 @@ public class NodeBlockManager : MonoBehaviour
             return null;
         }
 
-        nodeBlockSpawnPoint.z = 0;
-        GameObject nodeBlockObject = Instantiate(nodeBlockPrefab, nodeBlockSpawnPoint, Quaternion.identity);
-        nodeBlockObject.GetComponent<NodeBlockController>().InstantiateNodeBlockController(node, list);
-
-        viewsManager.AddToView(nodeBlockObject);
-        return nodeBlockObject;
+        return SpawnNodeBlockWithoutValidation(node);
     }
     public void SpawnNodeBlock(ButtonScript button, NodeBlock node)
     {
@@ -146,6 +151,12 @@ public class NodeBlockManager : MonoBehaviour
         languageReferenceList.Add(newNodeBlock);
         viewsManager.AddNewView(newNodeBlock);
         viewsManager.ChangeView(newNodeBlock);
+
+        //making start node
+        NodeBlock startNodeBlock = new NodeBlock(name + "(Start)", NodeBlockTypes.Function, 0, 0);
+        startNodeBlock.hasPreviousBlock = false;
+
+        SpawnNodeBlockWithoutValidation(startNodeBlock);
     }
     public void AddNodeBlock(string name)
     {

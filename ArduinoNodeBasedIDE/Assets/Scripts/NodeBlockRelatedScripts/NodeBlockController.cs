@@ -10,11 +10,14 @@ using UnityEngine;
 public class NodeBlockController : MonoBehaviour
 {
     public NodeBlock nodeBlock;
-    public List<NodeBlock> list;
+  
 
     public GameObject textField;
 
     public GameObject field;
+
+    //test variable
+    public bool isStartNodeBlock;
 
     public GameObject inPointStartPoint;
     public GameObject outPointStartPoint;
@@ -37,11 +40,19 @@ public class NodeBlockController : MonoBehaviour
     public bool instantiated = false;
 
     public NodeBlockManager nodeBlockManager;
+
+    public void DestroyMe()
+    {
+        if (!isStartNodeBlock)
+        {
+            Destroy(gameObject);
+        }
+    }
     public void Start()
     {
         nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
     }
-    public void InstantiateNodeBlockController(NodeBlock node, List<NodeBlock> list)
+    public void InstantiateNodeBlockController(NodeBlock node)
     {
         if(instantiated)
         {
@@ -50,7 +61,6 @@ public class NodeBlockController : MonoBehaviour
 
         instantiated = true;
 
-        this.list = list;
         SetNodeBlock(node);
         AddInPoints();
         AddOutPoint();
@@ -113,12 +123,16 @@ public class NodeBlockController : MonoBehaviour
 
     private void AddOutPoint()
     {
-        outPoint = CreatePoint(outPointPrefab, outPointStartPoint.transform.position, nodeBlock, nodeBlock.GetOutputType(), 0, this.transform);
+        if (nodeBlock.returnOutputBlock)
+        {
+            outPoint = CreatePoint(outPointPrefab, outPointStartPoint.transform.position, nodeBlock, nodeBlock.GetOutputType(), 0, this.transform);
+        }
+        
     }
 
     private void AddNextBlocks()
     {
-        for (int i = 0; i < nodeBlock.GetNumberOfInputs(); i++)
+        for (int i = 0; i < nodeBlock.nextBlockListSize; i++)
         {
             GameObject newNextPoint = CreatePoint(nextBlockPrefab, nextBlockStartPoint.transform.position, nodeBlock, "", 0, this.transform);
             nextBlockList.Add(newNextPoint);
@@ -127,7 +141,10 @@ public class NodeBlockController : MonoBehaviour
     }
     private void AddPreviousBlock()
     {
-        previousBlock = CreatePoint(previousBlockPrefab, previousBlockStartPoint.transform.position, nodeBlock, "", 0, this.transform);
+        if (nodeBlock.hasPreviousBlock)
+        {
+            previousBlock = CreatePoint(previousBlockPrefab, previousBlockStartPoint.transform.position, nodeBlock, "", 0, this.transform);
+        }
     }
 
     private void SetNodeBlock(NodeBlock node)

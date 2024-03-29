@@ -933,6 +933,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: {fileID: 2224149197360718455}
   nodeBlockManager: {fileID: 0}
+  spawnButton: {fileID: 6828809265214773906}
+  deleteButton: {fileID: 7097680866675567719}
+  editButton: {fileID: 3126432422391007526}
+  changeButton: {fileID: 2563770550002968600}
 --- !u!1 &6828809265214773906
 GameObject:
   m_ObjectHideFlags: 0

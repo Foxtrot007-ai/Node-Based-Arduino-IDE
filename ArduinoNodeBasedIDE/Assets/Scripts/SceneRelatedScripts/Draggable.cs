@@ -8,10 +8,7 @@ public class Dragable : MonoBehaviour
     private Vector2 directionPoint;
     public bool colliding = false;
     public bool holding = false;
-    public void DestroyMe()
-    {
-        Destroy(gameObject);
-    }
+
     private void OnMouseOver()
     {
         if (Input.GetMouseButtonDown(0))
@@ -23,7 +20,7 @@ public class Dragable : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.LeftControl))
         {
-            DestroyMe();
+            gameObject.GetComponent<NodeBlockController>().DestroyMe();
         }
     }
     private void OnMouseDrag()
