@@ -15,6 +15,7 @@ public class NodeBlock : ICloneable{
 
     private string name;
     private NodeBlockTypes nodeBlockType;
+    public DateTime lastChange;
 
     public NodeBlock previousBlock; //previous nodeblock in control flow
     public bool hasPreviousBlock;
@@ -69,6 +70,8 @@ public class NodeBlock : ICloneable{
             SetOutputType("int");
         }
 
+        lastChange = DateTime.Now;
+
     }
 
     public object Clone()
@@ -80,6 +83,7 @@ public class NodeBlock : ICloneable{
     public void SetName(string name)
     {
         this.name = name;
+        lastChange = DateTime.Now;
     }
 
     public string GetName()
@@ -134,6 +138,7 @@ public class NodeBlock : ICloneable{
         if (inputIndex >= 0 && inputIndex < inputBlockListSize)
         {
             inputTypes[inputIndex] = input;
+            lastChange = DateTime.Now;
         }
     }
 
@@ -163,6 +168,7 @@ public class NodeBlock : ICloneable{
     public void SetOutputType(string output)
     {
         this.outputType = output;
+        lastChange = DateTime.Now;
     }
 
     public string GetOutputType()
@@ -183,5 +189,37 @@ public class NodeBlock : ICloneable{
     public NodeBlockTypes GetNodeBlockType()
     {
         return nodeBlockType;
+    }
+    public void AddInput()
+    {
+        inputBlockListSize++;
+        inputTypes = new String[inputBlockListSize];
+        lastChange = DateTime.Now;
+    }
+    public void DeleteInput()
+    {
+        if (inputBlockListSize > 0) inputBlockListSize--;
+        if (inputBlockListSize >= 1)
+        {
+            inputTypes = new String[inputBlockListSize];
+        }
+        else if (inputBlockListSize == 0)
+        {
+            inputTypes = null;
+        }
+
+        lastChange = DateTime.Now;
+    }
+
+    public void AddOutput()
+    {
+        returnOutputBlock = true;
+        lastChange = DateTime.Now;
+    }
+    public void DeleteOutput()
+    {
+        returnOutputBlock = false;
+        outputBlock = null;
+        lastChange = DateTime.Now;
     }
 }

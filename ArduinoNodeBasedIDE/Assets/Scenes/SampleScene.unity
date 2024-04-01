@@ -630,9 +630,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 221290453}
     m_Modifications:
+    - target: {fileID: 1594588171645566833, guid: 9faece1faf504004280a003de20831b4, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1594588171645566833, guid: 9faece1faf504004280a003de20831b4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2375382023680369970, guid: 9faece1faf504004280a003de20831b4, type: 3}
       propertyPath: m_Name
       value: NodeBlockEditor
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703027193571331275, guid: 9faece1faf504004280a003de20831b4, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703027193571331275, guid: 9faece1faf504004280a003de20831b4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703027193571331275, guid: 9faece1faf504004280a003de20831b4, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3985896001564211350, guid: 9faece1faf504004280a003de20831b4, type: 3}
       propertyPath: inputField
@@ -641,6 +661,14 @@ PrefabInstance:
     - target: {fileID: 3985896001564211350, guid: 9faece1faf504004280a003de20831b4, type: 3}
       propertyPath: listContainer
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966297547861137134, guid: 9faece1faf504004280a003de20831b4, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966297547861137134, guid: 9faece1faf504004280a003de20831b4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6671570779203893367, guid: 9faece1faf504004280a003de20831b4, type: 3}
       propertyPath: m_Pivot.x

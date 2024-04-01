@@ -1,3 +1,6 @@
+using Codice.CM.Client.Differences;
+using PlasticGui;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,39 +22,48 @@ public class NodeBlockEditor : MonoBehaviour
 
     public Vector3 inputPointIncrease;
 
-    public GameObject[] inputs;
-
-    public GameObject output;
+    public bool instantiated = false;
+    public GameObject listContainer;
+    public List<GameObject> inputObjects;
+    public GameObject outputObject;
 
     public NodeBlockManager nodeBlockManager;
-
+    public DateTime lastTimeStamp;
     public void Start()
     {
         nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
+        instantiated = false;
+    }
+
+    public void Update()
+    {
+        if (instantiated)
+        {
+            if(lastTimeStamp != currentNodeBlock.lastChange)
+            {
+                UpdateContent();
+            }
+        }
     }
     public void SetNodeBlockToEdit(NodeBlock nodeBlock)
     {
+        instantiated = true;
         currentNodeBlock = nodeBlock;
-        UpdateField();
-        CleanEditor();
-        InstantiateInputs();
-        InstantiateOutput();
+        UpdateContent();
     }
 
     public void UpdateField()
     {
-        nodeBlockName.GetComponent<TMP_Text>().text = currentNodeBlock.GetName();
+        nodeBlockName.GetComponent<TMP_InputField>().text = currentNodeBlock.GetName();
     }
 
     public void InstantiateInputs() 
     {
         int numberOfInputs = currentNodeBlock.GetNumberOfInputs();
 
-        inputs = new GameObject[numberOfInputs];
-
-        for (int i = 0; i < numberOfInputs; i++)
+        for(int i = 0; i < numberOfInputs; i++)
         {
-            inputs[i] = CreatePort(inputEditorPrefab, inputStartPoint.transform.position + i * inputPointIncrease, currentNodeBlock.GetInputType(i));
+            inputObjects.Add(CreateButton(currentNodeBlock.GetInputType(i)));
         }
     }
 
@@ -59,11 +71,11 @@ public class NodeBlockEditor : MonoBehaviour
     {
         if (currentNodeBlock.returnOutputBlock)
         {
-            output = CreatePort(outputEditorPrefab, outputStartPoint.transform.position, currentNodeBlock.GetOutputType());
+            outputObject = CreateOutPoint(outputEditorPrefab, outputStartPoint.transform.position, currentNodeBlock.GetOutputType());
         }
     }
 
-    public GameObject CreatePort(GameObject prefab, Vector3 point, string type)
+    public GameObject CreateOutPoint(GameObject prefab, Vector3 point, string type)
     { 
         GameObject temp = Instantiate(prefab, point, Quaternion.identity);
         temp.transform.SetParent(this.transform);
@@ -74,22 +86,65 @@ public class NodeBlockEditor : MonoBehaviour
 
     public void CleanEditor()
     {
-        foreach(var node in inputs)
+        foreach(var node in inputObjects)
         {
             GameObject.Destroy(node);
         }
-        
-        if(output != null)
+        inputObjects.Clear();
+
+        if (outputObject != null)
         {
-            GameObject.Destroy(output);
+            GameObject.Destroy(outputObject);
         }
     }
-
-    public void UpdateNodeBlockConnectionsTypes()
+    protected GameObject CreateButton(string type)
     {
+        GameObject newContent = Instantiate(inputEditorPrefab);
+        newContent.transform.SetParent(listContainer.transform);
+        newContent.GetComponentInChildren<TMP_InputField>().text = type;
+        newContent.transform.localScale = Vector3.one;
+        return newContent;
+    }
+
+    protected void UpdateContent()
+    {
+        lastTimeStamp = currentNodeBlock.lastChange;
+        UpdateField();
+        CleanEditor();
+        InstantiateInputs();
+        InstantiateOutput();
+    }
+
+    public void DeleteInput()
+    {
+        currentNodeBlock.DeleteInput();
+    }
+
+    public void AddInput()
+    {
+        currentNodeBlock.AddInput();
+    }
+    public void DeleteOutput()
+    {
+        currentNodeBlock.DeleteOutput();
+    }
+
+    public void AddOutput()
+    {
+        currentNodeBlock.AddOutput();
+    }
+
+    public void UpdateNodeBlockData()
+    {
+        string newName = nodeBlockName.GetComponentInChildren<TMP_InputField>().text;
+        if(newName != currentNodeBlock.GetName())
+        {
+            currentNodeBlock.SetName(newName);
+        }
+
         for (int i = 0; i < currentNodeBlock.GetNumberOfInputs(); i++)
         {
-            string newType = inputs[i].GetComponentInChildren<TMP_InputField>().text;
+            string newType = inputObjects[i].GetComponentInChildren<TMP_InputField>().text;
             if (newType != currentNodeBlock.GetInputType(i)) {
                 nodeBlockManager.updateInputType(i, newType, currentNodeBlock);
             } 
@@ -97,7 +152,7 @@ public class NodeBlockEditor : MonoBehaviour
 
         if (currentNodeBlock.returnOutputBlock)
         {
-            string newType = output.GetComponentInChildren<TMP_InputField>().text;
+            string newType = outputObject.GetComponentInChildren<TMP_InputField>().text;
             if (newType != currentNodeBlock.GetOutputType())
             {
                 nodeBlockManager.updateOutputType(newType, currentNodeBlock);

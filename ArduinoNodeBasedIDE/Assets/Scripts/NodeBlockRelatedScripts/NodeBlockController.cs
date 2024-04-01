@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEditor.MemoryProfiler;
 using UnityEngine;
 
@@ -41,6 +42,7 @@ public class NodeBlockController : MonoBehaviour
 
     public NodeBlockManager nodeBlockManager;
 
+    public DateTime lastTimeStamp;
     public void DestroyMe()
     {
         if (!isStartNodeBlock)
@@ -52,12 +54,50 @@ public class NodeBlockController : MonoBehaviour
     {
         nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
     }
+    public void Update()
+    {
+        if (instantiated)
+        {
+            if (lastTimeStamp != nodeBlock.lastChange)
+            {
+                ReloadBlock();
+            }
+        }
+        
+    }
+    public void ReloadBlock()
+    {
+        DestroyConnections();
+        InstantiateNodeBlockController(this.nodeBlock);
+    }
+    public void DestroyConnections()
+    {
+        foreach(GameObject p in inPointsList)
+        {
+            Destroy(p);
+            inPointStartPoint.transform.position -= inPointStartPointIncrease;
+        }
+        inPointsList.Clear();
+        if(outPoint != null)
+        {
+            Destroy(outPoint);
+        }
+        foreach (GameObject p in nextBlockList)
+        {
+            Destroy(p);
+            nextBlockStartPoint.transform.position -= nextBlockStartPointIncrease;
+        }
+        nextBlockList.Clear();
+        if (previousBlock != null)
+        {
+            Destroy(previousBlock);
+        }
+        instantiated = false;
+    }
     public void InstantiateNodeBlockController(NodeBlock node)
     {
-        if(instantiated)
-        {
-            return;
-        }
+        lastTimeStamp = node.lastChange;
+     
 
         instantiated = true;
 

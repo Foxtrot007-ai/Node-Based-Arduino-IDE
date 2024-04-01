@@ -156,7 +156,7 @@ public class NodeBlockManager : MonoBehaviour
         NodeBlock startNodeBlock = new NodeBlock(name + "(Start)", NodeBlockTypes.Function, 0, 0);
         startNodeBlock.hasPreviousBlock = false;
 
-        SpawnNodeBlockWithoutValidation(startNodeBlock);
+        SpawnNodeBlockWithoutValidation(startNodeBlock).GetComponent<NodeBlockController>().isStartNodeBlock = true;
     }
     public void AddNodeBlock(string name)
     {

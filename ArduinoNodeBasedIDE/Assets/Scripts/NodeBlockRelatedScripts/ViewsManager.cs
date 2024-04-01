@@ -49,7 +49,8 @@ public class ViewsManager
         {
             foreach (GameObject block in views[actualView])
             {
-                block.SetActive(false);
+                if(block != null)
+                    block.SetActive(false);
             }
         }
         actualView = node;
@@ -57,7 +58,8 @@ public class ViewsManager
         {
             foreach (GameObject block in views[actualView])
             {
-                block.SetActive(true);
+                if (block != null)  
+                    block.SetActive(true);
             }
         }
     }
