@@ -11,6 +11,7 @@ namespace Tests.EditMode.ut.Backend.Validator
     public class ClassTypeValidatorTest
     {
         [Test]
+        [Order(0)]
         public void IsClassTypeEmptySet()
         {
             //given
@@ -20,6 +21,7 @@ namespace Tests.EditMode.ut.Backend.Validator
         }
 
         [Test]
+        [Order(1)]
         public void AddNullTypeFail()
         {
             //given
@@ -30,7 +32,7 @@ namespace Tests.EditMode.ut.Backend.Validator
         }
 
         [Test]
-        [Order(1)]
+        [Order(2)]
         public void GetClassTypesEmpty()
         {
             //given
@@ -40,7 +42,7 @@ namespace Tests.EditMode.ut.Backend.Validator
         }
         
         [Test]
-        [Order(2)]
+        [Order(3)]
         public void IsClassTypeSuccess()
         {
             //given
@@ -51,7 +53,7 @@ namespace Tests.EditMode.ut.Backend.Validator
         }
 
         [Test]
-        [Order(3)]
+        [Order(4)]
         public void GetClassTypes()
         {
             //given
