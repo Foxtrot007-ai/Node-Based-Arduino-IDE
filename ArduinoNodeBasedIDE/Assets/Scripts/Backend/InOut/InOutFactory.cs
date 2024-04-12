@@ -1,3 +1,4 @@
+using Backend.API;
 using Backend.InOut.Base;
 using Backend.Node;
 using Backend.Type;
@@ -6,9 +7,9 @@ namespace Backend.InOut
 {
     public static class InOutFactory
     {
-        public static BaseInOut CreateBaseInOut(IType type, IPlaceHolderNodeType parent, InOutSide side)
+        public static BaseInOut CreateBaseInOut(IMyType myType, IPlaceHolderNodeType parent, InOutSide side)
         {
-            return type switch
+            return myType switch
             {
                 VoidType voidType => new VoidInOut(parent, voidType),
                 ClassType classType => new ClassInOut(parent, side, classType),
@@ -18,9 +19,9 @@ namespace Backend.InOut
             };
         }
 
-        public static BaseInOut CreateBaseInOut(IType iType, IInOut inOut)
+        public static BaseInOut CreateBaseInOut(IMyType iMyType, IInOut inOut)
         {
-            return CreateBaseInOut(iType, inOut.ParentNode, inOut.Side);
+            return CreateBaseInOut(iMyType, inOut.ParentNode, inOut.Side);
         }
     }
 }

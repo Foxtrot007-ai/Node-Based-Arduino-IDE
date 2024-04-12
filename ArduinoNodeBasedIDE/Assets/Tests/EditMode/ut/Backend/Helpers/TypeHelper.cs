@@ -1,5 +1,5 @@
 using System;
-using Backend;
+using Backend.API;
 using Backend.Type;
 using Backend.Validator;
 using NSubstitute;
@@ -10,7 +10,7 @@ namespace Tests.EditMode.ut.Backend.Helpers
 
     public static class TypeHelper
     {
-        public static IType CreateType(EType eType, string name = null)
+        public static IMyType CreateType(EType eType, string name = null)
         {
             switch (eType)
             {

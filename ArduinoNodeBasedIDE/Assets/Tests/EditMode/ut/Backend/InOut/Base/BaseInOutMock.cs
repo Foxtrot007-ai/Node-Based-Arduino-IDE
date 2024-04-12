@@ -1,4 +1,4 @@
-using Backend;
+using Backend.API;
 using Backend.InOut;
 using Backend.InOut.Base;
 using Backend.Node;
@@ -11,6 +11,6 @@ namespace Tests.EditMode.ut.Backend.InOut.Base
         {
         }
 
-        public override IType MyType { get; }
+        public override IMyType MyType { get; }
     }
 }

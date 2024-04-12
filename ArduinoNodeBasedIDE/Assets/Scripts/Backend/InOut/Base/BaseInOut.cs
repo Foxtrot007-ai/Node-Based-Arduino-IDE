@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Backend.API;
 using Backend.Exceptions.InOut;
 using Backend.Node;
 
@@ -11,7 +12,7 @@ namespace Backend.InOut.Base
         public IPlaceHolderNodeType ParentNode { get; }
         public IInOut Connected { get; set; }
 
-        public abstract IType MyType { get; }
+        public abstract IMyType MyType { get; }
         public InOutSide Side { get; }
         public InOutType InOutType { get; }
         public virtual string InOutName => MyType.TypeName;
@@ -62,11 +63,6 @@ namespace Backend.InOut.Base
         {
             Connected.Connected = null;
             this.Connected = null;
-        }
-
-        public void ChangeType(IType iType)
-        {
-            throw new NotChangeableException();
         }
 
         private void CheckIsConnected(IInOut inOut)

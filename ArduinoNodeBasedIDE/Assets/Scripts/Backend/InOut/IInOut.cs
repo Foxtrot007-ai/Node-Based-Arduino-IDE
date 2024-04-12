@@ -1,4 +1,5 @@
-﻿using Backend.Node;
+﻿using Backend.API;
+using Backend.Node;
 
 namespace Backend.InOut
 {
@@ -6,5 +7,6 @@ namespace Backend.InOut
     {
         public new IInOut Connected { get; set; }
         public IPlaceHolderNodeType ParentNode { get; }
+        public InOutSide Side { get; }
     }
 }

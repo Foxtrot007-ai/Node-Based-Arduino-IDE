@@ -1,4 +1,5 @@
-﻿using Backend.Exceptions.InOut;
+﻿using Backend.API;
+using Backend.Exceptions.InOut;
 using Backend.Node;
 using Backend.Type;
 
@@ -7,14 +8,14 @@ namespace Backend.InOut.Base
     public class StringInOut : BaseInOut
     {
         
-        public StringType ConcretType { get; }
-        public override IType MyType => ConcretType;
+        public StringType ConcreteType { get; }
+        public override IMyType MyType => ConcreteType;
 
 
 
         public StringInOut(IPlaceHolderNodeType parentNode, InOutSide side, StringType stringType) : base(parentNode, side, InOutType.String)
         {
-            ConcretType = stringType;
+            ConcreteType = stringType;
         }
 
         protected override void CheckInOutType(IInOut iInOut)

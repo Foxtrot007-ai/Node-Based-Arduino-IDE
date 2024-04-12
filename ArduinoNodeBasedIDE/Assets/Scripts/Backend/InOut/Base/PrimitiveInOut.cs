@@ -1,4 +1,5 @@
-﻿using Backend.Exceptions.InOut;
+﻿using Backend.API;
+using Backend.Exceptions.InOut;
 using Backend.Node;
 using Backend.Type;
 
@@ -6,13 +7,13 @@ namespace Backend.InOut.Base
 {
     public class PrimitiveInOut : BaseInOut
     {
-        public PrimitiveType ConcretType { get; }
+        public PrimitiveType ConcreteType { get; }
 
-        public override IType MyType => ConcretType;
+        public override IMyType MyType => ConcreteType;
 
         public PrimitiveInOut(IPlaceHolderNodeType parentNode, InOutSide side, PrimitiveType primitiveType) : base(parentNode, side, InOutType.Primitive)
         {
-            ConcretType = primitiveType;
+            ConcreteType = primitiveType;
         }
 
         protected override void CheckInOutType(IInOut iInOut)

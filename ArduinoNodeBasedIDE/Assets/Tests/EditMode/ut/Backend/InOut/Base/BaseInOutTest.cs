@@ -132,16 +132,6 @@ namespace Tests.EditMode.ut.Backend.InOut.Base
             Assert.IsNull(baseInOut1.Connected);
             Assert.IsNull(baseInOut2.Connected);
         }
-
-        [Test]
-        public void ChangeTypeException()
-        {
-            //given
-            var baseInOut = InOutHelper.CreateBaseMock(InOutSide.Input);
-            //when
-            InOutException exception = Assert.Throws<NotChangeableException>(() => baseInOut.ChangeType(null));
-            //then
-        }
         
         [Test]
         public void ReconnectOk()
