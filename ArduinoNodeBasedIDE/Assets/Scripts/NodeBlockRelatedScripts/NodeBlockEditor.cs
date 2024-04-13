@@ -136,6 +136,7 @@ public class NodeBlockEditor : MonoBehaviour
 
     public void UpdateNodeBlockData()
     {
+        if (currentNodeBlock == null) return;
         string newName = nodeBlockName.GetComponentInChildren<TMP_InputField>().text;
         if(newName != currentNodeBlock.GetName())
         {
