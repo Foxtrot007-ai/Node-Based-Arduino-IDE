@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using Backend.Exceptions.InOut;
 using Backend.InOut;
-using Backend.InOut.Base;
+using Backend.InOut.MyType;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
 
-namespace Tests.EditMode.ut.Backend.InOut.Base
+namespace Tests.EditMode.ut.Backend.InOut.MyType
 {
     [TestFixture]
     [TestOf(typeof(ClassInOut))]

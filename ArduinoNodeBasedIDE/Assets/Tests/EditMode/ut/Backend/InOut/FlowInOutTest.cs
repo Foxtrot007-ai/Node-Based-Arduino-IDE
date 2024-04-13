@@ -1,43 +1,43 @@
 using System.Collections.Generic;
 using Backend.Exceptions.InOut;
 using Backend.InOut;
-using Backend.InOut.Base;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
 
-namespace Tests.EditMode.ut.Backend.InOut.Base
+namespace Tests.EditMode.ut.Backend.InOut.MyType
 {
     [TestFixture]
-    [TestOf(typeof(PrimitiveInOut))]
+    [TestOf(typeof(FlowInOut))]
     [Category("InOut")]
-    public class PrimitiveInOutTest
+    public class FlowInOutTest
     {
-        private PrimitiveInOut _primitiveIn;
-        
+
+        private FlowInOut _flowIn;
+
         [SetUp]
-        public void Setup()
+        public void Init()
         {
-            _primitiveIn = (PrimitiveInOut) InOutHelper.CreateBaseInOut(InOutType.Primitive, InOutSide.Input);
+            _flowIn = (FlowInOut) InOutHelper.CreateBaseInOut(InOutType.Flow, InOutSide.Input);
         }
-        
+
         private static List<IInOut> _wrong = new()
         {
+            InOutHelper.CreateBaseInOut(InOutType.Primitive),
+            InOutHelper.CreateBaseInOut(InOutType.String),
             InOutHelper.CreateBaseInOut(InOutType.Class),
-            InOutHelper.CreateBaseInOut(InOutType.Flow),
             InOutHelper.CreateBaseInOut(InOutType.Void),
         };
-        
+
         [Test]
         [TestCaseSource(nameof(_wrong))]
         public void WrongConnectionTypeException(IInOut output)
         {
-            Assert.Throws<WrongConnectionTypeException>(() => _primitiveIn.Connect(output));
+            Assert.Throws<WrongConnectionTypeException>(() =>  _flowIn.Connect(output));
         }
-        
+
         private static List<IInOut> _ok = new()
         {
-            InOutHelper.CreateBaseInOut(InOutType.Primitive),
-            InOutHelper.CreateBaseInOut(InOutType.String),
+            InOutHelper.CreateBaseInOut(InOutType.Flow)
         };
         
         [Test]
@@ -46,9 +46,10 @@ namespace Tests.EditMode.ut.Backend.InOut.Base
         {
             //given
             //when
-            _primitiveIn.Connect(output);
+            _flowIn.Connect(output);
             //then
-            InOutHelper.ExpectAreConnected(_primitiveIn, output);
+            InOutHelper.ExpectAreConnected(_flowIn, output);
         }
+
     }
 }

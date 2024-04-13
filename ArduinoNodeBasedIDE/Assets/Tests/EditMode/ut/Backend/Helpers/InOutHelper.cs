@@ -1,10 +1,10 @@
 using System;
 using Backend.InOut;
-using Backend.InOut.Base;
+using Backend.InOut.MyType;
 using Backend.Node;
 using Backend.Type;
 using NUnit.Framework;
-using Tests.EditMode.ut.Backend.InOut.Base;
+using Tests.EditMode.ut.Backend.InOut;
 
 namespace Tests.EditMode.ut.Backend.Helpers
 {

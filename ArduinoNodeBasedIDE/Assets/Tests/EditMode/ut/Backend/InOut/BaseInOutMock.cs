@@ -1,9 +1,7 @@
-using Backend.API;
 using Backend.InOut;
-using Backend.InOut.Base;
 using Backend.Node;
 
-namespace Tests.EditMode.ut.Backend.InOut.Base
+namespace Tests.EditMode.ut.Backend.InOut
 {
     public class BaseInOutMock : BaseInOut
     {
@@ -11,6 +9,6 @@ namespace Tests.EditMode.ut.Backend.InOut.Base
         {
         }
 
-        public override IMyType MyType { get; }
+        public override string InOutName { get; }
     }
 }

@@ -1,5 +1,5 @@
 using Backend.API;
-using Backend.InOut.Base;
+using Backend.InOut.MyType;
 using Backend.Node;
 using Backend.Type;
 
@@ -7,7 +7,7 @@ namespace Backend.InOut
 {
     public static class InOutFactory
     {
-        public static BaseInOut CreateBaseInOut(IMyType myType, IPlaceHolderNodeType parent, InOutSide side)
+        public static MyTypeInOut CreateBaseInOut(IMyType myType, IPlaceHolderNodeType parent, InOutSide side)
         {
             return myType switch
             {

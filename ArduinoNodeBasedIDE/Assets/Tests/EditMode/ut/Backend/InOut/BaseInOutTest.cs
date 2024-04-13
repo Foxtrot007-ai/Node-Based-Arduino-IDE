@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
 using Backend.Exceptions.InOut;
 using Backend.InOut;
-using Backend.InOut.Base;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
 
-namespace Tests.EditMode.ut.Backend.InOut.Base
+namespace Tests.EditMode.ut.Backend.InOut
 {
     [TestFixture]
     [TestOf(typeof(BaseInOut))]
@@ -63,24 +61,6 @@ namespace Tests.EditMode.ut.Backend.InOut.Base
             //when
             InOutException exception = Assert.Throws<SelfConnectionException>(() => baseInOut1.Connect(baseInOut2));
             //then
-        }
-
-        private static List<InOutType> _wrongType = new()
-        {
-            InOutType.Void,
-            InOutType.Dynamic
-        };
-        
-        [Test]
-        [TestCaseSource(nameof(_wrongType))]
-        public void WrongConnectionTypeException(InOutType inOutType)
-        {
-            //given
-            var baseInOut1 = InOutHelper.CreateBaseMock(InOutSide.Input);
-            var baseInOut2 = InOutHelper.CreateBaseMock(InOutSide.Output, inOutType: inOutType);
-            //when
-            //then
-            Assert.Throws<WrongConnectionTypeException>(() => baseInOut1.Connect(baseInOut2));
         }
         
         [Test]
