@@ -26,6 +26,9 @@ public class NodeBlockManager : MonoBehaviour
     //NodeBlock Editor
     public GameObject nodeBlockEditor;
 
+    //Variable Editor
+    public GameObject variableEditorPrefab;
+    public GameObject currentVariableEditor;
 
     // Start is called before the first frame update
     void Start()
@@ -60,10 +63,14 @@ public class NodeBlockManager : MonoBehaviour
         //throw exception
         return null;
     }
-
-    public List<NodeBlock> SearchNodeBlocks(VariableListManager manager, String nodeBlockName)
+    public List<NodeBlock> SearchNodeBlocks(GlobalVariableListManager manager, String nodeBlockName)
     {
         return SearchNodeBlocks(variableList, nodeBlockName);
+    }
+
+    public List<NodeBlock> SearchNodeBlocks(LocalVariableListManager manager, String nodeBlockName)
+    {
+        return SearchNodeBlocks(viewsManager.GetLocalVariables(), nodeBlockName);
     }
 
     public List<NodeBlock> SearchNodeBlocks(FunctionListManager manager, String nodeBlockName)
@@ -158,7 +165,7 @@ public class NodeBlockManager : MonoBehaviour
 
         SpawnNodeBlockWithoutValidation(startNodeBlock).GetComponent<NodeBlockController>().isStartNodeBlock = true;
     }
-    public void AddNodeBlock(string name)
+    public void AddNodeBlock(GlobalVariableListManager list, string name)
     {
         NodeBlock newNodeBlock = new NodeBlock(name, NodeBlockTypes.Variable, 0, 1);
 
@@ -168,6 +175,18 @@ public class NodeBlockManager : MonoBehaviour
         }
 
         variableList.Add(newNodeBlock);
+    }
+
+    public void AddNodeBlock(LocalVariableListManager list, string name)
+    {
+        NodeBlock newNodeBlock = new NodeBlock(name, NodeBlockTypes.Variable, 0, 1);
+
+        if (viewsManager.GetLocalVariables().Contains(newNodeBlock))
+        {
+            return;
+        }
+
+        viewsManager.AddVariableToView(newNodeBlock);
     }
     //Update types
 
@@ -202,7 +221,11 @@ public class NodeBlockManager : MonoBehaviour
     }
     public void SetNodeBlockToEdit(VariableButtonScript button, NodeBlock nodeBlock)
     {
-        SetNodeBlockToEdit(variableList, nodeBlock);
+        if(currentVariableEditor == null)
+        {
+            currentVariableEditor = Instantiate(variableEditorPrefab, Vector3.zero, Quaternion.identity, GameObject.FindGameObjectWithTag("Canvas").transform);
+            currentVariableEditor.GetComponent<VariableEditor>().InstantiateEditor(nodeBlock);
+        }
     }
 
     public void SetNodeBlockToEdit(FunctionButtonScript button, NodeBlock nodeBlock)

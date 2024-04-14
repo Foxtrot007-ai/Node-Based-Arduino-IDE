@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class VariableListManager : ListManager
+public class LocalVariableListManager : ListManager
 {
     public GameObject nameField;
     protected override List<NodeBlock> GetNodeBlocks()
@@ -13,7 +13,7 @@ public class VariableListManager : ListManager
     }
     public void CreateNewVariable()
     {
-        nodeBlockManager.AddNodeBlock(nameField.GetComponent<TMP_InputField>().text);
+        nodeBlockManager.AddNodeBlock(this, nameField.GetComponent<TMP_InputField>().text);
         UpdateContent();
     }
 }

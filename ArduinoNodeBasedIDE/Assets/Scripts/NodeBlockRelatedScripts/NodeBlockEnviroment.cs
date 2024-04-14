@@ -19,7 +19,7 @@ public class NodeBlockEnviroment
 
     private void fillFunction(ref NodeBlock function)
     {
-        List<GameObject> blocks = manager.viewsManager.views[function];
+        List<GameObject> blocks = manager.viewsManager.views[function].Item1;
         List<NodeBlock> nodeblocks = new List<NodeBlock>();
         foreach(GameObject block in blocks)
         {

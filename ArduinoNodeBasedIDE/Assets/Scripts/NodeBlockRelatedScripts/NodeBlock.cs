@@ -28,7 +28,7 @@ public class NodeBlock : ICloneable{
     public int inputBlockListSize;
 
     public NodeBlock outputBlock; //points to nodeblock that take its input or null
-    public string outputType;
+    public string outputType = "void";
     public bool returnOutputBlock;
 
     public NodeBlock(string name, NodeBlockTypes nbtype, int numberOfInput, int output)

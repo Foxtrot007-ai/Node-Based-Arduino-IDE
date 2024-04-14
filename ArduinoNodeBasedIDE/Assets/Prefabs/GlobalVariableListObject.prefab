@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2603179451557431231}
   - component: {fileID: 6605215961703071255}
-  - component: {fileID: 3905177173411270212}
+  - component: {fileID: 4829432039026873306}
   m_Layer: 5
   m_Name: GlobalVariableListObject
   m_TagString: SearchBar
@@ -55,7 +55,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 122d2e92d17219e40a416d5bd052a594, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3905177173411270212
+--- !u!114 &4829432039026873306
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -70,7 +70,7 @@ MonoBehaviour:
   lastInput: 
   inputField: {fileID: 5816052060480119176}
   listContainer: {fileID: 7128337597691788689}
-  buttonContent: {fileID: 6683723637829887773, guid: d0dd44d307245544dae2c6911c8c822f, type: 3}
+  buttonContent: {fileID: 6683723637829887773, guid: 589de8d2bccfebd4c8f36dbefafd0c76, type: 3}
   contentObjects: []
   nodeBlockManager: {fileID: 0}
   nameField: {fileID: 0}
@@ -1576,8 +1576,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3905177173411270212}
-        m_TargetAssemblyTypeName: VariableListManager, Assembly-CSharp
+      - m_Target: {fileID: 4829432039026873306}
+        m_TargetAssemblyTypeName: VariableListManager, Scripts
         m_MethodName: CreateNewVariable
         m_Mode: 1
         m_Arguments:

@@ -6,15 +6,15 @@ using UnityEngine;
 public class ViewsManager
 {
     public NodeBlock actualView = null;
-    public Dictionary<NodeBlock, List<GameObject>> views = new Dictionary<NodeBlock, List<GameObject>>();
+    public Dictionary<NodeBlock, Tuple<List<GameObject>, List<NodeBlock>>> views = new Dictionary<NodeBlock, Tuple<List<GameObject>, List<NodeBlock>>>();
 
     public void DeleteNodeBlock(NodeBlock node)
     {
         foreach (var view in views)
         {
-            List<GameObject> toDelete = view.Value.FindAll(x => x.GetComponent<NodeBlockController>().nodeBlock.Equals(node));
+            List<GameObject> toDelete = view.Value.Item1.FindAll(x => x.GetComponent<NodeBlockController>().nodeBlock.Equals(node));
 
-            view.Value.RemoveAll(x => x.GetComponent<NodeBlockController>().nodeBlock.Equals(node));
+            view.Value.Item1.RemoveAll(x => x.GetComponent<NodeBlockController>().nodeBlock.Equals(node));
 
             foreach (var obj in toDelete)
             {
@@ -24,11 +24,19 @@ public class ViewsManager
     }
     public void AddNewView(NodeBlock node)
     {
-        views.Add(node, new List<GameObject>());
+        views.Add(node, new Tuple<List<GameObject>, List<NodeBlock>>(new List<GameObject>(), new List<NodeBlock>()));
     }
     public void AddToView(GameObject ToAdd)
     {
-        views[actualView].Add(ToAdd);
+        views[actualView].Item1.Add(ToAdd);
+    }
+    public void AddVariableToView(NodeBlock variable)
+    {
+        views[actualView].Item2.Add(variable);
+    }
+    public List<NodeBlock> GetLocalVariables()
+    {
+        return views[actualView].Item2;
     }
     public void DeleteView(NodeBlock node, List<NodeBlock> languageReferenceList, List<NodeBlock> functionList)
     {
@@ -36,7 +44,7 @@ public class ViewsManager
         
         DeleteNodeBlock(node);
 
-        foreach (var obj in views[node])
+        foreach (var obj in views[node].Item1)
         {
             GameObject.Destroy(obj);
         }
@@ -47,7 +55,7 @@ public class ViewsManager
     {
         if (actualView != null)
         {
-            foreach (GameObject block in views[actualView])
+            foreach (GameObject block in views[actualView].Item1)
             {
                 if(block != null)
                     block.SetActive(false);
@@ -56,7 +64,7 @@ public class ViewsManager
         actualView = node;
         if (actualView != null)
         {
-            foreach (GameObject block in views[actualView])
+            foreach (GameObject block in views[actualView].Item1)
             {
                 if (block != null)  
                     block.SetActive(true);
