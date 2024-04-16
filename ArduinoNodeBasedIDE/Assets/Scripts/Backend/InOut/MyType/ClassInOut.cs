@@ -1,6 +1,4 @@
-﻿using Backend.API;
-using Backend.Exceptions.InOut;
-using Backend.Node;
+﻿using Backend.Node;
 using Backend.Type;
 
 namespace Backend.InOut.MyType
@@ -11,18 +9,6 @@ namespace Backend.InOut.MyType
             : base(parentNode, side, InOutType.Class, classType)
         {
         }
-        protected override void CheckInOutType(IConnection iConnection)
-        {
-            if (iConnection.InOutType is not InOutType.Class)
-            {
-                throw new WrongConnectionTypeException();
-            }
-
-            var classType = ((ClassInOut)iConnection).ConcreteType;
-            if (classType != ConcreteType)
-            {
-                throw new WrongConnectionTypeException();
-            }
-        }
+        
     }
 }

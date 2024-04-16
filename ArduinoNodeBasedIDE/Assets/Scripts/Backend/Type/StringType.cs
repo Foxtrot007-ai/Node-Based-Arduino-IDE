@@ -2,11 +2,16 @@ using Backend.API;
 
 namespace Backend.Type
 {
-    public class StringType : IMyType
+    public class StringType : IType
     {
         public EType EType => EType.String;
         public string TypeName => "string";
 
+        public bool CanBeCast(IType iMyType)
+        {
+            return iMyType is StringType or PrimitiveType;
+        }
+        
         protected bool Equals(StringType other)
         {
             return true;

@@ -13,19 +13,19 @@ namespace Backend.InOut
             InOutName = name;
         }
         
-        public override void Connect(IConnection iConnection)
-        {
-            if (iConnection.InOutType is not InOutType.Flow)
-            {
-                throw new WrongConnectionTypeException();
-            }
-            base.Connect(iConnection);
-        }
         public override void Reconnect(IInOut inOut)
         {
             if (inOut.InOutType is InOutType.Flow)
             {
                 base.Reconnect(inOut);
+            }
+        }
+        protected override void Check(IInOut inOut)
+        {
+            base.Check(inOut);
+            if (inOut is not FlowInOut)
+            {
+                throw new WrongConnectionTypeException();
             }
         }
     }

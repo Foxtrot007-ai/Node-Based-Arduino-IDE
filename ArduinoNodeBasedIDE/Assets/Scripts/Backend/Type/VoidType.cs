@@ -3,16 +3,21 @@ using Backend.API;
 
 namespace Backend.Type
 {
-    public class VoidType : IMyType
+    public class VoidType : IType
     {
         public EType EType => EType.Void;
         public string TypeName => "void";
 
+        public bool CanBeCast(IType iMyType)
+        {
+            return false;
+        }
+        
         protected bool Equals(VoidType other)
         {
             return true;
         }
-
+        
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;

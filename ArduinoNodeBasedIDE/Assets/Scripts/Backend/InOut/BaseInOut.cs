@@ -28,17 +28,11 @@ namespace Backend.InOut
             InOutType = inOutType;
         }
 
-        public virtual void Connect(IConnection iConnection)
+        public void Connect(IConnection iConnection)
         {
-            if (iConnection is not IInOut inOut)
-            {
-                throw new ArgumentNullException();
-            }
-
-            CheckIsConnected(inOut);
-            CheckSide(inOut);
-            CheckSelfConnection(inOut);
-            CheckCycle(inOut);
+            var inOut = (IInOut)iConnection;
+            Check(inOut);
+            
             inOut.Connected = this;
             Connected = inOut;
         }
@@ -55,7 +49,20 @@ namespace Backend.InOut
             Connected.Connected = null;
             this.Connected = null;
         }
+        
+        protected virtual void Check(IInOut inOut)
+        {
+            if (inOut is null)
+            {
+                throw new ArgumentNullException();
+            }
 
+            CheckIsConnected(inOut);
+            CheckSide(inOut);
+            CheckSelfConnection(inOut);
+            CheckCycle(inOut);
+        }
+        
         private void CheckIsConnected(IInOut inOut)
         {
             if (Connected is not null || inOut.Connected is not null)

@@ -4,7 +4,7 @@ using Backend.Validator;
 
 namespace Backend.Type
 {
-    public class ClassType : IMyType
+    public class ClassType : IType
     {
         public EType EType => EType.Class;
         public string TypeName { get; }
@@ -21,6 +21,15 @@ namespace Backend.Type
             }
 
             TypeName = classType;
+        }
+
+        public bool CanBeCast(IType iMyType)
+        {
+            if (iMyType is not ClassType classType)
+            {
+                return false;
+            }
+            return classType == this;
         }
 
         protected bool Equals(ClassType other)

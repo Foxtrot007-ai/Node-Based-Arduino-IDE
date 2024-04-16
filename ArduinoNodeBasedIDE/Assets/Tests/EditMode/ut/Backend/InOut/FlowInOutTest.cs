@@ -4,7 +4,7 @@ using Backend.InOut;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
 
-namespace Tests.EditMode.ut.Backend.InOut.MyType
+namespace Tests.EditMode.ut.Backend.InOut
 {
     [TestFixture]
     [TestOf(typeof(FlowInOut))]
@@ -17,15 +17,13 @@ namespace Tests.EditMode.ut.Backend.InOut.MyType
         [SetUp]
         public void Init()
         {
-            _flowIn = (FlowInOut) InOutHelper.CreateBaseInOut(InOutType.Flow, InOutSide.Input);
+            _flowIn = InOutHelper.CreateFlowInOut(InOutSide.Input);
         }
 
         private static List<IInOut> _wrong = new()
         {
-            InOutHelper.CreateBaseInOut(InOutType.Primitive),
-            InOutHelper.CreateBaseInOut(InOutType.String),
-            InOutHelper.CreateBaseInOut(InOutType.Class),
-            InOutHelper.CreateBaseInOut(InOutType.Void),
+            InOutHelper.CreateBaseMock(),
+            InOutHelper.CreateMyTypeInOutMock(),
         };
 
         [Test]
@@ -34,17 +32,12 @@ namespace Tests.EditMode.ut.Backend.InOut.MyType
         {
             Assert.Throws<WrongConnectionTypeException>(() =>  _flowIn.Connect(output));
         }
-
-        private static List<IInOut> _ok = new()
-        {
-            InOutHelper.CreateBaseInOut(InOutType.Flow)
-        };
         
         [Test]
-        [TestCaseSource(nameof(_ok))]
-        public void ConnectionOk(IInOut output)
+        public void ConnectionOk()
         {
             //given
+            var output = InOutHelper.CreateFlowInOut();
             //when
             _flowIn.Connect(output);
             //then

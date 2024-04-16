@@ -3,7 +3,7 @@ using Backend.Exceptions;
 
 namespace Backend.Type
 {
-    public class PrimitiveType : IMyType
+    public class PrimitiveType : IType
     {
         public EType EType { get; }
         public string TypeName => EType.ToString().ToLower();
@@ -12,6 +12,11 @@ namespace Backend.Type
         {
             return eType is EType.Short or EType.Int or EType.Long or EType.LongLong or EType.Float or EType.Double
                 or EType.Bool;
+        }
+        
+        public bool CanBeCast(IType iMyType)
+        {
+            return iMyType is PrimitiveType or StringType;
         }
 
         public PrimitiveType(EType primitiveType)

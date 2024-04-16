@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using Backend.API;
 using Backend.Exceptions;
 using Backend.Type;
 using NUnit.Framework;
+using Tests.EditMode.ut.Backend.Helpers;
 
 namespace Tests.EditMode.ut.Backend.Type
 {
@@ -11,6 +13,14 @@ namespace Tests.EditMode.ut.Backend.Type
     public class PrimitiveTypeTest
     {
 
+        private PrimitiveType _primitiveType;
+
+        [SetUp]
+        public void Init()
+        {
+            _primitiveType = new PrimitiveType(EType.Int);
+        }
+        
         private static List<EType> _notPrimitive = new()
         {
             EType.Class,
@@ -50,7 +60,39 @@ namespace Tests.EditMode.ut.Backend.Type
             //then
             Assert.AreEqual(type, primitiveType.EType);
         }
+        
+        private static readonly List<IType> _castFalse = new()
+        {
+            TypeHelper.CreateClassTypeMock("test"),
+            new VoidType(),
+        };
+        
+        [Test]
+        [TestCaseSource(nameof(_castFalse))]
+        public void CanBeCastFalse(IType type)
+        {
+            //given
+            //when
+            //then 
+            Assert.False(_primitiveType.CanBeCast(type));
+        }
+        
+        private static readonly List<IType> _castTrue = new()
+        {
+            new PrimitiveType(EType.LongLong),
+            new StringType(),
+        };
 
+        [Test]
+        [TestCaseSource(nameof(_castTrue))]
+        public void CanBeCastTrue(IType type)
+        {
+            //given
+            //when
+            //then
+            Assert.True(_primitiveType.CanBeCast(type));
+        }
+        
         [Test] 
         public void NotEqual()
         {
