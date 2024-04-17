@@ -6,8 +6,9 @@ using UnityEngine;
 public class ShowListScript : MonoBehaviour
 {
     public GameObject referenceListPrefab;
-    public GameObject variableListPrefab;
+    public GameObject globalVariableListPrefab;
     public GameObject functionListPrefab;
+    public GameObject localVariableListPrefab;
     public NodeBlockManager nodeBlockManager;
     public Vector3 clickPoint;
 
@@ -30,9 +31,14 @@ public class ShowListScript : MonoBehaviour
             setListActive(referenceListPrefab);
         }
 
-        if (Input.GetKeyDown(KeyCode.V))
+        if (Input.GetKeyDown(KeyCode.G))
         {
-            setListActive(variableListPrefab);
+            setListActive(globalVariableListPrefab);
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            setListActive(localVariableListPrefab);
         }
 
         if (Input.GetKeyDown(KeyCode.F))

@@ -6,15 +6,15 @@ public class ReferenceButtonScript : ButtonScript
 {
     public override void SpawnNodeBlock()
     {
-        nodeBlockManager.SpawnNodeBlock(this, node);
+        nodeBlockManager.SpawnNodeBlock(this);
     }
     public override void DeleteNodeBlock()
     {
-        nodeBlockManager.DeleteNodeBlock(this, node);
+        nodeBlockManager.DeleteNodeBlock(this);
     }
 
     public override void EditMyNodeBlock()
     {
-        nodeBlockManager.SetNodeBlockToEdit(this, node);
+        nodeBlockManager.SetNodeBlockToEdit(this);
     }
 }

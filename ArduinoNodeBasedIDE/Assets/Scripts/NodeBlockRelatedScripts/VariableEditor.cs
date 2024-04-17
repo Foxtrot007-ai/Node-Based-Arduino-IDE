@@ -1,4 +1,5 @@
 using System;
+using Backend.API;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,33 +7,33 @@ using UnityEngine;
 
 public class VariableEditor : MonoBehaviour
 {
-    public NodeBlock currentNodeBlock;
+    public IVariableManage variable;
 
-    public GameObject nodeBlockName;
+    public GameObject variableName;
     public GameObject typeField;
 
-    public void InstantiateEditor(NodeBlock variable)
+    public void InstantiateEditor(IVariableManage variable)
     {
-        currentNodeBlock = variable;
-        nodeBlockName.GetComponentInChildren<TMP_InputField>().text = variable.GetName();
-        typeField.GetComponentInChildren<TMP_InputField>().text = variable.GetOutputType();
+        this.variable = variable;
+        variableName.GetComponentInChildren<TMP_InputField>().text = variable.Name;
+        typeField.GetComponentInChildren<TMP_InputField>().text = variable.Type.ToString();
     }
 
     public void CheckForNewName()
     {
-        String inputName = nodeBlockName.GetComponentInChildren<TMP_InputField>().text;
-        if (inputName != currentNodeBlock.GetName())
+        String inputName = variableName.GetComponentInChildren<TMP_InputField>().text;
+        /*if (inputName != variable.Name())
         {
-            currentNodeBlock.SetName(inputName);
-        }
+            variable.Name(inputName);
+        }*/
     }
     public void CheckForNewType()
     {
         String inputType = typeField.GetComponentInChildren<TMP_InputField>().text;
-        if (inputType != currentNodeBlock.GetOutputType())
+        /*if (inputType != variable.GetOutputType())
         {
-            currentNodeBlock.SetName(inputType);
-        }
+            variable.SetName(inputType);
+        }*/
     }
     public void DestroyMe()
     {
