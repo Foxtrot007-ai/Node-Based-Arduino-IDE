@@ -1,4 +1,4 @@
-﻿namespace Backend.InOut
+﻿namespace Backend.Connection
 {
     public enum InOutType
     {

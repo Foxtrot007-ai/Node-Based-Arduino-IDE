@@ -1,10 +1,10 @@
 using System.Collections.Generic;
+using Backend.Connection;
 using Backend.Exceptions.InOut;
-using Backend.InOut;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
 
-namespace Tests.EditMode.ut.Backend.InOut
+namespace Tests.EditMode.ut.Backend.Connection
 {
     [TestFixture]
     [TestOf(typeof(FlowInOut))]
@@ -20,7 +20,7 @@ namespace Tests.EditMode.ut.Backend.InOut
             _flowIn = InOutHelper.CreateFlowInOut(InOutSide.Input);
         }
 
-        private static List<IInOut> _wrong = new()
+        private static List<InOut> _wrong = new()
         {
             InOutHelper.CreateBaseMock(),
             InOutHelper.CreateMyTypeInOutMock(),
@@ -28,7 +28,7 @@ namespace Tests.EditMode.ut.Backend.InOut
 
         [Test]
         [TestCaseSource(nameof(_wrong))]
-        public void WrongConnectionTypeException(IInOut output)
+        public void WrongConnectionTypeException(InOut output)
         {
             Assert.Throws<WrongConnectionTypeException>(() =>  _flowIn.Connect(output));
         }

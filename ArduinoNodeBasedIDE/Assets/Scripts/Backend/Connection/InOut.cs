@@ -6,51 +6,51 @@ using Backend.Exceptions.InOut;
 using Backend.Node;
 using Castle.Core.Internal;
 
-namespace Backend.InOut
+namespace Backend.Connection
 {
-    public abstract class BaseInOut : IInOut
+    public abstract class InOut : IConnection
     {
         public ConnectionPoint UIPoint { get; set; }
         public IPlaceHolderNodeType ParentNode { get; }
-        public IInOut Connected { get; set; }
+        private InOut _connected;
 
         public InOutSide Side { get; }
         public InOutType InOutType { get; }
         public abstract string InOutName { get; }
-        IConnection IConnection.Connected => Connected;
+        public IConnection Connected => _connected;
 
 
-        protected BaseInOut(IPlaceHolderNodeType parentNode, InOutSide side, InOutType inOutType)
+        protected InOut(IPlaceHolderNodeType parentNode, InOutSide side, InOutType inOutType)
         {
             ParentNode = parentNode;
             Side = side;
-            Connected = null;
+            _connected = null;
             InOutType = inOutType;
         }
 
         public void Connect(IConnection iConnection)
         {
-            var inOut = (IInOut)iConnection;
+            var inOut = (InOut)iConnection;
             Check(inOut);
-            
-            inOut.Connected = this;
-            Connected = inOut;
+
+            inOut._connected = this;
+            _connected = inOut;
         }
 
-        public virtual void Reconnect(IInOut inOut)
+        public virtual void Reconnect(InOut inOut)
         {
             //CheckSide and CheckCycle no need bcs only type of connection change 
-            inOut.Connected = this;
-            Connected = inOut;
+            inOut._connected = this;
+            _connected = inOut;
         }
 
         public virtual void Disconnect()
         {
-            Connected.Connected = null;
-            this.Connected = null;
+            _connected._connected = null;
+            _connected = null;
         }
-        
-        protected virtual void Check(IInOut inOut)
+
+        protected virtual void Check(InOut inOut)
         {
             if (inOut is null)
             {
@@ -62,16 +62,16 @@ namespace Backend.InOut
             CheckSelfConnection(inOut);
             CheckCycle(inOut);
         }
-        
-        private void CheckIsConnected(IInOut inOut)
+
+        private void CheckIsConnected(InOut inOut)
         {
-            if (Connected is not null || inOut.Connected is not null)
+            if (_connected is not null || inOut._connected is not null)
             {
                 throw new AlreadyConnectedException();
             }
         }
 
-        private void CheckSide(IInOut iInOut)
+        private void CheckSide(InOut iInOut)
         {
             if (Side == iInOut.Side)
             {
@@ -79,15 +79,15 @@ namespace Backend.InOut
             }
         }
 
-        private void CheckSelfConnection(IInOut iInOut)
+        private void CheckSelfConnection(InOut iInOut)
         {
             if (iInOut.ParentNode == ParentNode)
             {
                 throw new SelfConnectionException();
             }
         }
-        
-        private void CheckCycle(IInOut inOut)
+
+        private void CheckCycle(InOut inOut)
         {
             var visited = new HashSet<IPlaceHolderNodeType> { ParentNode };
             var toVisit = new Stack<IPlaceHolderNodeType>();
@@ -100,10 +100,10 @@ namespace Backend.InOut
                 {
                     throw new CycleException();
                 }
-                
+
                 foreach (var iter in parent.InputsListInOut.Concat(parent.OutputsListInOut))
                 {
-                    var newParent = iter.Connected?.ParentNode;
+                    var newParent = iter._connected?.ParentNode;
                     if (newParent is not null && visited.Add(newParent))
                     {
                         toVisit.Push(newParent);
@@ -111,5 +111,6 @@ namespace Backend.InOut
                 }
             }
         }
+        
     }
 }

@@ -1,10 +1,9 @@
-﻿using Backend.API;
-using Backend.Exceptions.InOut;
+﻿using Backend.Exceptions.InOut;
 using Backend.Node;
 
-namespace Backend.InOut
+namespace Backend.Connection
 {
-    public class FlowInOut : BaseInOut
+    public class FlowInOut : InOut
     {
         public override string InOutName { get; }
 
@@ -13,14 +12,14 @@ namespace Backend.InOut
             InOutName = name;
         }
         
-        public override void Reconnect(IInOut inOut)
+        public override void Reconnect(InOut inOut)
         {
             if (inOut.InOutType is InOutType.Flow)
             {
                 base.Reconnect(inOut);
             }
         }
-        protected override void Check(IInOut inOut)
+        protected override void Check(InOut inOut)
         {
             base.Check(inOut);
             if (inOut is not FlowInOut)
@@ -28,5 +27,6 @@ namespace Backend.InOut
                 throw new WrongConnectionTypeException();
             }
         }
+        
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Backend.Node;
 using Backend.Type;
 
-namespace Backend.InOut.MyType
+namespace Backend.Connection.MyType
 {
     public class ClassInOut : MyTypeInOut<ClassType>
     {
@@ -9,6 +9,6 @@ namespace Backend.InOut.MyType
             : base(parentNode, side, InOutType.Class, classType)
         {
         }
-        
+
     }
 }

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using Backend.InOut;
+using Backend.Connection;
 
 namespace Backend.Node
 {
     public interface IPlaceHolderNodeType : INode
     {
-        public List<IInOut> InputsListInOut { get; }
-        public List<IInOut> OutputsListInOut { get; }
+        public List<InOut> InputsListInOut { get; }
+        public List<InOut> OutputsListInOut { get; }
     }
 }

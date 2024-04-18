@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Backend.API;
-using Backend.InOut;
+using Backend.Connection;
 
 namespace Backend.Node
 {
@@ -13,8 +13,8 @@ namespace Backend.Node
         public NodeType NodeType { get; protected set;}
         public List<IConnection> InputsList => (List<IConnection>)InputsListInOut.Cast<IConnection>();
         public List<IConnection> OutputsList => (List<IConnection>)OutputsListInOut.Cast<IConnection>();
-        public List<IInOut> InputsListInOut { get; protected set; }
-        public List<IInOut> OutputsListInOut { get; protected set;}
+        public List<InOut> InputsListInOut { get; protected set; }
+        public List<InOut> OutputsListInOut { get; protected set;}
         
         public void Delete()
         {

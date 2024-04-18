@@ -1,21 +1,18 @@
-using System;
-using Backend.API;
-using Backend.InOut;
-using Backend.InOut.MyType;
+using Backend.Connection;
 using Backend.Node;
 using Backend.Type;
 using NUnit.Framework;
-using Tests.EditMode.ut.Backend.InOut;
+using Tests.EditMode.ut.Backend.Connection;
 
 namespace Tests.EditMode.ut.Backend.Helpers
 {
     public static class InOutHelper
     {
-        public static BaseInOutMock CreateBaseMock(InOutSide side = InOutSide.Output,
+        public static InOutMock CreateBaseMock(InOutSide side = InOutSide.Output,
             IPlaceHolderNodeType parent = null, InOutType inOutType = InOutType.Primitive)
         {
             parent ??= NodeHelper.CreateBaseParent();
-            var inOut = new BaseInOutMock(parent, side, inOutType);
+            var inOut = new InOutMock(parent, side, inOutType);
             NodeHelper.Add(parent, inOut, side);
             return inOut;
         }
@@ -38,20 +35,13 @@ namespace Tests.EditMode.ut.Backend.Helpers
             return inOut;
         }
 
-        public static void Connect(IInOut inOut1, IInOut inOut2)
-        {
-            inOut2.Connected = inOut1;
-            inOut1.Connected = inOut2;
-            ExpectAreConnected(inOut1, inOut2);
-        }
-
-        public static void ExpectAreConnected(IInOut inOut1, IInOut inOut2)
+        public static void ExpectAreConnected(InOut inOut1, InOut inOut2)
         {
             Assert.AreSame(inOut1, inOut2.Connected);
             Assert.AreSame(inOut2, inOut1.Connected);
         }
 
-        public static void ExpectNullConnected(params IInOut[] list)
+        public static void ExpectNullConnected(params InOut[] list)
         {
             foreach (var inOut in list)
             {
@@ -59,7 +49,7 @@ namespace Tests.EditMode.ut.Backend.Helpers
             }
         }
 
-        public static void ExpectAreNotConnected(IInOut inOut1, IInOut inOut2)
+        public static void ExpectAreNotConnected(InOut inOut1, InOut inOut2)
         {
             if (inOut1.Connected is null || inOut2.Connected is null) return;
 

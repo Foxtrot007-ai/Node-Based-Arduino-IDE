@@ -1,15 +1,15 @@
 using System;
+using Backend.Connection;
 using Backend.Exceptions.InOut;
-using Backend.InOut;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
 
-namespace Tests.EditMode.ut.Backend.InOut
+namespace Tests.EditMode.ut.Backend.Connection
 {
     [TestFixture]
-    [TestOf(typeof(BaseInOut))]
+    [TestOf(typeof(InOut))]
     [Category("InOut")]
-    public class BaseInOutTest
+    public class InOutTest
     {
         
         [Test]
@@ -29,7 +29,7 @@ namespace Tests.EditMode.ut.Backend.InOut
             var baseInOut1 = InOutHelper.CreateBaseMock(InOutSide.Input);
             var baseInOut2 = InOutHelper.CreateBaseMock(InOutSide.Output);
             var baseInOut3 = InOutHelper.CreateBaseMock(InOutSide.Input);
-            InOutHelper.Connect(baseInOut1, baseInOut2);
+            baseInOut1.Connect(baseInOut2);
             
             //when
             InOutException exception1 = Assert.Throws<AlreadyConnectedException>(() => baseInOut1.Connect(baseInOut3));
@@ -91,8 +91,8 @@ namespace Tests.EditMode.ut.Backend.InOut
             var baseIn3 = InOutHelper.CreateBaseMock(InOutSide.Input, parent3);
             var baseOut3 = InOutHelper.CreateBaseMock(InOutSide.Output, parent3);
 
-            InOutHelper.Connect(baseOut1,baseIn2);
-            InOutHelper.Connect(baseOut2,baseIn3);
+            baseOut1.Connect(baseIn2);
+            baseOut2.Connect(baseIn3);
 
             //when
             InOutException exception = Assert.Throws<CycleException>(() => baseOut3.Connect(baseIn1));
@@ -105,7 +105,7 @@ namespace Tests.EditMode.ut.Backend.InOut
             //given
             var baseInOut1 = InOutHelper.CreateBaseMock(InOutSide.Input);
             var baseInOut2 = InOutHelper.CreateBaseMock(InOutSide.Output);
-            InOutHelper.Connect(baseInOut1, baseInOut2);
+            baseInOut1.Connect(baseInOut2);
             //when
             baseInOut1.Disconnect();
             //then
@@ -124,5 +124,6 @@ namespace Tests.EditMode.ut.Backend.InOut
             //then
             InOutHelper.ExpectAreConnected(baseInOut1, baseInOut2);
         }
+        
     }
 }

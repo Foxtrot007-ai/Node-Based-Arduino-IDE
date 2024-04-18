@@ -1,10 +1,8 @@
-using Backend.API;
-using Backend.InOut;
-using Backend.InOut.MyType;
+using Backend.Connection;
 using Backend.Node;
 using Backend.Type;
 
-namespace Tests.EditMode.ut.Backend.InOut
+namespace Tests.EditMode.ut.Backend.Connection
 {
     public class MyTypeInOutMock : MyTypeInOut<IType>
     {
@@ -12,5 +10,6 @@ namespace Tests.EditMode.ut.Backend.InOut
         public MyTypeInOutMock(IPlaceHolderNodeType parentNode, InOutSide side, InOutType inOutType, IType concreteType) : base(parentNode, side, inOutType, concreteType)
         {
         }
+        
     } 
 }

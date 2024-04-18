@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Backend.InOut;
-using Backend.InOut.MyType;
+using Backend.Connection;
+using Backend.Connection.MyType;
 using Backend.Type;
 
 namespace Backend.Node
@@ -20,7 +20,7 @@ namespace Backend.Node
             NodeType = NodeType.If;
             _previousNode = new FlowInOut(this, InOutSide.Input, "prev");
             _predicate = new PrimitiveInOut(this, InOutSide.Input, new PrimitiveType(EType.Bool));
-            InputsListInOut = new List<IInOut>
+            InputsListInOut = new List<InOut>
             {
                 _previousNode,
                 _predicate,
@@ -30,7 +30,7 @@ namespace Backend.Node
             _true = new FlowInOut(this, InOutSide.Output, " true");
             _false = new FlowInOut(this, InOutSide.Output, " false");
 
-            OutputsListInOut = new List<IInOut>
+            OutputsListInOut = new List<InOut>
             {
                 _nextNode,
                 _true,

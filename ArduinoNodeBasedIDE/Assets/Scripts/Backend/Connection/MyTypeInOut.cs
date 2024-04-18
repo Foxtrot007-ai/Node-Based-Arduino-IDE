@@ -2,9 +2,9 @@ using Backend.Exceptions.InOut;
 using Backend.Node;
 using Backend.Type;
 
-namespace Backend.InOut
+namespace Backend.Connection
 {
-    public abstract class MyTypeInOut : BaseInOut
+    public abstract class MyTypeInOut : InOut
     {
         public abstract IType MyType { get; }
         protected MyTypeInOut(IPlaceHolderNodeType parentNode, InOutSide side, InOutType inOutType) : base(parentNode, side, inOutType)
@@ -24,7 +24,7 @@ namespace Backend.InOut
             ConcreteType = concreteType;
         }
 
-        public override void Reconnect(IInOut inOut)
+        public override void Reconnect(InOut inOut)
         {
             try
             {
@@ -36,12 +36,12 @@ namespace Backend.InOut
             {
             }
         }
-        protected override void Check(IInOut inOut)
+        protected override void Check(InOut inOut)
         {
             base.Check(inOut);
             CheckInOutType(inOut);
         }
-        private void CheckInOutType(IInOut inOut)
+        private void CheckInOutType(InOut inOut)
         {
             if (inOut is not MyTypeInOut myTypeInOut)
             {
