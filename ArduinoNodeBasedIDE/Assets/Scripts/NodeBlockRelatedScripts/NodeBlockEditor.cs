@@ -1,26 +1,21 @@
-using Codice.CM.Client.Differences;
-using PlasticGui;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using Backend.API;
+using Backend.API.DTO;
+
 
 public class NodeBlockEditor : MonoBehaviour
 {
-    public NodeBlock currentNodeBlock;
+    public IFunctionManage currentNodeBlock;
 
     public GameObject nodeBlockName;
 
-    public GameObject inputEditorPrefab;
-    public GameObject outputEditorPrefab;
+    public GameObject inputButtonPrefab;
 
-    public GameObject inputStartPoint;
-    public GameObject outputStartPoint;
+    public GameObject outputTypeField;
 
-    public Vector3 inputPointIncrease;
 
     public bool instantiated = false;
     public GameObject listContainer;
@@ -28,7 +23,7 @@ public class NodeBlockEditor : MonoBehaviour
     public GameObject outputObject;
 
     public NodeBlockManager nodeBlockManager;
-    public DateTime lastTimeStamp;
+  
     public void Start()
     {
         nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
@@ -39,125 +34,71 @@ public class NodeBlockEditor : MonoBehaviour
     {
         if (instantiated)
         {
-            if(lastTimeStamp != currentNodeBlock.lastChange)
-            {
-                UpdateContent();
-            }
+            CheckForNewName();
+            CheckForNewOutputType();
+            InstantiateInputs();
         }
     }
-    public void SetNodeBlockToEdit(NodeBlock nodeBlock)
+    public void SetNodeBlockToEdit(IFunctionManage nodeBlock)
     {
         instantiated = true;
         currentNodeBlock = nodeBlock;
-        UpdateContent();
+        nodeBlockName.GetComponentInChildren<TMP_InputField>().text = currentNodeBlock.Name;
+        outputTypeField.GetComponentInChildren<TMP_InputField>().text = currentNodeBlock.OutputType.ToString();
+        
     }
 
-    public void UpdateField()
+    public void CheckForNewName()
     {
-        nodeBlockName.GetComponent<TMP_InputField>().text = currentNodeBlock.GetName();
+        String inputName = nodeBlockName.GetComponentInChildren<TMP_InputField>().text;
+        if (inputName != currentNodeBlock.Name)
+        {
+            //currentNodeBlock.SetName(inputName);
+        }
     }
+
+    public void CheckForNewOutputType()
+    {
+        String outputType = outputTypeField.GetComponentInChildren<TMP_InputField>().text;
+        if (outputType != currentNodeBlock.OutputType.ToString())
+        {
+            FunctionManageDto dto = new FunctionManageDto { 
+                                                            FunctionName = currentNodeBlock.Name, 
+                                                            OutputType = new MyTypeFake { TypeName = outputType }
+                                                          };
+            currentNodeBlock.Change(dto);
+        }
+    }
+
 
     public void InstantiateInputs() 
     {
-        int numberOfInputs = currentNodeBlock.GetNumberOfInputs();
-
-        for(int i = 0; i < numberOfInputs; i++)
+        foreach(IVariableManage variable in currentNodeBlock.InputList.VariableManages)
         {
-            inputObjects.Add(CreateButton(currentNodeBlock.GetInputType(i)));
+            inputObjects.Add(CreateButton(variable));
         }
     }
 
-    public void InstantiateOutput()
+    public void CleanInput(GameObject inputButton)
     {
-        if (currentNodeBlock.returnOutputBlock)
-        {
-            outputObject = CreateOutPoint(outputEditorPrefab, outputStartPoint.transform.position, currentNodeBlock.GetOutputType());
-        }
+        inputObjects.Remove(inputButton);
+        GameObject.Destroy(inputButton);
     }
-
-    public GameObject CreateOutPoint(GameObject prefab, Vector3 point, string type)
-    { 
-        GameObject temp = Instantiate(prefab, point, Quaternion.identity);
-        temp.transform.SetParent(this.transform);
-        temp.transform.localScale = Vector3.one;
-        temp.GetComponentInChildren<TMP_InputField>().text = type;
-        return temp;
-    }
-
-    public void CleanEditor()
+    
+    public void AddInput(string name, string type)
     {
-        foreach(var node in inputObjects)
-        {
-            GameObject.Destroy(node);
-        }
-        inputObjects.Clear();
-
-        if (outputObject != null)
-        {
-            GameObject.Destroy(outputObject);
-        }
+        IVariableManage variable = new VariableFake { Name = name, Type = new MyTypeFake { TypeName = type } };
+        currentNodeBlock.InputList.AddVariable(variable);
+        inputObjects.Add(CreateButton(variable));
     }
-    protected GameObject CreateButton(string type)
+
+    protected GameObject CreateButton(IVariableManage variable)
     {
-        GameObject newContent = Instantiate(inputEditorPrefab);
+        GameObject newContent = Instantiate(inputButtonPrefab);
         newContent.transform.SetParent(listContainer.transform);
-        newContent.GetComponentInChildren<TMP_InputField>().text = type;
+        newContent.GetComponentInChildren<TMP_InputField>().text = variable.ToString();
         newContent.transform.localScale = Vector3.one;
+        newContent.GetComponent<ButtonScript>().variable = variable;
         return newContent;
-    }
-
-    protected void UpdateContent()
-    {
-        lastTimeStamp = currentNodeBlock.lastChange;
-        UpdateField();
-        CleanEditor();
-        InstantiateInputs();
-        InstantiateOutput();
-    }
-
-    public void DeleteInput()
-    {
-        currentNodeBlock.DeleteInput();
-    }
-
-    public void AddInput()
-    {
-        currentNodeBlock.AddInput();
-    }
-    public void DeleteOutput()
-    {
-        currentNodeBlock.DeleteOutput();
-    }
-
-    public void AddOutput()
-    {
-        currentNodeBlock.AddOutput();
-    }
-
-    public void UpdateNodeBlockData()
-    {
-        if (currentNodeBlock == null) return;
-        string newName = nodeBlockName.GetComponentInChildren<TMP_InputField>().text;
-        if(newName != currentNodeBlock.GetName())
-        {
-            currentNodeBlock.SetName(newName);
-        }
-
-        for (int i = 0; i < currentNodeBlock.GetNumberOfInputs(); i++)
-        {
-            string newType = inputObjects[i].GetComponentInChildren<TMP_InputField>().text;
-            if (newType != currentNodeBlock.GetInputType(i)) {
-                nodeBlockManager.updateInputType(i, newType, currentNodeBlock);
-            } 
-        }
-
-        if (currentNodeBlock.returnOutputBlock)
-        {
-            string newType = outputObject.GetComponentInChildren<TMP_InputField>().text;
-            if (newType != currentNodeBlock.GetOutputType())
-            {
-                nodeBlockManager.updateOutputType(newType, currentNodeBlock);
-            }
-        }
     }
 }

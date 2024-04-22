@@ -7,10 +7,12 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.MemoryProfiler;
 using UnityEngine;
+using Backend;
+using Backend.API;
 
 public class NodeBlockController : MonoBehaviour
 {
-    public NodeBlock nodeBlock;
+    public INode nodeBlock;
   
 
     public GameObject textField;
@@ -22,27 +24,20 @@ public class NodeBlockController : MonoBehaviour
 
     public GameObject inPointStartPoint;
     public GameObject outPointStartPoint;
-    public GameObject nextBlockStartPoint;
-    public GameObject previousBlockStartPoint;
 
     public Vector3 inPointStartPointIncrease;
-    public Vector3 nextBlockStartPointIncrease;
-      
+    public Vector3 outPointStartPointIncrease;
+
     public GameObject inPointPrefab;
     public GameObject outPointPrefab;
-    public GameObject nextBlockPrefab;
-    public GameObject previousBlockPrefab;
 
     public List<GameObject> inPointsList = new List<GameObject>();
-    public GameObject outPoint = null;
-    public List<GameObject> nextBlockList = new List<GameObject>();
-    public GameObject previousBlock = null;
+    public List<GameObject> outPointsList = new List<GameObject>();
 
     public bool instantiated = false;
 
     public NodeBlockManager nodeBlockManager;
 
-    public DateTime lastTimeStamp;
     public void DestroyMe()
     {
         if (!isStartNodeBlock)
@@ -58,139 +53,62 @@ public class NodeBlockController : MonoBehaviour
     {
         if (instantiated)
         {
-            if (lastTimeStamp != nodeBlock.lastChange)
-            {
-                ReloadBlock();
-            }
+            CheckForNameChange();
         }
-        
     }
-    public void ReloadBlock()
-    {
-        DestroyConnections();
-        InstantiateNodeBlockController(this.nodeBlock);
-    }
-    public void DestroyConnections()
-    {
-        foreach(GameObject p in inPointsList)
-        {
-            Destroy(p);
-            inPointStartPoint.transform.position -= inPointStartPointIncrease;
-        }
-        inPointsList.Clear();
-        if(outPoint != null)
-        {
-            Destroy(outPoint);
-        }
-        foreach (GameObject p in nextBlockList)
-        {
-            Destroy(p);
-            nextBlockStartPoint.transform.position -= nextBlockStartPointIncrease;
-        }
-        nextBlockList.Clear();
-        if (previousBlock != null)
-        {
-            Destroy(previousBlock);
-        }
-        instantiated = false;
-    }
-    public void InstantiateNodeBlockController(NodeBlock node)
-    {
-        lastTimeStamp = node.lastChange;
-     
 
+    public void ResizeConnections()
+    {
+        //to do
+    }
+
+    private void CheckForNameChange()
+    {
+        if(textField.GetComponent<TMP_Text>().text != nodeBlock.NodeName)
+        {
+            textField.GetComponent<TMP_Text>().text = nodeBlock.NodeName;
+        }
+    }
+
+    public void InstantiateNodeBlockController(INode nodeBlock)
+    {
         instantiated = true;
 
-        SetNodeBlock(node);
+        SetNodeBlock(nodeBlock);
         AddInPoints();
         AddOutPoint();
-        AddNextBlocks();
-        AddPreviousBlock();
     }
-    /*
-    private void Unconnect(GameObject point)
-    {
-        ConnectionPoint connection = point.GetComponent<ConnectionPoint>();
-        if (connection.connectedPoint != null)
-        {
-            connection.Unconnect();
-        }
-        
-    }
-    */
-    public void UnconnectAll()
-    {
-        /*
-        foreach(var point in inPointsList)
-        {
-            Unconnect(point);
-        }
 
-        if(outPoint != null)
-        {
-            Unconnect(outPoint);
-        }
-
-        foreach (var point in nextBlockList)
-        {
-            Unconnect(point);
-        }
-
-        if (previousBlock != null)
-        {
-            Unconnect(previousBlock);
-        }
-        */
-    }
-    
-    private GameObject CreatePoint(GameObject prefab, Vector3 spawnPoint, NodeBlock nodeBlock, string type, int connectionIndex, Transform parent)
+    private GameObject CreatePoint(GameObject prefab, Vector3 spawnPoint, IConnection con, Transform parent)
     {
         GameObject newPoint = Instantiate(prefab, spawnPoint, Quaternion.identity);
         newPoint.transform.SetParent(parent);
         ConnectionPoint connection = newPoint.GetComponent<ConnectionPoint>();
-        connection.InstantiateConnection(this, type, connectionIndex);
+        connection.InstantiateConnection(con);
         return newPoint;
     }
     private void AddInPoints()
     {
-        for(int i = 0; i < nodeBlock.GetNumberOfInputs(); i++)
-        {
-            GameObject newInPoint = CreatePoint(inPointPrefab, inPointStartPoint.transform.position, nodeBlock, nodeBlock.GetInputType(i), i, this.transform);
-            inPointsList.Add(newInPoint);
-            inPointStartPoint.transform.position += inPointStartPointIncrease;
-        }
+        AddPoints(nodeBlock.InputsList, inPointsList, inPointPrefab, inPointStartPoint, inPointStartPointIncrease);
     }
-
     private void AddOutPoint()
     {
-        if (nodeBlock.returnOutputBlock)
-        {
-            outPoint = CreatePoint(outPointPrefab, outPointStartPoint.transform.position, nodeBlock, nodeBlock.GetOutputType(), 0, this.transform);
-        }
-        
+        AddPoints(nodeBlock.OutputsList, outPointsList, outPointPrefab, outPointStartPoint, outPointStartPointIncrease);
     }
-
-    private void AddNextBlocks()
+    private void AddPoints(List<IConnection> list, List<GameObject> objectList, GameObject prefab, GameObject startPoint, Vector3 increase)
     {
-        for (int i = 0; i < nodeBlock.nextBlockListSize; i++)
+        foreach (IConnection con in list)
         {
-            GameObject newNextPoint = CreatePoint(nextBlockPrefab, nextBlockStartPoint.transform.position, nodeBlock, "", 0, this.transform);
-            nextBlockList.Add(newNextPoint);
-            nextBlockStartPoint.transform.position += nextBlockStartPointIncrease;
-        }  
-    }
-    private void AddPreviousBlock()
-    {
-        if (nodeBlock.hasPreviousBlock)
-        {
-            previousBlock = CreatePoint(previousBlockPrefab, previousBlockStartPoint.transform.position, nodeBlock, "", 0, this.transform);
+            GameObject newInPoint = CreatePoint(prefab, startPoint.transform.position, con, this.transform);
+            objectList.Add(newInPoint);
+            startPoint.transform.position += increase;
         }
     }
 
-    private void SetNodeBlock(NodeBlock node)
+    private void SetNodeBlock(INode nodeBlock)
     {
-        this.nodeBlock = node;
-        textField.GetComponent<TMP_Text>().text = nodeBlock.GetName();
+        this.nodeBlock = nodeBlock;
+        textField.GetComponent<TMP_Text>().text = nodeBlock.NodeName;
     }
 }
 

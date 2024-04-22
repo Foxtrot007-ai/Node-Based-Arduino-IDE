@@ -185,7 +185,7 @@ public class NodeBlockManager : MonoBehaviour
 
     public void AddNodeBlock(string name, int numberOfInput, int numberOfOutput)
     {
-        IFunctionManage function = null;
+        IFunctionManage function = new FunctionFake { Name = name };
 
         if (myFunctionList.Contains(function))
         {
@@ -204,7 +204,7 @@ public class NodeBlockManager : MonoBehaviour
     }
     public void AddNodeBlock(GlobalVariableListManager list, string name)
     {
-        IVariableManage variable = null;
+        IVariableManage variable = new VariableFake { Name = name };
 
         if (variableList.Contains(variable))
         {
@@ -216,7 +216,7 @@ public class NodeBlockManager : MonoBehaviour
 
     public void AddNodeBlock(LocalVariableListManager list, string name)
     {
-        IVariableManage variable = null;
+        IVariableManage variable = new VariableFake { Name = name };
 
         if (viewsManager.GetLocalVariables().Contains(variable))
         {
@@ -224,17 +224,6 @@ public class NodeBlockManager : MonoBehaviour
         }
 
         viewsManager.AddVariableToView(variable);
-    }
-    //Update types
-
-    public void updateInputType(int index, string newType, NodeBlock node)
-    {
-        node.SetInputType(newType, index);
-    }
-
-    public void updateOutputType(string newType, NodeBlock node)
-    {
-        node.SetOutputType(newType);
     }
 
 

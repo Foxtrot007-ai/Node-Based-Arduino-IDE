@@ -15,7 +15,7 @@ public class DeleteAction : IAction
     public void RedoAction()
     {
         Debug.Log("Redo DeleteAction");
-        nodeBlockObject.GetComponent<NodeBlockController>().UnconnectAll();
+        //nodeBlockObject.GetComponent<NodeBlockController>().UnconnectAll();
         nodeBlockObject.SetActive(false);
     }
 
