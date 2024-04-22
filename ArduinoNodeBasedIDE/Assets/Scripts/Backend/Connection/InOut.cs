@@ -18,12 +18,14 @@ namespace Backend.Connection
         public InOutType InOutType { get; }
         public abstract string InOutName { get; }
         public IConnection Connected => _connected;
+        private List<ISubscribeInOut> _subscribe;
         protected InOut(IPlaceHolderNodeType parentNode, InOutSide side, InOutType inOutType)
         {
             ParentNode = parentNode;
             Side = side;
             _connected = null;
             InOutType = inOutType;
+            _subscribe = new List<ISubscribeInOut>();
         }
 
         public void Connect(IConnection iConnection)
@@ -65,7 +67,7 @@ namespace Backend.Connection
 
         protected virtual void AfterConnectHandler(InOut inOut)
         {
-            ;
+            _subscribe.ForEach(x => x.ConnectNotify(this));
         }
 
         protected virtual void ErrorConnectHandler(InOut inOut, Exception exception)
@@ -108,7 +110,7 @@ namespace Backend.Connection
 
         protected virtual void AfterDisconnectHandler(InOut inOut)
         {
-            ;
+            _subscribe.ForEach(x => x.DisconnectNotify(this));
         }
 
         protected virtual void ErrorDisconnectHandler(InOut inOut, Exception exception)
@@ -182,6 +184,15 @@ namespace Backend.Connection
                 }
             }
         }
-        
+
+        public void Subscribe(ISubscribeInOut subscribeInOut)
+        {
+            _subscribe.Add(subscribeInOut);
+        }
+
+        public void Unsubscribe(ISubscribeInOut subscribeInOut)
+        {
+            _subscribe.Remove(subscribeInOut);
+        }
     }
 }
