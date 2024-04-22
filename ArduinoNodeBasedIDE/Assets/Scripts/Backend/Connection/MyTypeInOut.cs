@@ -1,3 +1,4 @@
+using Backend.API;
 using Backend.Exceptions.InOut;
 using Backend.Node;
 using Backend.Type;
@@ -23,30 +24,26 @@ namespace Backend.Connection
         {
             ConcreteType = concreteType;
         }
-
-        public override void Reconnect(InOut inOut)
+        
+        protected override void PreCheck(IConnection iConnection)
         {
-            try
+            if (iConnection is not MyTypeInOut)
             {
-                CheckInOutType(inOut);
-                //TODO CheckAdapter
-                base.Reconnect(inOut);
+                throw new WrongConnectionTypeException();
             }
-            catch(InOutException)
-            {
-            }
+            base.PreCheck(iConnection);
         }
+
         protected override void Check(InOut inOut)
         {
             base.Check(inOut);
             CheckInOutType(inOut);
+            //TODO CheckAdapter
         }
+        
         private void CheckInOutType(InOut inOut)
         {
-            if (inOut is not MyTypeInOut myTypeInOut)
-            {
-                throw new WrongConnectionTypeException();
-            }
+            var myTypeInOut = (MyTypeInOut)inOut;
 
             if (!MyType.CanBeCast(myTypeInOut.MyType))
             {

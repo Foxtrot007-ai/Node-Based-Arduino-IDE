@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Backend.Connection;
 using Backend.Exceptions.InOut;
 using NSubstitute;
+using NSubstitute.ReceivedExtensions;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
 
@@ -41,10 +42,12 @@ namespace Tests.EditMode.ut.Backend.Connection
         {
             //given
             var output = InOutHelper.CreateMyTypeInOutMock();
-            _myTypeInput.MyType.CanBeCast(output.MyType).Returns(false);
+            output.MyType.CanBeCast(output.MyType).Returns(false);
             //when
             var exception = Assert.Throws<CannotBeCastException>(() => _myTypeInput.Connect(output));
-            //then 
+            //then
+            output.MyType.Received().CanBeCast(_myTypeInput.MyType);
+            _myTypeInput.MyType.DidNotReceiveWithAnyArgs().CanBeCast(default);
         }
 
         [Test]
@@ -52,35 +55,13 @@ namespace Tests.EditMode.ut.Backend.Connection
         {
             //given
             var output = InOutHelper.CreateMyTypeInOutMock();
-            _myTypeInput.MyType.CanBeCast(output.MyType).Returns(true);
+            output.MyType.CanBeCast(_myTypeInput.MyType).Returns(true);
             //when
             _myTypeInput.Connect(output);
             //then
             InOutHelper.ExpectAreConnected(_myTypeInput, output);
-        }
-
-        [Test]
-        public void ReconnectSilentThrow()
-        {
-            //given
-            var output = InOutHelper.CreateMyTypeInOutMock();
-            _myTypeInput.MyType.CanBeCast(output.MyType).Returns(false);
-            //when
-            Assert.DoesNotThrow(() => _myTypeInput.Reconnect(output));
-            //then 
-            InOutHelper.ExpectNullConnected(_myTypeInput, output);
-        }
-
-        [Test]
-        public void ReconnectOk()
-        {
-            //given
-            var output = InOutHelper.CreateMyTypeInOutMock();
-            _myTypeInput.MyType.CanBeCast(output.MyType).Returns(true);
-            //when
-            _myTypeInput.Reconnect(output);
-            //then
-            InOutHelper.ExpectAreConnected(_myTypeInput, output);
+            output.MyType.Received().CanBeCast(_myTypeInput.MyType);
+            _myTypeInput.MyType.DidNotReceiveWithAnyArgs().CanBeCast(default);
         }
 
     }

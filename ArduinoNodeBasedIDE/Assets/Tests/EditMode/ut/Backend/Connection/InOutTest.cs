@@ -113,17 +113,5 @@ namespace Tests.EditMode.ut.Backend.Connection
             Assert.IsNull(baseInOut2.Connected);
         }
         
-        [Test]
-        public void ReconnectOk()
-        {
-            //given
-            var baseInOut1 = InOutHelper.CreateBaseMock(InOutSide.Input);
-            var baseInOut2 = InOutHelper.CreateBaseMock(InOutSide.Output);
-            //when
-            baseInOut1.Reconnect(baseInOut2);
-            //then
-            InOutHelper.ExpectAreConnected(baseInOut1, baseInOut2);
-        }
-        
     }
 }
