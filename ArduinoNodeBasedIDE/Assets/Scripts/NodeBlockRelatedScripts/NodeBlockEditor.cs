@@ -20,7 +20,6 @@ public class NodeBlockEditor : MonoBehaviour
     public bool instantiated = false;
     public GameObject listContainer;
     public List<GameObject> inputObjects;
-    public GameObject outputObject;
 
     public NodeBlockManager nodeBlockManager;
   
@@ -44,7 +43,7 @@ public class NodeBlockEditor : MonoBehaviour
         instantiated = true;
         currentNodeBlock = nodeBlock;
         nodeBlockName.GetComponentInChildren<TMP_InputField>().text = currentNodeBlock.Name;
-        outputTypeField.GetComponentInChildren<TMP_InputField>().text = currentNodeBlock.OutputType.ToString();
+        outputTypeField.GetComponentInChildren<TMP_InputField>().text = currentNodeBlock.OutputType.TypeName;
         
     }
 
@@ -60,12 +59,17 @@ public class NodeBlockEditor : MonoBehaviour
     public void CheckForNewOutputType()
     {
         String outputType = outputTypeField.GetComponentInChildren<TMP_InputField>().text;
-        if (outputType != currentNodeBlock.OutputType.ToString())
+        if (outputType != currentNodeBlock.OutputType.TypeName)
         {
-            FunctionManageDto dto = new FunctionManageDto { 
-                                                            FunctionName = currentNodeBlock.Name, 
-                                                            OutputType = new MyTypeFake { TypeName = outputType }
-                                                          };
+            FunctionManageDto dto = new FunctionManageDto 
+            { 
+                FunctionName = currentNodeBlock.Name, 
+                OutputType = new MyTypeFake 
+                {
+                    TypeName = outputType, 
+                    EType = (Backend.Type.EType)Enum.Parse(typeof(Backend.Type.EType), outputType)
+                }
+            };
             currentNodeBlock.Change(dto);
         }
     }

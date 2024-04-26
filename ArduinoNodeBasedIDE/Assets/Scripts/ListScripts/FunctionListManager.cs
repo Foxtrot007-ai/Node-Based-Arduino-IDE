@@ -9,8 +9,6 @@ using UnityEngine.UI;
 public class FunctionListManager : ListManager
 {
     public GameObject nameField;
-    public GameObject numberOfInputField;
-    public GameObject outputField;
 
     protected override List<IFunctionManage> GetFunctions()
     {

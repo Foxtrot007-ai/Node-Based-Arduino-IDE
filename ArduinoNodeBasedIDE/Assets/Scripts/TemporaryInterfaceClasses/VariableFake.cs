@@ -25,6 +25,8 @@ public class VariableFake : IVariableManage
         Debug.Log("VariableFake:CreateFunction");
         NodeFake newNode = new NodeFake();
         newNode.NodeName = Name;
+        newNode.OutputsList = new List<IConnection>();
+        newNode.InputsList = new List<IConnection>();
         MyInstance.Add(newNode);
         return newNode;
     }

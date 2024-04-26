@@ -14,6 +14,8 @@ public class FunctionFake : IFunctionManage
 
     public IVariableList InputList { get; set; }
 
+    public INode StartNode { get; set; }
+
     private List<INode> MyInstance = new List<INode>();
     public void Change(FunctionManageDto functionManageDto)
     {
@@ -27,6 +29,8 @@ public class FunctionFake : IFunctionManage
         Debug.Log("FunctionFake:CreateFunction");
         NodeFake newNode = new NodeFake();
         newNode.NodeName = Name;
+        newNode.OutputsList = new List<IConnection>();
+        newNode.InputsList = new List<IConnection>();
         MyInstance.Add(newNode);
         return newNode;
     }

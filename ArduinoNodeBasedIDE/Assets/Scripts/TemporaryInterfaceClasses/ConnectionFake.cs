@@ -14,6 +14,8 @@ public class ConnectionFake : IConnection
 
     public ConnectionPoint UIPoint { get; set; }
 
+    public bool IsDeleted { get; }
+
     public void Connect(IConnection iConnection)
     {
         Connected = iConnection;

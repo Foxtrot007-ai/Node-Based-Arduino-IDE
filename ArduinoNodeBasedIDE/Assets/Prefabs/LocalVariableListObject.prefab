@@ -73,7 +73,7 @@ MonoBehaviour:
   buttonContent: {fileID: 6683723637829887773, guid: 589de8d2bccfebd4c8f36dbefafd0c76, type: 3}
   contentObjects: []
   nodeBlockManager: {fileID: 0}
-  nameField: {fileID: 0}
+  nameField: {fileID: 5816052060480119176}
 --- !u!1 &734971633611754040
 GameObject:
   m_ObjectHideFlags: 0
@@ -1576,8 +1576,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: VariableListManager, Assembly-CSharp
+      - m_Target: {fileID: 5523024916770713935}
+        m_TargetAssemblyTypeName: LocalVariableListManager, Scripts
         m_MethodName: CreateNewVariable
         m_Mode: 1
         m_Arguments:

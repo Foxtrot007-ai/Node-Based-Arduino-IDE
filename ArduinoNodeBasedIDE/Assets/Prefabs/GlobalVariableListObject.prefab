@@ -73,7 +73,7 @@ MonoBehaviour:
   buttonContent: {fileID: 6683723637829887773, guid: d0dd44d307245544dae2c6911c8c822f, type: 3}
   contentObjects: []
   nodeBlockManager: {fileID: 0}
-  nameField: {fileID: 0}
+  nameField: {fileID: 5816052060480119176}
 --- !u!1 &734971633611754040
 GameObject:
   m_ObjectHideFlags: 0

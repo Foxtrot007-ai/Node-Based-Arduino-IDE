@@ -21,6 +21,8 @@ public class NodeBlockManager : MonoBehaviour
     //Variable List objects
     public List<IVariableManage> variableList = new List<IVariableManage>();
 
+    public GameObject localVariableList;
+
     //my FunctionsList objects
     public List<IFunctionManage> myFunctionList = new List<IFunctionManage>();
 
@@ -107,25 +109,15 @@ public class NodeBlockManager : MonoBehaviour
         viewsManager.AddToView(nodeBlockObject);
         return nodeBlockObject;
     }
-    public GameObject SpawnNodeBlock(List<IFunctionManage> list, IFunctionManage function)
+    public GameObject SpawnNodeBlock(IFunctionManage function)
     {
-        if (!list.Contains(function))
-        {
-            return null;
-        }
-
         GameObject nodeBlockObject = SpawnNodeBlockWithoutValidation();
         nodeBlockObject.GetComponent<NodeBlockController>().InstantiateNodeBlockController(function.CreateFunction());
         return nodeBlockObject;
     }
 
-    public GameObject SpawnNodeBlock(List<IVariableManage> list, IVariableManage variable)
+    public GameObject SpawnNodeBlock(IVariableManage variable)
     {
-        if (!list.Contains(variable))
-        {
-            return null;
-        }
-
         GameObject nodeBlockObject = SpawnNodeBlockWithoutValidation();
         nodeBlockObject.GetComponent<NodeBlockController>().InstantiateNodeBlockController(variable.CreateVariable());
         return nodeBlockObject;
@@ -137,19 +129,19 @@ public class NodeBlockManager : MonoBehaviour
     }
     public void SpawnNodeBlock(ReferenceButtonScript button)
     {
-        SpawnNodeBlock(languageReferenceParser.functions, button.function);
+        SpawnNodeBlock(button.function);
     }
     public void SpawnNodeBlock(VariableButtonScript button)
     {
-        SpawnNodeBlock(viewsManager.GetLocalVariables(), button.variable);
+        SpawnNodeBlock(button.variable);
     }
     public void SpawnNodeBlock(FunctionButtonScript button)
     {
-        SpawnNodeBlock(myFunctionList, button.function);
+        SpawnNodeBlock(button.function);
     }
     public void SpawnNodeBlock(InputButtonScript button)
     {
-        SpawnNodeBlock(viewsManager.GetLocalVariables(), button.variable);
+        SpawnNodeBlock(button.variable);
     }
 
     //DeleteNodeBlock Section
@@ -185,7 +177,19 @@ public class NodeBlockManager : MonoBehaviour
 
     public void AddNodeBlock(string name, int numberOfInput, int numberOfOutput)
     {
-        IFunctionManage function = new FunctionFake { Name = name };
+        IFunctionManage function = new FunctionFake
+        {
+            Name = name,
+            OutputType = new MyTypeFake
+            {
+                EType = Backend.Type.EType.Void,
+                TypeName = "Void"
+            },
+            InputList = new VariableListFake
+            { 
+                VariableManages = new List<IVariableManage>()
+            }
+        };
 
         if (myFunctionList.Contains(function))
         {
@@ -204,7 +208,15 @@ public class NodeBlockManager : MonoBehaviour
     }
     public void AddNodeBlock(GlobalVariableListManager list, string name)
     {
-        IVariableManage variable = new VariableFake { Name = name };
+        IVariableManage variable = new VariableFake 
+        { 
+            Name = name, 
+            Type = new MyTypeFake 
+            { 
+                EType = Backend.Type.EType.Int, 
+                TypeName = "int" 
+            }
+        };
 
         if (variableList.Contains(variable))
         {
@@ -216,7 +228,15 @@ public class NodeBlockManager : MonoBehaviour
 
     public void AddNodeBlock(LocalVariableListManager list, string name)
     {
-        IVariableManage variable = new VariableFake { Name = name };
+        IVariableManage variable = new VariableFake 
+        {   
+            Name = name,
+            Type = new MyTypeFake
+            {
+                EType = Backend.Type.EType.Int,
+                TypeName = "int"
+            }
+        };
 
         if (viewsManager.GetLocalVariables().Contains(variable))
         {
@@ -266,5 +286,6 @@ public class NodeBlockManager : MonoBehaviour
     public void ChangeView(FunctionButtonScript button)
     {
         viewsManager.ChangeView(button.function);
+        localVariableList.GetComponent<LocalVariableListManager>().ReloadVariables();
     }
 }

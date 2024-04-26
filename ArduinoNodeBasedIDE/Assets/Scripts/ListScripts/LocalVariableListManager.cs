@@ -17,6 +17,11 @@ public class LocalVariableListManager : ListManager
         DestroyContent();
         AddContentVariables();
     }
+
+    public void ReloadVariables()
+    {
+        UpdateContent();
+    }
     public void CreateNewVariable()
     {
         nodeBlockManager.AddNodeBlock(this, nameField.GetComponent<TMP_InputField>().text);

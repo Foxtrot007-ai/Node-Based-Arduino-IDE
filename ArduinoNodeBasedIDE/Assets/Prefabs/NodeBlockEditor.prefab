@@ -728,15 +728,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nodeBlockName: {fileID: 5096975513785429139}
-  inputEditorPrefab: {fileID: 6683723637829887773, guid: 8019d8c7278b5e141acac30b5721d20d, type: 3}
-  outputEditorPrefab: {fileID: 6016326570795073904, guid: b37e311885ea8034b8d8994dfec70375, type: 3}
-  inputStartPoint: {fileID: 7159916511031176004}
-  outputStartPoint: {fileID: 2652326095934595285}
-  inputPointIncrease: {x: 0, y: -10, z: 0}
+  inputButtonPrefab: {fileID: 6683723637829887773, guid: 8019d8c7278b5e141acac30b5721d20d, type: 3}
+  outputTypeField: {fileID: 3852811329574907485}
   instantiated: 0
   listContainer: {fileID: 7830195506954498280}
   inputObjects: []
-  outputObject: {fileID: 0}
   nodeBlockManager: {fileID: 0}
 --- !u!1 &2652326095934595285
 GameObject:
