@@ -15,6 +15,7 @@ public class NodeBlockEditor : MonoBehaviour
     public GameObject inputButtonPrefab;
 
     public GameObject outputTypeField;
+    private DropdownTypesScript dropdownType;
 
 
     public bool instantiated = false;
@@ -22,20 +23,20 @@ public class NodeBlockEditor : MonoBehaviour
     public List<GameObject> inputObjects;
 
     public NodeBlockManager nodeBlockManager;
-  
-    public void Start()
+
+    void Awake()
     {
+        dropdownType = outputTypeField.GetComponentInChildren<DropdownTypesScript>();
         nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
         instantiated = false;
     }
-
-    public void Update()
+    public void UpdateFunction()
     {
         if (instantiated)
         {
             CheckForNewName();
             CheckForNewOutputType();
-            InstantiateInputs();
+            CheckForNewInputs();
         }
     }
     public void SetNodeBlockToEdit(IFunctionManage nodeBlock)
@@ -43,8 +44,8 @@ public class NodeBlockEditor : MonoBehaviour
         instantiated = true;
         currentNodeBlock = nodeBlock;
         nodeBlockName.GetComponentInChildren<TMP_InputField>().text = currentNodeBlock.Name;
-        outputTypeField.GetComponentInChildren<TMP_InputField>().text = currentNodeBlock.OutputType.TypeName;
-        
+        dropdownType.option = currentNodeBlock.OutputType.TypeName;
+        InstantiateInputs();
     }
 
     public void CheckForNewName()
@@ -52,13 +53,18 @@ public class NodeBlockEditor : MonoBehaviour
         String inputName = nodeBlockName.GetComponentInChildren<TMP_InputField>().text;
         if (inputName != currentNodeBlock.Name)
         {
-            //currentNodeBlock.SetName(inputName);
+            FunctionManageDto dto = new FunctionManageDto
+            {
+                FunctionName = inputName,
+                OutputType = currentNodeBlock.OutputType
+            };
+            currentNodeBlock.Change(dto);
         }
     }
 
     public void CheckForNewOutputType()
     {
-        String outputType = outputTypeField.GetComponentInChildren<TMP_InputField>().text;
+        String outputType = dropdownType.option;
         if (outputType != currentNodeBlock.OutputType.TypeName)
         {
             FunctionManageDto dto = new FunctionManageDto 
@@ -73,7 +79,21 @@ public class NodeBlockEditor : MonoBehaviour
             currentNodeBlock.Change(dto);
         }
     }
+    
+    private List<IVariableManage> GetAllInputVariables()
+    {
+        List<IVariableManage> inputs = new List<IVariableManage>();
+        foreach(GameObject input in inputObjects)
+        {
+            inputs.Add(input.GetComponent<ButtonScript>().variable);
+        }
+        return inputs;
+    }
 
+    private void CheckForNewInputs()
+    {
+        //to do
+    }
 
     public void InstantiateInputs() 
     {

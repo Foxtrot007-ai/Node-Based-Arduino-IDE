@@ -12,8 +12,8 @@ using UnityEngine;
 public class LanguageReferenceParser
 {
     public string languageReferenceFile = "Assets/Resources/languageReference.txt";
-    public List<IFunctionManage> functions;
-    public List<IVariableManage> variables;
+    public List<IFunctionManage> functions = new List<IFunctionManage>();
+    public List<IVariableManage> variables = new List<IVariableManage>();
 
     public void CreateNode()
     {
@@ -25,7 +25,6 @@ public class LanguageReferenceParser
     }
     public void loadReferences()
     {
-        functions = new List<IFunctionManage>();
-        variables = new List<IVariableManage>();
+       
     }
 }

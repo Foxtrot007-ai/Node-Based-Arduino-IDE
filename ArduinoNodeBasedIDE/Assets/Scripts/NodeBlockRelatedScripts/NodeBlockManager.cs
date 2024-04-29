@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Backend.API;
 using Backend;
+using Backend.Validator;
 
 public class NodeBlockManager : MonoBehaviour
 {
@@ -34,7 +35,7 @@ public class NodeBlockManager : MonoBehaviour
     public GameObject currentVariableEditor;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         languageReferenceParser.loadReferences();
         instantiateBasicFunctions();
@@ -135,6 +136,11 @@ public class NodeBlockManager : MonoBehaviour
     {
         SpawnNodeBlock(button.variable);
     }
+    public void SpawnSetNodeBlock(VariableButtonScript button)
+    {
+        //setter
+        SpawnNodeBlock(button.variable);
+    }
     public void SpawnNodeBlock(FunctionButtonScript button)
     {
         SpawnNodeBlock(button.function);
@@ -214,7 +220,7 @@ public class NodeBlockManager : MonoBehaviour
             Type = new MyTypeFake 
             { 
                 EType = Backend.Type.EType.Int, 
-                TypeName = "int" 
+                TypeName = "Int"
             }
         };
 
@@ -234,7 +240,7 @@ public class NodeBlockManager : MonoBehaviour
             Type = new MyTypeFake
             {
                 EType = Backend.Type.EType.Int,
-                TypeName = "int"
+                TypeName = "Int"
             }
         };
 
@@ -268,7 +274,7 @@ public class NodeBlockManager : MonoBehaviour
         }
     }
 
-    public void SetNodeBlockToEdit(VariableButtonScript button, IVariableManage variable)
+    public void SetNodeBlockToEdit(VariableButtonScript button)
     {
         if(currentVariableEditor == null)
         {

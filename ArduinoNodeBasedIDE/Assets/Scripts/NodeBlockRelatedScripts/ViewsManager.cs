@@ -1,7 +1,9 @@
 using Backend.API;
+using PlasticGui.WorkspaceWindow.QueryViews;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ViewsManager
@@ -23,7 +25,14 @@ public class ViewsManager
     }
     public List<IVariableManage> GetLocalVariables()
     {
-        return views[actualView].Item2;
+        List<IVariableManage> empty = new List<IVariableManage>();
+
+        if (views.ContainsKey(actualView))
+        {
+            return views[actualView].Item2 ?? empty;
+        }
+
+        return empty;
     }
     public void DeleteView(IFunctionManage node, List<IFunctionManage> functionList)
     {
