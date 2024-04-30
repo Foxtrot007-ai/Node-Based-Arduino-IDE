@@ -8,7 +8,6 @@ public class ConnectionPoint : MonoBehaviour
     public NodeBlockManager nodeBlockManager;
 
     public IConnection connection;
-    public GameObject connectedPoint;
 
     public GameObject typeText;
     public GameObject line;
@@ -44,9 +43,9 @@ public class ConnectionPoint : MonoBehaviour
 
         if(connection.Connected != null)
         {
-            if (connectedPoint.transform.position != points[1])
+            if (connection.Connected.UIPoint.transform.position != points[1])
             {
-                points[1] = connectedPoint.transform.position;
+                points[1] = connection.Connected.UIPoint.transform.position;
                 DrawLine();
             }
         }
@@ -97,15 +96,9 @@ public class ConnectionPoint : MonoBehaviour
 
     public void Disconnect()
     {
-        if (connection.Connected != null)
-        {
-            connectedPoint.GetComponent<ConnectionPoint>().connectedPoint = null;
-        }
         connection.Connected.Disconnect();
-        connectedPoint = null;
         showLine = false;
         ClearLine();
-        
     }
 
     private void OnMouseDrag()
@@ -115,7 +108,6 @@ public class ConnectionPoint : MonoBehaviour
             points[1] = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - directionPoint;
             DrawLine();
         }
-
     }
     private bool checkColliderTag(string tag)
     {
@@ -130,18 +122,14 @@ public class ConnectionPoint : MonoBehaviour
             holding = false;
             return;
         }
+
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 
-        if (hit.collider != null 
-            && checkColliderTag(hit.transform.tag)
+        if (hit.collider != null
+            && CompareTag(hit.collider.tag)
             && hit.collider.gameObject.GetComponent<ConnectionPoint>().connection.Connected == null)
         {
             connection.Connect(hit.collider.gameObject.GetComponent<ConnectionPoint>().connection);
-            if (connection.Connected != null)
-            {
-                connectedPoint = hit.collider.gameObject;
-                hit.collider.gameObject.GetComponent<ConnectionPoint>().connectedPoint = gameObject;
-            }
         }
         else
         {

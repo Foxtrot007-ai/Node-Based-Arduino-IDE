@@ -15,14 +15,14 @@ public class ConnectAction : IAction
     public void RedoAction()
     {
         Debug.Log("Redo ConnectAction");
-        originalPoint.connectedPoint = partnerPoint;
-        partnerPoint.GetComponent<ConnectionPoint>().connectedPoint = originalPoint.gameObject;
+        //originalPoint.connectedPoint = partnerPoint;
+       // partnerPoint.GetComponent<ConnectionPoint>().connectedPoint = originalPoint.gameObject;
     }
 
     public void UndoAction()
     {
         Debug.Log("Undo ConnectAction");
-        originalPoint.connectedPoint = null;
-        partnerPoint.GetComponent<ConnectionPoint>().connectedPoint = null;
+        //originalPoint.connectedPoint = null;
+       // partnerPoint.GetComponent<ConnectionPoint>().connectedPoint = null;
     }
 }

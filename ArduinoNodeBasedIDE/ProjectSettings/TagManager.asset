@@ -17,6 +17,7 @@ TagManager:
   - UndoRedo
   - DropdownType
   - Canvas
+  - NodeBlockEditor
   layers:
   - Default
   - TransparentFX

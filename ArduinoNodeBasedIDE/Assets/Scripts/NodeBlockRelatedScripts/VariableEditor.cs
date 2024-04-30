@@ -60,7 +60,7 @@ public class VariableEditor : MonoBehaviour
     }
     public void DestroyMe()
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
     public void SaveChanges()
     {

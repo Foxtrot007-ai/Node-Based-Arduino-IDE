@@ -17,10 +17,11 @@ public class NodeBlockEditor : MonoBehaviour
     public GameObject outputTypeField;
     private DropdownTypesScript dropdownType;
 
-
     public bool instantiated = false;
     public GameObject listContainer;
     public List<GameObject> inputObjects;
+
+    private int newVariableNameIndex = 0;
 
     public NodeBlockManager nodeBlockManager;
 
@@ -92,37 +93,63 @@ public class NodeBlockEditor : MonoBehaviour
 
     private void CheckForNewInputs()
     {
-        //to do
+        List<IVariableManage> inputsVariablesFromListContainer = GetAllInputVariables();
+        List<IVariableManage> inputsToAdd = inputsVariablesFromListContainer.FindAll(input => !currentNodeBlock.InputList.VariableManages.Contains(input));
+        List<IVariableManage> inputsOldInputsToAdd = inputsVariablesFromListContainer.FindAll(input => currentNodeBlock.InputList.VariableManages.Contains(input));
+        List<IVariableManage> inputsToDelete = currentNodeBlock.InputList.VariableManages.FindAll(input => !inputsOldInputsToAdd.Contains(input));
+
+        foreach (IVariableManage input in inputsToDelete)
+        {
+            currentNodeBlock.InputList.DeleteVariable(input);
+        }
+
+        foreach (IVariableManage input in inputsToAdd)
+        {
+            currentNodeBlock.InputList.AddVariable(input);
+        }
     }
 
     public void InstantiateInputs() 
     {
+        foreach(GameObject input in inputObjects)
+        {
+            Destroy(input);
+        }
+
+        inputObjects.Clear();
+
         foreach(IVariableManage variable in currentNodeBlock.InputList.VariableManages)
         {
             inputObjects.Add(CreateButton(variable));
         }
     }
-
-    public void CleanInput(GameObject inputButton)
+    
+    public void AddInput()
     {
-        inputObjects.Remove(inputButton);
-        GameObject.Destroy(inputButton);
+        IVariableManage variable = new VariableFake 
+        { 
+            Name = "var" + ++newVariableNameIndex, 
+            Type = new MyTypeFake 
+            { 
+                TypeName = "Int", 
+                EType = Backend.Type.EType.Int 
+            } 
+        };
+        inputObjects.Add(CreateButton(variable));
     }
     
-    public void AddInput(string name, string type)
+    public void DeleteInput(GameObject input)
     {
-        IVariableManage variable = new VariableFake { Name = name, Type = new MyTypeFake { TypeName = type } };
-        currentNodeBlock.InputList.AddVariable(variable);
-        inputObjects.Add(CreateButton(variable));
+        inputObjects.Remove(input);
+        Destroy(input);
     }
 
     protected GameObject CreateButton(IVariableManage variable)
     {
         GameObject newContent = Instantiate(inputButtonPrefab);
         newContent.transform.SetParent(listContainer.transform);
-        newContent.GetComponentInChildren<TMP_InputField>().text = variable.ToString();
         newContent.transform.localScale = Vector3.one;
-        newContent.GetComponent<ButtonScript>().variable = variable;
+        newContent.GetComponent<InputButtonScript>().SetNodeBlock(variable);
         return newContent;
     }
 }

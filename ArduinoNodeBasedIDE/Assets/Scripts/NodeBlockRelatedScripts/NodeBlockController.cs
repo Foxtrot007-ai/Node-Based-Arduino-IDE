@@ -13,7 +13,6 @@ using Backend.API;
 public class NodeBlockController : MonoBehaviour
 {
     public INode nodeBlock;
-  
 
     public GameObject textField;
 
@@ -38,6 +37,7 @@ public class NodeBlockController : MonoBehaviour
 
     public NodeBlockManager nodeBlockManager;
 
+
     public void DestroyMe()
     {
         if (!isStartNodeBlock)
@@ -59,7 +59,9 @@ public class NodeBlockController : MonoBehaviour
 
     public void ResizeConnections()
     {
-        //to do
+        AddInPoints();
+        AddOutPoint();
+        field.transform.localScale = new Vector3(60, Math.Max(inPointsList.Count, outPointsList.Count), 0);
     }
 
     private void CheckForNameChange()
@@ -72,11 +74,10 @@ public class NodeBlockController : MonoBehaviour
 
     public void InstantiateNodeBlockController(INode nodeBlock)
     {
-        instantiated = true;
-
         SetNodeBlock(nodeBlock);
         AddInPoints();
         AddOutPoint();
+        instantiated = true;
     }
 
     private GameObject CreatePoint(GameObject prefab, Vector3 spawnPoint, IConnection con, Transform parent)
@@ -89,20 +90,45 @@ public class NodeBlockController : MonoBehaviour
     }
     private void AddInPoints()
     {
-        AddPoints(nodeBlock.InputsList, inPointsList, inPointPrefab, inPointStartPoint, inPointStartPointIncrease);
+        List<GameObject> newInPointsList = new List<GameObject>();
+        Vector3 startPoint = inPointStartPoint.transform.position;
+        foreach (IConnection con in nodeBlock.InputsList)
+        {
+            GameObject newInPoint = inPointsList.Find(point => point.GetComponent<ConnectionPoint>().connection == con);
+            if(newInPoint == null)
+            {
+                newInPoint = CreatePoint(inPointPrefab, startPoint, con, this.transform);
+            }
+            else
+            {
+                newInPoint.transform.position = startPoint;
+            }
+
+            newInPointsList.Add(newInPoint);
+            startPoint += inPointStartPointIncrease;
+        }
+        inPointsList = newInPointsList;
     }
     private void AddOutPoint()
     {
-        AddPoints(nodeBlock.OutputsList, outPointsList, outPointPrefab, outPointStartPoint, outPointStartPointIncrease);
-    }
-    private void AddPoints(List<IConnection> list, List<GameObject> objectList, GameObject prefab, GameObject startPoint, Vector3 increase)
-    {
-        foreach (IConnection con in list)
+        List<GameObject> newOutPointsList = new List<GameObject>();
+        Vector3 startPoint = outPointStartPoint.transform.position;
+        foreach (IConnection con in nodeBlock.OutputsList)
         {
-            GameObject newInPoint = CreatePoint(prefab, startPoint.transform.position, con, this.transform);
-            objectList.Add(newInPoint);
-            startPoint.transform.position += increase;
+            GameObject newOutPoint = outPointsList.Find(point => point.GetComponent<ConnectionPoint>().connection == con);
+            if (newOutPoint == null)
+            {
+                newOutPoint = CreatePoint(outPointPrefab, startPoint, con, this.transform);
+            }
+            else
+            {
+                newOutPoint.transform.position = startPoint;
+            }
+
+            newOutPointsList.Add(newOutPoint);
+            startPoint += outPointStartPointIncrease;
         }
+        outPointsList = newOutPointsList;
     }
 
     private void SetNodeBlock(INode nodeBlock)

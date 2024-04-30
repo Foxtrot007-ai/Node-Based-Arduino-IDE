@@ -1,11 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Backend.API;
-using Backend;
-using Backend.Validator;
 
 public class NodeBlockManager : MonoBehaviour
 {
@@ -31,7 +27,6 @@ public class NodeBlockManager : MonoBehaviour
     public GameObject nodeBlockEditor;
 
     //Variable Editor
-    public GameObject variableEditorPrefab;
     public GameObject currentVariableEditor;
 
     // Start is called before the first frame update
@@ -147,7 +142,8 @@ public class NodeBlockManager : MonoBehaviour
     }
     public void SpawnNodeBlock(InputButtonScript button)
     {
-        SpawnNodeBlock(button.variable);
+        //throw exception
+        Debug.Log("what?");
     }
 
     //DeleteNodeBlock Section
@@ -162,15 +158,16 @@ public class NodeBlockManager : MonoBehaviour
         variableList.Remove(button.variable);
         viewsManager.views[viewsManager.actualView].Item2.Remove(button.variable);
     }
+    public void DeleteNodeBlock(InputButtonScript button)
+    {
+        //throw exception
+        Debug.Log("what?");
+    }
 
     public void DeleteNodeBlock(FunctionButtonScript button)
     {
         button.function.DeleteFunction();
         viewsManager.DeleteView(button.function, myFunctionList);
-    }
-    public void DeleteNodeBlock(InputButtonScript button)
-    {
-        //button.parentFunction.InputList.DelVariable(button.variable);
     }
 
     public void DeleteNodeBlock(ReferenceButtonScript button)
@@ -267,18 +264,18 @@ public class NodeBlockManager : MonoBehaviour
     }
     public void SetNodeBlockToEdit(InputButtonScript button)
     {
-        if (currentVariableEditor == null)
+        if (!currentVariableEditor.activeSelf)
         {
-            currentVariableEditor = Instantiate(variableEditorPrefab, Vector3.zero, Quaternion.identity, GameObject.FindGameObjectWithTag("Canvas").transform);
-            currentVariableEditor.GetComponent<VariableEditor>().InstantiateEditor(button.variable);
+            currentVariableEditor.SetActive(true);
+            currentVariableEditor.GetComponent<VariableEditor>().InstantiateEditor(button.variable);    
         }
     }
 
     public void SetNodeBlockToEdit(VariableButtonScript button)
     {
-        if(currentVariableEditor == null)
+        if (!currentVariableEditor.activeSelf)
         {
-            currentVariableEditor = Instantiate(variableEditorPrefab, Vector3.zero, Quaternion.identity, GameObject.FindGameObjectWithTag("Canvas").transform);
+            currentVariableEditor.SetActive(true);
             currentVariableEditor.GetComponent<VariableEditor>().InstantiateEditor(button.variable);
         }
     }
