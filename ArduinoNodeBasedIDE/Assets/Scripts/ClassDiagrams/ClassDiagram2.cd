@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ButtonScript">
+    <Position X="18" Y="8.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAUAACAAAAAEAgAAAAAAAAAAAAAIAAAAAYAEAAA=</HashCode>
+      <FileName>Assets\Scripts\ButtonScripts\ButtonScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FunctionButtonScript">
+    <Position X="15" Y="12.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAYAAAAAAAAEAAAAAAEAAAAAAAAAAEAAAYAAAAE=</HashCode>
+      <FileName>Assets\Scripts\ButtonScripts\FunctionButtonScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InputButtonScript">
+    <Position X="19" Y="12.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAACAAAEAAAAAAAAAAAAAAAAAAAAAYAEAAA=</HashCode>
+      <FileName>Assets\Scripts\ButtonScripts\InputButtonScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ReferenceButtonScript">
+    <Position X="21" Y="12.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Assets\Scripts\ButtonScripts\ReferenceButtonScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VariableButtonScript">
+    <Position X="17" Y="12.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAACAAAEAAAABAAAAAAAAAAAAAAAAYAAAAA=</HashCode>
+      <FileName>Assets\Scripts\ButtonScripts\VariableButtonScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LanguageReferenceParser">
+    <Position X="8.75" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAIAAAAAAAAgEAAAAAAAAAAAAAAAQAAAAEAAA=</HashCode>
+      <FileName>Assets\Scripts\FileRelatedScripts\LanguageReferenceParser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FunctionListManager">
+    <Position X="18.75" Y="5.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAKABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\ListScripts\FunctionListManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GlobalVariableListManager">
+    <Position X="21" Y="5.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAIAAAIAAAAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Assets\Scripts\ListScripts\GlobalVariableListManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ListManager">
+    <Position X="17.25" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEEEAiAAAIAAACEACBAAAAAAQAACAAAAAAAAQIA=</HashCode>
+      <FileName>Assets\Scripts\ListScripts\ListManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LocalVariableListManager">
+    <Position X="16.5" Y="5.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAICAAAAAIAAAIAAAAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Assets\Scripts\ListScripts\LocalVariableListManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ReferenceListManager">
+    <Position X="14.5" Y="5.75" Width="1.75" />
+    <InheritanceLine Type="ListManager" FixedToPoint="true">
+      <Path>
+        <Point X="18.625" Y="4.684" />
+        <Point X="18.625" Y="5.375" />
+        <Point X="15.521" Y="5.375" />
+        <Point X="15.521" Y="5.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAACAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\ListScripts\ReferenceListManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ShowListScript">
+    <Position X="20.5" Y="1.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAEAACAAIAAABAAABAAAAAAAAAAAEAAgAAAQAAA=</HashCode>
+      <FileName>Assets\Scripts\ListScripts\ShowListScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NodeBlockController">
+    <Position X="6.5" Y="5.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AASAAAFAACIARBIBAAAAAAIBEAEBEMAIAAAAAQkAAIA=</HashCode>
+      <FileName>Assets\Scripts\NodeBlockRelatedScripts\NodeBlockController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConnectionPoint">
+    <Position X="10" Y="5.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAUAAAGAAiAABAAgAAIBAAAAAAEIAQQEAEAAAQASAAA=</HashCode>
+      <FileName>Assets\Scripts\NodeBlockRelatedScripts\ConnectionPoint.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NodeBlockEditor">
+    <Position X="3.5" Y="5.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAkAIgAAHQCIAAAAAAAAIAALQAAEEABAABQAAEA=</HashCode>
+      <FileName>Assets\Scripts\NodeBlockRelatedScripts\NodeBlockEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NodeBlockManager">
+    <Position X="5.5" Y="0.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAEAQAQAMAAAAAEAQACAZAAAABAAACAAAABAAICgQEA=</HashCode>
+      <FileName>Assets\Scripts\NodeBlockRelatedScripts\NodeBlockManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VariableEditor">
+    <Position X="0.75" Y="5.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAQAICAAAAAAAAEAAAAAABAAAAAAAAIAAEAEE=</HashCode>
+      <FileName>Assets\Scripts\NodeBlockRelatedScripts\VariableEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ViewsManager">
+    <Position X="2.5" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAEAAABAAAAEAAAAAAAAABQAAAIAAAA=</HashCode>
+      <FileName>Assets\Scripts\NodeBlockRelatedScripts\ViewsManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DropdownTypesAlerter">
+    <Position X="12" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\DropdownTypesAlerter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DropdownTypesScript">
+    <Position X="11.75" Y="1.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAABAAAAIAAAAAAACAAAAAAAAAAAAAAAAAEg=</HashCode>
+      <FileName>Assets\Scripts\DropdownTypesScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
