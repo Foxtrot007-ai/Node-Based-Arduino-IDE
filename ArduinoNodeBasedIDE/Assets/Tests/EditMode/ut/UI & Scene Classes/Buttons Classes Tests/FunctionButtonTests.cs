@@ -1,15 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Backend.API;
 using Backend.API.DTO;
 using NUnit.Framework;
 using TMPro;
 using UnityEngine;
-using UnityEngine.TestTools;
 using UnityEngine.UI;
 
-namespace ut.UIClasses
+namespace ut.UIClasses.Buttons
 {
     public class FunctionButtonTests
     {

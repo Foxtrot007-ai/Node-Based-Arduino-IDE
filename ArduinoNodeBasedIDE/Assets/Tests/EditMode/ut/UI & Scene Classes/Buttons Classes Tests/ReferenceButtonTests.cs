@@ -8,7 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace ut.UIClasses
+namespace ut.UIClasses.Buttons
 {
     public class ReferenceButtonTests
     {

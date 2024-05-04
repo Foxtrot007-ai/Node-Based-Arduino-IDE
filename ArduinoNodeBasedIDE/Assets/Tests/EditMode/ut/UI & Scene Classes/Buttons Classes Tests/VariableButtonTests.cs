@@ -8,13 +8,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace ut.UIClasses
+namespace ut.UIClasses.Buttons
 {
-    public class InputButtonTests
+    public class VariableButtonTests
     {
-
+    
         [Test]
-        public void InputButtonScriptSetVariableTest()
+        public void VariableButtonScriptSetVariableTest()
         {
             //given
             //Creating variable
@@ -31,7 +31,7 @@ namespace ut.UIClasses
 
             //creating fake button object with his fields
             GameObject button = new GameObject();
-            InputButtonScript script = button.AddComponent<InputButtonScript>();
+            VariableButtonScript script = button.AddComponent<VariableButtonScript>();
 
             GameObject nameField = new GameObject();
             nameField.AddComponent<TextMeshProUGUI>();

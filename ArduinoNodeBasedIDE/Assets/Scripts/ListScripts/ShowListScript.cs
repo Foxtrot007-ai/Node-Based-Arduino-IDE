@@ -17,7 +17,7 @@ public class ShowListScript : MonoBehaviour
         nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
     }
 
-    private void setListActive(GameObject list)
+    public void setListActive(GameObject list)
     {
         clickPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         nodeBlockManager.nodeBlockSpawnPoint = clickPoint;
