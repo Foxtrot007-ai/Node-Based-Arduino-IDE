@@ -16,7 +16,7 @@ namespace Backend.Connection
 
     public abstract class MyTypeInOut<T> : MyTypeInOut where T : IType
     {
-        public T ConcreteType { get; }
+        public T ConcreteType { get; protected set; }
         public override string InOutName => ConcreteType.TypeName;
 
         public override IType MyType => ConcreteType;
@@ -34,10 +34,10 @@ namespace Backend.Connection
             base.PreCheck(iConnection);
         }
 
-        protected override void Check(InOut inOut)
+        protected override void Check(InOut input)
         {
-            base.Check(inOut);
-            CheckInOutType(inOut);
+            base.Check(input);
+            CheckInOutType(input);
             //TODO CheckAdapter
         }
         

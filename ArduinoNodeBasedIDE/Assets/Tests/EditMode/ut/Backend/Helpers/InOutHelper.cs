@@ -1,4 +1,5 @@
 using Backend.Connection;
+using Backend.Connection.MyType;
 using Backend.Node;
 using Backend.Type;
 using NUnit.Framework;
@@ -27,6 +28,15 @@ namespace Tests.EditMode.ut.Backend.Helpers
             return inOut;
         }
 
+        public static AnyInOut CreateAnyInOut(InOutSide side = InOutSide.Output, IPlaceHolderNodeType parent = null, IType myType = null)
+        {
+            parent ??= NodeHelper.CreateBaseParent();
+            myType ??= TypeHelper.CreateMyTypeMock();
+            var inOut = new AnyInOut(parent, side, myType);
+            NodeHelper.Add(parent, inOut, side);
+            return inOut;
+        }
+        
         public static FlowInOut CreateFlowInOut(InOutSide side = InOutSide.Output, IPlaceHolderNodeType parent = null, string name = "test")
         {
             parent ??= NodeHelper.CreateBaseParent();
@@ -34,6 +44,7 @@ namespace Tests.EditMode.ut.Backend.Helpers
             NodeHelper.Add(parent, inOut, side);
             return inOut;
         }
+
 
         public static void ExpectAreConnected(InOut inOut1, InOut inOut2)
         {

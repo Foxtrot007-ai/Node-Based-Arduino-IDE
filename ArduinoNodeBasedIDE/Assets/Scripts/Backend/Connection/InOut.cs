@@ -15,7 +15,7 @@ namespace Backend.Connection
         public IPlaceHolderNodeType ParentNode { get; }
         private InOut _connected;
         public InOutSide Side { get; }
-        public InOutType InOutType { get; }
+        public InOutType InOutType { get; protected set; }
         public abstract string InOutName { get; }
         public IConnection Connected => _connected;
         private List<ISubscribeInOut> _subscribe;
@@ -131,9 +131,27 @@ namespace Backend.Connection
             CheckCycle(inOut);
         }
 
-        protected virtual void Check(InOut inOut)
+        protected virtual void Check(InOut input)
         {
             ;
+        }
+
+        protected void ReCheck()
+        {
+            if (_connected is null)
+                return;
+            
+            var output = Side == InOutSide.Output ? this : (MyTypeInOut) _connected;
+            var input = Side == InOutSide.Input ? this : (MyTypeInOut) _connected;
+            try
+            {
+                output.Check(input);
+            }
+            catch (InOutException e)
+            {
+                Disconnect();
+                throw;
+            }
         }
 
         private void CheckIsConnected(InOut inOut)
