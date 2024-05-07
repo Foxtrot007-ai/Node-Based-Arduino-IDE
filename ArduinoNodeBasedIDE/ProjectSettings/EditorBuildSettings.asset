@@ -11,4 +11,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LocalVariableListManagerTestScene.unity
     guid: e22b9ff79531f864184096db056d0c82
+  - enabled: 1
+    path: Assets/Scenes/GlobalVariableListManagerTestScene.unity
+    guid: cd3aa10b5de2eea4a8cfcfde2da637cd
+  - enabled: 1
+    path: Assets/Scenes/ReferenceListManagerTestScene.unity
+    guid: 313eb374da8a291408814600c574ae25
+  - enabled: 1
+    path: Assets/Scenes/FunctionListManagerTestScene.unity
+    guid: 4d5d868af2c051a4d9a60b74c6d7cbf7
   m_configObjects: {}
