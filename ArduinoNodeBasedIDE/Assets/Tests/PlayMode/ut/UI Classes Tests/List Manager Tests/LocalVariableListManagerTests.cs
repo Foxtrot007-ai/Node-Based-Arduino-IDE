@@ -12,21 +12,6 @@ namespace ut.UIClasses.Lists
 {
     public class LocalVariableListManagerTests
     {
-        public IVariableManage MakeVariable(string name)
-        {
-            IVariableManage node = new VariableFake();
-            node.Change(new VariableManageDto
-            {
-                VariableName = name,
-                Type = new MyTypeFake
-                {
-                    EType = Backend.Type.EType.Int,
-                    TypeName = "Int"
-                }
-            });
-            return node;
-        }
-
         [UnityTest]
         public IEnumerator LoadTestScene()
         {
@@ -74,9 +59,9 @@ namespace ut.UIClasses.Lists
 
             NodeBlockManager manager = managerObject.GetComponent<NodeBlockManager>();
             LocalVariableListManager list = listObject.GetComponent<LocalVariableListManager>();
-            manager.viewsManager.AddVariableToView(MakeVariable("a"));
-            manager.viewsManager.AddVariableToView(MakeVariable("b"));
-            manager.viewsManager.AddVariableToView(MakeVariable("c"));
+            manager.viewsManager.AddVariableToView(SimpleNodeBlockMaker.MakeVariable("a", Backend.Type.EType.Int));
+            manager.viewsManager.AddVariableToView(SimpleNodeBlockMaker.MakeVariable("b", Backend.Type.EType.Int));
+            manager.viewsManager.AddVariableToView(SimpleNodeBlockMaker.MakeVariable("c", Backend.Type.EType.Int));
 
             //when
             list.nameField.GetComponent<TMP_InputField>().text = "";
@@ -106,9 +91,10 @@ namespace ut.UIClasses.Lists
 
             NodeBlockManager manager = managerObject.GetComponent<NodeBlockManager>();
             LocalVariableListManager list = listObject.GetComponent<LocalVariableListManager>();
-            manager.viewsManager.AddVariableToView(MakeVariable("a"));
-            manager.viewsManager.AddVariableToView(MakeVariable("b"));
-            manager.viewsManager.AddVariableToView(MakeVariable("c"));
+            manager.viewsManager.AddVariableToView(SimpleNodeBlockMaker.MakeVariable("a", Backend.Type.EType.Int));
+            manager.viewsManager.AddVariableToView(SimpleNodeBlockMaker.MakeVariable("b", Backend.Type.EType.Int));
+            manager.viewsManager.AddVariableToView(SimpleNodeBlockMaker.MakeVariable("c", Backend.Type.EType.Int));
+
 
             //when
             list.nameField.GetComponent<TMP_InputField>().text = "a1";

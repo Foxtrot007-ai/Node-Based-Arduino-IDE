@@ -11,20 +11,6 @@ namespace ut.UIClasses.Lists
 {
     public class GlobalVariableListManagerTests
     {
-        public IVariableManage MakeVariable(string name)
-        {
-            IVariableManage node = new VariableFake();
-            node.Change(new VariableManageDto
-            {
-                VariableName = name,
-                Type = new MyTypeFake
-                {
-                    EType = Backend.Type.EType.Int,
-                    TypeName = "Int"
-                }
-            });
-            return node;
-        }
 
         [UnityTest]
         public IEnumerator CreateGlobalVariableTest()
@@ -73,10 +59,10 @@ namespace ut.UIClasses.Lists
 
             NodeBlockManager manager = managerObject.GetComponent<NodeBlockManager>();
             GlobalVariableListManager list = listObject.GetComponent<GlobalVariableListManager>();
-            manager.variableList.Add(MakeVariable("a"));
-            manager.variableList.Add(MakeVariable("b"));
-            manager.variableList.Add(MakeVariable("c"));
-            manager.variableList.Add(MakeVariable("d"));
+            manager.variableList.Add(SimpleNodeBlockMaker.MakeVariable("a", Backend.Type.EType.Int));
+            manager.variableList.Add(SimpleNodeBlockMaker.MakeVariable("b", Backend.Type.EType.Int));
+            manager.variableList.Add(SimpleNodeBlockMaker.MakeVariable("c", Backend.Type.EType.Int));
+            manager.variableList.Add(SimpleNodeBlockMaker.MakeVariable("d", Backend.Type.EType.Int));
 
             //when
             list.nameField.GetComponent<TMP_InputField>().text = "test";
@@ -108,10 +94,10 @@ namespace ut.UIClasses.Lists
 
             NodeBlockManager manager = managerObject.GetComponent<NodeBlockManager>();
             GlobalVariableListManager list = listObject.GetComponent<GlobalVariableListManager>();
-            manager.variableList.Add(MakeVariable("a0"));
-            manager.variableList.Add(MakeVariable("a1"));
-            manager.variableList.Add(MakeVariable("a2"));
-            manager.variableList.Add(MakeVariable("d0"));
+            manager.variableList.Add(SimpleNodeBlockMaker.MakeVariable("a0", Backend.Type.EType.Int));
+            manager.variableList.Add(SimpleNodeBlockMaker.MakeVariable("a1", Backend.Type.EType.Int));
+            manager.variableList.Add(SimpleNodeBlockMaker.MakeVariable("a2", Backend.Type.EType.Int));
+            manager.variableList.Add(SimpleNodeBlockMaker.MakeVariable("d0", Backend.Type.EType.Int));
 
             //when
             //should search for only variable with "a" in name

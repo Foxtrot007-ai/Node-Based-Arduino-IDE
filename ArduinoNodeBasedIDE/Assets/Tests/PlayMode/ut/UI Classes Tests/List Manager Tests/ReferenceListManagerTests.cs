@@ -11,20 +11,6 @@ namespace ut.UIClasses.Lists
 {
     public class ReferenceListManagerTests
     {
-        public IFunctionManage MakeFunction(string name)
-        {
-            IFunctionManage node = new FunctionFake();
-            node.Change(new FunctionManageDto
-            {
-                FunctionName = name,
-                OutputType = new MyTypeFake
-                {
-                    EType = Backend.Type.EType.Int,
-                    TypeName = "Int"
-                }
-            });
-            return node;
-        }
         [UnityTest]
         public IEnumerator LoadTest()
         {
@@ -44,7 +30,7 @@ namespace ut.UIClasses.Lists
 
             NodeBlockManager manager = managerObject.GetComponent<NodeBlockManager>();
             ReferenceListManager list = listObject.GetComponent<ReferenceListManager>();
-            manager.languageReferenceParser.functions.Add(MakeFunction("Add"));
+            manager.languageReferenceParser.functions.Add(SimpleNodeBlockMaker.MakeFunction("Add", Backend.Type.EType.Int));
             //when
 
             list.inputField.GetComponent<TMP_InputField>().text = "Add";

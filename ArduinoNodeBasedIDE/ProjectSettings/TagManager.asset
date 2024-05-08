@@ -19,6 +19,7 @@ TagManager:
   - Canvas
   - NodeBlockEditor
   - ErrorMessageManager
+  - InputButton
   layers:
   - Default
   - TransparentFX

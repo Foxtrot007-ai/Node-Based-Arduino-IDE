@@ -11,20 +11,6 @@ namespace ut.UIClasses.Lists
 {
     public class FunctionListManagerTests
     {
-        public IFunctionManage MakeFunction(string name)
-        {
-            IFunctionManage node = new FunctionFake();
-            node.Change(new FunctionManageDto
-            {
-                FunctionName = name,
-                OutputType = new MyTypeFake
-                {
-                    EType = Backend.Type.EType.Int,
-                    TypeName = "Int"
-                }
-            });
-            return node;
-        }
         [UnityTest]
         public IEnumerator CreateFunctionTest()
         {
@@ -76,10 +62,10 @@ namespace ut.UIClasses.Lists
 
             NodeBlockManager manager = managerObject.GetComponent<NodeBlockManager>();
             FunctionListManager list = listObject.GetComponent<FunctionListManager>();
-            manager.myFunctionList.Add(MakeFunction("a0"));
-            manager.myFunctionList.Add(MakeFunction("a1"));
-            manager.myFunctionList.Add(MakeFunction("a2"));
-            manager.myFunctionList.Add(MakeFunction("a3"));
+            manager.myFunctionList.Add(SimpleNodeBlockMaker.MakeFunction("a0", Backend.Type.EType.Int));
+            manager.myFunctionList.Add(SimpleNodeBlockMaker.MakeFunction("a1", Backend.Type.EType.Int));
+            manager.myFunctionList.Add(SimpleNodeBlockMaker.MakeFunction("a2", Backend.Type.EType.Int));
+            manager.myFunctionList.Add(SimpleNodeBlockMaker.MakeFunction("a3", Backend.Type.EType.Int));
             //when
 
             list.inputField.GetComponent<TMP_InputField>().text = "a";

@@ -9,7 +9,7 @@ using Backend.Type;
 
 public class VariableEditor : MonoBehaviour
 {
-    private IVariableManage variable;
+    public IVariableManage variable;
 
     public GameObject variableNameField;
 
