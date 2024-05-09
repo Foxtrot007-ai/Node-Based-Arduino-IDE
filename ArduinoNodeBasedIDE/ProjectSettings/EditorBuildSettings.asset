@@ -32,4 +32,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/FunctionButtonScriptTestScene.unity
     guid: 038f94ad938909347ae8ace9eb875e43
+  - enabled: 1
+    path: Assets/Scenes/DropdownTypesScriptTestScene.unity
+    guid: 81bd8e4e2f7bb2042a0c7e7ca3341b4e
+  - enabled: 1
+    path: Assets/Scenes/VariableEditorTestScene.unity
+    guid: 32bd625361c4e2048bca2f122ebb4156
+  - enabled: 1
+    path: Assets/Scenes/NodeBlockEditorTestScene.unity
+    guid: 7c1a81a4c2ab2014a9c20a871b81ca1d
+  - enabled: 1
+    path: Assets/Scenes/InfoMessageManagerTestScene.unity
+    guid: 6538aaefabcf09747860dbcea1409867
   m_configObjects: {}

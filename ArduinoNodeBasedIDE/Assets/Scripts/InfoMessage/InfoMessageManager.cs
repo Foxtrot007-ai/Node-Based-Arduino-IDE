@@ -12,8 +12,8 @@ public class InfoMessageManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        addMessage("First test message", 0.2f);
-        addMessage("Second test message", 0.2f);
+        //addMessage("First test message", 0.2f);
+        //addMessage("Second test message", 0.2f);
     }
 
     // Update is called once per frame

@@ -38,6 +38,7 @@ public class NodeBlockEditor : MonoBehaviour
             CheckForNewName();
             CheckForNewOutputType();
             CheckForNewInputs();
+            SetNodeBlockToEdit(currentNodeBlock);
         }
     }
     public void SetNodeBlockToEdit(IFunctionManage nodeBlock)

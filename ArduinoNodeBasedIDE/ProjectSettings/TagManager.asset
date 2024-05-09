@@ -18,8 +18,9 @@ TagManager:
   - DropdownType
   - Canvas
   - NodeBlockEditor
-  - ErrorMessageManager
   - InputButton
+  - InfoMessage
+  - InfoMessageManager
   layers:
   - Default
   - TransparentFX

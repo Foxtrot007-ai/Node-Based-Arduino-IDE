@@ -222,7 +222,7 @@ GameObject:
   - component: {fileID: 5719776442479926728}
   m_Layer: 0
   m_Name: InfoMessage
-  m_TagString: Untagged
+  m_TagString: InfoMessage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -259,3 +259,4 @@ MonoBehaviour:
   image: {fileID: 0}
   startFade: 0
   text: {fileID: 1906180654827787791}
+  fadeRate: 0
