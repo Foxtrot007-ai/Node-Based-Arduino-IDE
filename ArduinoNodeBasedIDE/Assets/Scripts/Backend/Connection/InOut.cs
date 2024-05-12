@@ -15,16 +15,15 @@ namespace Backend.Connection
         public IPlaceHolderNodeType ParentNode { get; }
         private InOut _connected;
         public InOutSide Side { get; }
-        public InOutType InOutType { get; protected set; }
+        public abstract InOutType InOutType { get; }
         public abstract string InOutName { get; }
         public IConnection Connected => _connected;
         private List<ISubscribeInOut> _subscribe;
-        protected InOut(IPlaceHolderNodeType parentNode, InOutSide side, InOutType inOutType)
+        protected InOut(IPlaceHolderNodeType parentNode, InOutSide side)
         {
             ParentNode = parentNode;
             Side = side;
             _connected = null;
-            InOutType = inOutType;
             _subscribe = new List<ISubscribeInOut>();
         }
 

@@ -4,23 +4,15 @@ using Backend.Type;
 
 namespace Backend.Connection.MyType
 {
-    public class AnyInOut : MyTypeInOut<IType>
+    public class AnyInOut : MyTypeInOut
     {
-        public AnyInOut(IPlaceHolderNodeType parentNode, InOutSide side, IType concreteType) : base(parentNode, side, HelperInOut.ETypeToInOut(concreteType.EType), concreteType)
+        public AnyInOut(IPlaceHolderNodeType parentNode, InOutSide side, IType concreteType) : base(parentNode, side, concreteType)
         {
         }
-        
-        protected virtual void SetMyType(IType iMyType)
-        {
-            ConcreteType = iMyType ?? throw new ArgumentNullException(null,"Cannot change type to null.");
-            InOutType = HelperInOut.ETypeToInOut(iMyType.EType);
-        }
-        
         public virtual void ChangeMyType(IType iMyType)
         {
-            SetMyType(iMyType);
+            MyType = iMyType ?? throw new ArgumentNullException(null, "Cannot change type to null.");
             ReCheck();
         }
-        
     }
 }

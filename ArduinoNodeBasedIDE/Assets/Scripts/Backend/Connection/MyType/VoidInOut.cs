@@ -3,10 +3,10 @@ using Backend.Type;
 
 namespace Backend.Connection.MyType
 {
-    public class VoidInOut : MyTypeInOut<VoidType>
+    public class VoidInOut : MyTypeInOut
     {
         public VoidInOut(IPlaceHolderNodeType parentNode, VoidType voidType)
-            : base(parentNode, InOutSide.Output, InOutType.Void, voidType)
+            : base(parentNode, InOutSide.Output, voidType)
         {
         }
         

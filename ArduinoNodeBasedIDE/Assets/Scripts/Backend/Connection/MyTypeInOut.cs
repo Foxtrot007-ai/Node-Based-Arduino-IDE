@@ -5,33 +5,25 @@ using Backend.Type;
 
 namespace Backend.Connection
 {
-    public abstract class MyTypeInOut : InOut
+    public class MyTypeInOut : InOut
     {
-        public abstract IType MyType { get; }
-        protected MyTypeInOut(IPlaceHolderNodeType parentNode, InOutSide side, InOutType inOutType) : base(parentNode, side, inOutType)
+        public IType MyType { get; protected set; }
+        public override InOutType InOutType => HelperInOut.ETypeToInOut(MyType.EType);
+        public override string InOutName => MyType.TypeName;
+
+        public MyTypeInOut(IPlaceHolderNodeType parentNode, InOutSide side, IType myType) : 
+            base(parentNode, side)
         {
-
-        }
-    }
-
-    public abstract class MyTypeInOut<T> : MyTypeInOut where T : IType
-    {
-        public T ConcreteType { get; protected set; }
-        public override string InOutName => ConcreteType.TypeName;
-
-        public override IType MyType => ConcreteType;
-        protected MyTypeInOut(IPlaceHolderNodeType parentNode, InOutSide side, InOutType inOutType, T concreteType) : base(parentNode, side, inOutType)
-        {
-            ConcreteType = concreteType;
+            MyType = myType;
         }
         
         protected override void PreCheck(IConnection iConnection)
         {
+            base.PreCheck(iConnection);
             if (iConnection is not MyTypeInOut)
             {
                 throw new WrongConnectionTypeException();
             }
-            base.PreCheck(iConnection);
         }
 
         protected override void Check(InOut input)

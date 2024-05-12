@@ -6,9 +6,10 @@ namespace Backend.Connection
 {
     public class FlowInOut : InOut
     {
+        public override InOutType InOutType => InOutType.Flow;
         public override string InOutName { get; }
 
-        public FlowInOut(IPlaceHolderNodeType parentNode, InOutSide side, string name) : base(parentNode, side, InOutType.Flow)
+        public FlowInOut(IPlaceHolderNodeType parentNode, InOutSide side, string name) : base(parentNode, side)
         {
             InOutName = name;
         }

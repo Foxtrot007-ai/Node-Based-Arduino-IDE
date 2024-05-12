@@ -10,20 +10,20 @@ namespace Tests.EditMode.ut.Backend.Helpers
     public static class InOutHelper
     {
         public static InOutMock CreateBaseMock(InOutSide side = InOutSide.Output,
-            IPlaceHolderNodeType parent = null, InOutType inOutType = InOutType.Primitive)
+            IPlaceHolderNodeType parent = null)
         {
             parent ??= NodeHelper.CreateBaseParent();
-            var inOut = new InOutMock(parent, side, inOutType);
+            var inOut = new InOutMock(parent, side);
             NodeHelper.Add(parent, inOut, side);
             return inOut;
         }
 
         public static MyTypeInOutMock CreateMyTypeInOutMock(InOutSide side = InOutSide.Output,
-            IPlaceHolderNodeType parent = null, IType myType = null, InOutType inOutType = InOutType.Primitive)
+            IPlaceHolderNodeType parent = null, IType myType = null)
         {
             parent ??= NodeHelper.CreateBaseParent();
             myType ??= TypeHelper.CreateMyTypeMock();
-            var inOut = new MyTypeInOutMock(parent, side, inOutType, myType);
+            var inOut = new MyTypeInOutMock(parent, side, myType);
             NodeHelper.Add(parent, inOut, side);
             return inOut;
         }

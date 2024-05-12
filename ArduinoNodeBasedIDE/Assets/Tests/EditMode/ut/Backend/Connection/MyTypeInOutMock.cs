@@ -4,12 +4,10 @@ using Backend.Type;
 
 namespace Tests.EditMode.ut.Backend.Connection
 {
-    public class MyTypeInOutMock : MyTypeInOut<IType>
+    public class MyTypeInOutMock : MyTypeInOut
     {
-
-        public MyTypeInOutMock(IPlaceHolderNodeType parentNode, InOutSide side, InOutType inOutType, IType concreteType) : base(parentNode, side, inOutType, concreteType)
+        public MyTypeInOutMock(IPlaceHolderNodeType parentNode, InOutSide side, IType myType) : base(parentNode, side, myType)
         {
         }
-        
     } 
 }
