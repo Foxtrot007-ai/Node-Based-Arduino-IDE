@@ -31,6 +31,10 @@ namespace Backend.Type
             }
             return classType == this;
         }
+        public bool IsAdapterNeed(IType iMyType)
+        {
+            return false;
+        }
 
         protected bool Equals(ClassType other)
         {

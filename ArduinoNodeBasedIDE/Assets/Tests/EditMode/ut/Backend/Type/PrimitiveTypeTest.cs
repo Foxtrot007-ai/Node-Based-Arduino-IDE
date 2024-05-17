@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Backend.API;
 using Backend.Exceptions;
 using Backend.Type;
 using NUnit.Framework;
@@ -61,36 +60,36 @@ namespace Tests.EditMode.ut.Backend.Type
             Assert.AreEqual(type, primitiveType.EType);
         }
         
-        private static readonly List<IType> _castFalse = new()
+        private static readonly List<(IType, bool)> _castParam = new()
         {
-            TypeHelper.CreateClassTypeMock("test"),
-            new VoidType(),
+            (TypeHelper.CreateClassTypeMock("test"), false),
+            (new VoidType(), false),
+            (new PrimitiveType(EType.LongLong), true),
+            (new StringType(), true),
         };
         
         [Test]
-        [TestCaseSource(nameof(_castFalse))]
-        public void CanBeCastFalse(IType type)
+        [TestCaseSource(nameof(_castParam))]
+        public void CanBeCastParamTest((IType, bool) param)
         {
-            //given
-            //when
-            //then 
-            Assert.False(_primitiveType.CanBeCast(type));
+            var (type, expect) = param;
+            Assert.AreEqual(expect,_primitiveType.CanBeCast(type));
         }
-        
-        private static readonly List<IType> _castTrue = new()
-        {
-            new PrimitiveType(EType.LongLong),
-            new StringType(),
-        };
 
-        [Test]
-        [TestCaseSource(nameof(_castTrue))]
-        public void CanBeCastTrue(IType type)
+        private static readonly List<(IType, bool)> _adapterParam = new()
         {
-            //given
-            //when
-            //then
-            Assert.True(_primitiveType.CanBeCast(type));
+            (TypeHelper.CreateClassTypeMock("test"), false),
+            (new VoidType(), false),
+            (new PrimitiveType(EType.LongLong), false),
+            (new StringType(), true),
+        };
+        
+        [Test]
+        [TestCaseSource(nameof(_adapterParam))]
+        public void IsAdapterNeedParamTest((IType, bool) param)
+        {
+            var (type, expect) = param;
+            Assert.AreEqual(expect,_primitiveType.IsAdapterNeed(type));
         }
         
         [Test] 

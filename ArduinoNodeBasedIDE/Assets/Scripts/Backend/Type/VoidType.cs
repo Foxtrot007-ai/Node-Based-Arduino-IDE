@@ -12,7 +12,11 @@ namespace Backend.Type
         {
             return false;
         }
-        
+        public bool IsAdapterNeed(IType iMyType)
+        {
+            return false;
+        }
+
         protected bool Equals(VoidType other)
         {
             return true;

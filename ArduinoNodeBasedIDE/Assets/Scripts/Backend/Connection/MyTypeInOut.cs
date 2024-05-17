@@ -31,22 +31,30 @@ namespace Backend.Connection
         protected override void Check(InOut input)
         {
             base.Check(input);
-            if (input is AutoInOut { MyType: null })
+            var myTypeInput = (MyTypeInOut)input;
+            if (myTypeInput is AutoInOut { MyType: null })
             {
                 return;
             }
-            CheckInOutType(input);
-            //TODO CheckAdapter
+            CheckCast(myTypeInput);
+            CheckAdapter(myTypeInput);
         }
         
-        private void CheckInOutType(InOut inOut)
+        private void CheckCast(MyTypeInOut myTypeInput)
         {
-            var myTypeInOut = (MyTypeInOut)inOut;
-            if (!MyType.CanBeCast(myTypeInOut.MyType))
+
+            if (!MyType.CanBeCast(myTypeInput.MyType))
             {
                 throw new CannotBeCastException();
             }
         }
 
+        private void CheckAdapter(MyTypeInOut myTypeInput)
+        {
+            if (MyType.IsAdapterNeed(myTypeInput.MyType))
+            {
+                throw new AdapterNeedException();
+            }
+        }
     }
 }

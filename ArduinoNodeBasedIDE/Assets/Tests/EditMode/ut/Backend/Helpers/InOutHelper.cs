@@ -76,5 +76,12 @@ namespace Tests.EditMode.ut.Backend.Helpers
             Assert.AreSame(inOut2, inOut1.Connected);
         }
 
+        public static void Connect(MyTypeInOut input, MyTypeInOut output)
+        {
+            output.MyType.CanBeCast(input.MyType).Returns(true);
+            output.MyType.IsAdapterNeed(input.MyType).Returns(false);
+            output.Connect(input);
+            ExpectAreConnected(output, input);
+        }
     }
 }

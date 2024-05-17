@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Backend.API;
 using Backend.Exceptions;
 using Backend.Type;
 using Backend.Validator;
@@ -50,39 +49,26 @@ namespace Tests.EditMode.ut.Backend.Type
             Assert.AreEqual(name, classType.TypeName);
         }
 
-        private static readonly List<IType> _castFalse = new()
+        private static readonly List<(IType, bool)> _castParam = new()
         {
-            TypeHelper.CreateClassTypeMock("wrong"),
-            new PrimitiveType(EType.Int),
-            new StringType(),
-            new VoidType(),
-        };
-        
-        [Test]
-        [TestCaseSource(nameof(_castFalse))]
-        public void CanBeCastFalse(IType type)
-        {
-            //given
-            //when
-            //then 
-            Assert.False(_classType.CanBeCast(type));
-        }
-        
-        private static readonly List<IType> _castTrue = new()
-        {
-            TypeHelper.CreateClassTypeMock("good"),
+            (TypeHelper.CreateClassTypeMock("wrong"), false),
+            (new PrimitiveType(EType.Int), false),
+            (new StringType(), false),
+            (new VoidType(), false),
+            (TypeHelper.CreateClassTypeMock("good"), true),
         };
 
         [Test]
-        [TestCaseSource(nameof(_castTrue))]
-        public void CanBeCastTrue(IType type)
+        [TestCaseSource(nameof(_castParam))]
+        public void CanBeCastParamTest((IType, bool) param)
         {
             //given
+            var (type, expect) = param;
             //when
-            //then
-            Assert.True(_classType.CanBeCast(type));
+            //then 
+            Assert.AreEqual(expect, _classType.CanBeCast(type));
         }
-        
+
         [Test]
         public void NotEqual()
         {

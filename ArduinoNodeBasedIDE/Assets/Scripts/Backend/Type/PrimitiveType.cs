@@ -18,6 +18,15 @@ namespace Backend.Type
         {
             return iMyType is PrimitiveType or StringType;
         }
+        public bool IsAdapterNeed(IType iMyType)
+        {
+            return iMyType switch
+            {
+                PrimitiveType => false,
+                StringType => true,
+                _ => false,
+            };
+        }
 
         public PrimitiveType(EType primitiveType)
         {

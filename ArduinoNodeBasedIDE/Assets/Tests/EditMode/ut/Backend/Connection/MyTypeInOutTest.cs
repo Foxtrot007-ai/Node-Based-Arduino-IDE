@@ -42,9 +42,23 @@ namespace Tests.EditMode.ut.Backend.Connection
         {
             //given
             var output = InOutHelper.CreateMyTypeInOutMock();
-            output.MyType.CanBeCast(output.MyType).Returns(false);
+            output.MyType.CanBeCast(_myTypeInput.MyType).Returns(false);
             //when
             var exception = Assert.Throws<CannotBeCastException>(() => _myTypeInput.Connect(output));
+            //then
+            output.MyType.Received().CanBeCast(_myTypeInput.MyType);
+            _myTypeInput.MyType.DidNotReceiveWithAnyArgs().CanBeCast(default);
+        }
+        
+        [Test]
+        public void ConnectionNeedAdapterException()
+        {
+            //given
+            var output = InOutHelper.CreateMyTypeInOutMock();
+            output.MyType.CanBeCast(_myTypeInput.MyType).Returns(true);
+            output.MyType.IsAdapterNeed(_myTypeInput.MyType).Returns(true);
+            //when
+            var exception = Assert.Throws<AdapterNeedException>(() => _myTypeInput.Connect(output));
             //then
             output.MyType.Received().CanBeCast(_myTypeInput.MyType);
             _myTypeInput.MyType.DidNotReceiveWithAnyArgs().CanBeCast(default);
@@ -56,6 +70,8 @@ namespace Tests.EditMode.ut.Backend.Connection
             //given
             var output = InOutHelper.CreateMyTypeInOutMock();
             output.MyType.CanBeCast(_myTypeInput.MyType).Returns(true);
+            output.MyType.IsAdapterNeed(_myTypeInput.MyType).Returns(false);
+
             //when
             _myTypeInput.Connect(output);
             //then

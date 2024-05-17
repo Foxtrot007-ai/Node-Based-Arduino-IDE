@@ -16,13 +16,6 @@ namespace Tests.EditMode.ut.Backend.Connection
     public class AnyInOutTest
     {
         private AnyInOut _anyInput;
-
-        private void Connect(MyTypeInOut input, MyTypeInOut output)
-        {
-            output.MyType.CanBeCast(input.MyType).Returns(true);
-            output.Connect(input);
-            InOutHelper.ExpectAreConnected(output, input);
-        }
         
         [SetUp]
         public void Init()
@@ -56,7 +49,7 @@ namespace Tests.EditMode.ut.Backend.Connection
         {
             //given
             var output = InOutHelper.CreateMyTypeInOutMock();
-            Connect(_anyInput, output);
+            InOutHelper.Connect(_anyInput, output);
 
             var newType = TypeHelper.CreateMyTypeMock();
             output.MyType.CanBeCast(newType).Returns(false);
@@ -68,14 +61,32 @@ namespace Tests.EditMode.ut.Backend.Connection
         }
 
         [Test]
+        public void ChangeTypeDisconnectAndNeedAdapterException()
+        {
+            //given
+            var output = InOutHelper.CreateMyTypeInOutMock();
+            InOutHelper.Connect(_anyInput, output);
+
+            var newType = TypeHelper.CreateMyTypeMock();
+            output.MyType.CanBeCast(newType).Returns(true);
+            output.MyType.IsAdapterNeed(newType).Returns(true);
+            //when
+            Assert.Throws<AdapterNeedException>(() => _anyInput.ChangeMyType(newType));
+            //then 
+            Assert.AreSame(newType, _anyInput.MyType);
+            InOutHelper.ExpectNullConnected(_anyInput, output);
+        }
+        
+        [Test]
         public void ChangeTypeNoDisconnect()
         {
             //given
             var output = InOutHelper.CreateMyTypeInOutMock();
-            Connect(_anyInput, output);
+            InOutHelper.Connect(_anyInput, output);
             
             var newType = TypeHelper.CreateMyTypeMock();
             output.MyType.CanBeCast(newType).Returns(true);
+            output.MyType.IsAdapterNeed(newType).Returns(false);
             //when
             _anyInput.ChangeMyType(newType);
             //then 

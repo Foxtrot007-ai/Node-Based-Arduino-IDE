@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Backend.API;
 using Backend.Type;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
@@ -20,36 +19,42 @@ namespace Tests.EditMode.ut.Backend.Type
             _stringType = new StringType();
         }
         
-        private static readonly List<IType> _castFalse = new()
+        private static readonly List<(IType, bool)> _castParam = new()
         {
-            TypeHelper.CreateClassTypeMock("test"),
-            new VoidType(),
+            (TypeHelper.CreateClassTypeMock("test"), false),
+            (new VoidType(), false),
+            (new PrimitiveType(EType.LongLong), true),
+            (new StringType(), true),
         };
         
         [Test]
-        [TestCaseSource(nameof(_castFalse))]
-        public void CanBeCastFalse(IType type)
+        [TestCaseSource(nameof(_castParam))]
+        public void CanBeCastParamTest((IType, bool) param)
         {
             //given
+            var (type, expect) = param;
             //when
             //then 
-            Assert.False(_stringType.CanBeCast(type));
+            Assert.AreEqual(expect, _stringType.CanBeCast(type));
         }
         
-        private static readonly List<IType> _castTrue = new()
+        private static readonly List<(IType, bool)> _adpterParam = new()
         {
-            new PrimitiveType(EType.LongLong),
-            new StringType(),
+            (TypeHelper.CreateClassTypeMock("test"), false),
+            (new VoidType(), false),
+            (new PrimitiveType(EType.LongLong), true),
+            (new StringType(), false),
         };
-
+        
         [Test]
-        [TestCaseSource(nameof(_castTrue))]
-        public void CanBeCastTrue(IType type)
+        [TestCaseSource(nameof(_adpterParam))]
+        public void IsAdapterNeedParamTest((IType, bool) param)
         {
             //given
+            var (type, expect) = param;
             //when
-            //then
-            Assert.True(_stringType.CanBeCast(type));
+            //then 
+            Assert.AreEqual(expect, _stringType.IsAdapterNeed(type));
         }
         
         [Test]

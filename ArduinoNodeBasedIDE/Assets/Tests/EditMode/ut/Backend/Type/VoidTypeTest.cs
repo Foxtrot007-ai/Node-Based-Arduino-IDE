@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Backend.API;
 using Backend.Type;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
@@ -19,22 +18,23 @@ namespace Tests.EditMode.ut.Backend.Type
             _voidType = new VoidType();
         }
 
-        private static readonly List<IType> _castFalse = new()
+        private static readonly List<(IType, bool)> _castParam = new()
         {
-            TypeHelper.CreateClassTypeMock("wrong"),
-            new PrimitiveType(EType.Int),
-            new StringType(),
-            new VoidType(),
+            (TypeHelper.CreateClassTypeMock("wrong"), false),
+            (new PrimitiveType(EType.Int), false),
+            (new StringType(), false),
+            (new VoidType(), false),
         };
         
         [Test]
-        [TestCaseSource(nameof(_castFalse))]
-        public void CanBeCastFalse(IType type)
+        [TestCaseSource(nameof(_castParam))]
+        public void CanBeCastFalse((IType, bool) param)
         {
             //given
+            var (type, expect) = param;
             //when
             //then 
-            Assert.False(_voidType.CanBeCast(type));
+            Assert.AreEqual(expect, _voidType.CanBeCast(type));
         }
 
         [Test]

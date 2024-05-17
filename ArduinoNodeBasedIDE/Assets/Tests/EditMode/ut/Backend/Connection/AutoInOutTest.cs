@@ -25,9 +25,7 @@ namespace Tests.EditMode.ut.Backend.Connection
         public void ShouldSetTypeAfterConnectAndDisconnect()
         {
             //given
-            _myTypeOutput.MyType.CanBeCast(_myTypeOutput.MyType).Returns(true);
-            _autoInput.Connect(_myTypeOutput);
-            InOutHelper.ExpectAreConnected(_autoInput, _myTypeOutput);
+            InOutHelper.Connect(_autoInput, _myTypeOutput);
             Assert.AreSame(_myTypeOutput.MyType, _autoInput.MyType);
             //when
             _autoInput.Disconnect();
@@ -43,11 +41,9 @@ namespace Tests.EditMode.ut.Backend.Connection
             var newMyType = TypeHelper.CreateMyTypeMock();
             _autoInput.ChangeMyType(newMyType);
             Assert.AreSame(newMyType, _autoInput.MyType);
-            _myTypeOutput.MyType.CanBeCast(newMyType).Returns(true);
             //when
-
-            _autoInput.Connect(_myTypeOutput);
-            InOutHelper.ExpectAreConnected(_autoInput, _myTypeOutput);
+            InOutHelper.Connect(_autoInput, _myTypeOutput);
+            
             Assert.AreNotSame(_autoInput.MyType, _myTypeOutput.MyType);
             Assert.AreSame(newMyType, _autoInput.MyType);
             
@@ -77,10 +73,8 @@ namespace Tests.EditMode.ut.Backend.Connection
             var newMyType = TypeHelper.CreateMyTypeMock();
             _autoInput.ChangeMyType(newMyType);
             Assert.AreSame(newMyType, _autoInput.MyType);
-            _myTypeOutput.MyType.CanBeCast(newMyType).Returns(true);
             //when
-            _autoInput.Connect(_myTypeOutput);
-            InOutHelper.ExpectAreConnected(_autoInput, _myTypeOutput);
+            InOutHelper.Connect(_autoInput, _myTypeOutput);
             Assert.AreNotSame(_autoInput.MyType, _myTypeOutput.MyType);
             Assert.AreSame(newMyType, _autoInput.MyType);
             
@@ -96,9 +90,8 @@ namespace Tests.EditMode.ut.Backend.Connection
         {
             //given
             var anyOutput = InOutHelper.CreateAnyInOut();
-            anyOutput.MyType.CanBeCast(anyOutput.MyType).Returns(true);
-            _autoInput.Connect(anyOutput);
-            InOutHelper.ExpectAreConnected(_autoInput, anyOutput);
+            InOutHelper.Connect(_autoInput, anyOutput);
+
             Assert.AreSame(anyOutput.MyType, _autoInput.MyType);
             //when
             var newType = TypeHelper.CreateMyTypeMock();
