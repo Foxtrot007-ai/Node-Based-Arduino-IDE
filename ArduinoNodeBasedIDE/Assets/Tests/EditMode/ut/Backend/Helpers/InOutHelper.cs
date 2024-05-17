@@ -2,6 +2,7 @@ using Backend.Connection;
 using Backend.Connection.MyType;
 using Backend.Node;
 using Backend.Type;
+using NSubstitute;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Connection;
 
@@ -45,7 +46,14 @@ namespace Tests.EditMode.ut.Backend.Helpers
             return inOut;
         }
 
-
+        public static AutoInOut CreateAutoInOut(InOutSide side = InOutSide.Output, IPlaceHolderNodeType parent = null)
+        {
+            parent ??= NodeHelper.CreateBaseParent();
+            var inOut = new AutoInOut(parent, side);
+            NodeHelper.Add(parent, inOut, side);
+            return inOut;
+        }
+        
         public static void ExpectAreConnected(InOut inOut1, InOut inOut2)
         {
             Assert.AreSame(inOut1, inOut2.Connected);

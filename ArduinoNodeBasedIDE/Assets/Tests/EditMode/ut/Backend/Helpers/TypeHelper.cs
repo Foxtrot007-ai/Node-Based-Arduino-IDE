@@ -39,9 +39,17 @@ namespace Tests.EditMode.ut.Backend.Helpers
             return classType;
         }
 
+        public static IType CreateMyTypeMock(EType eType)
+        {
+            var typeMock = Substitute.For<IType>();
+            typeMock.EType.Returns(eType);
+            return typeMock;
+        }
         public static IType CreateMyTypeMock()
         {
-            return Substitute.For<IType>();
+            var typeMock = Substitute.For<IType>();
+            typeMock.EType.Returns(EType.Int);
+            return typeMock;
         }
     }
 }

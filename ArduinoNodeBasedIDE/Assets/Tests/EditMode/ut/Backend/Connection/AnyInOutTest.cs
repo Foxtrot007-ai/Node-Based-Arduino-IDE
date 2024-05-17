@@ -1,7 +1,9 @@
 using System;
 using Backend.Connection;
 using Backend.Connection.MyType;
+using Backend.Exceptions;
 using Backend.Exceptions.InOut;
+using Backend.Type;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
@@ -36,6 +38,17 @@ namespace Tests.EditMode.ut.Backend.Connection
             var exception = Assert.Throws<ArgumentNullException>(() => _anyInput.ChangeMyType(null));
             //then 
             Assert.AreEqual("Cannot change type to null.", exception.Message);
+        }
+        
+        [Test]
+        public void ChangeTypeVoidWrongTypeException()
+        {
+            //given
+            //when
+            var newType = TypeHelper.CreateMyTypeMock(EType.Void);
+            var exception = Assert.Throws<WrongTypeException>(() => _anyInput.ChangeMyType(newType));
+            //then 
+            Assert.AreEqual("Cannot change type to void for input side.", exception.Message);
         }
         
         [Test]

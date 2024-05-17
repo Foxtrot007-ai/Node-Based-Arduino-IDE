@@ -64,5 +64,17 @@ namespace Tests.EditMode.ut.Backend.Connection
             _myTypeInput.MyType.DidNotReceiveWithAnyArgs().CanBeCast(default);
         }
 
+        [Test]
+        public void ShouldNotCheckIfConnectToAuto()
+        {
+            //given
+            var output = InOutHelper.CreateMyTypeInOutMock(InOutSide.Output);
+            var input = InOutHelper.CreateAutoInOut(InOutSide.Input);
+            //when
+            output.Connect(input);
+            //then
+            InOutHelper.ExpectAreConnected(input, output);
+            output.MyType.DidNotReceiveWithAnyArgs().CanBeCast(default);
+        }
     }
 }
