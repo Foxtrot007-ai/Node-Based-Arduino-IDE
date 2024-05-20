@@ -1,0 +1,1 @@
+Maybe change name InOut to something better like "prefix"IO and then use "prefix"I[n] for Input and "prefix"O[ut]
