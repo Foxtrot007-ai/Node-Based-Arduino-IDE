@@ -5,7 +5,6 @@ using Backend.API;
 using Backend.Exceptions.InOut;
 using Backend.Node;
 using Castle.Core.Internal;
-using UnityEngine;
 
 namespace Backend.Connection
 {
@@ -17,12 +16,15 @@ namespace Backend.Connection
         public InOutSide Side { get; }
         public abstract InOutType InOutType { get; }
         public abstract string InOutName { get; }
+        public bool IsDeleted { get; private set; }
+
         public IConnection Connected => _connected;
         private List<ISubscribeInOut> _subscribe;
         protected InOut(IPlaceHolderNodeType parentNode, InOutSide side)
         {
             ParentNode = parentNode;
             Side = side;
+            IsDeleted = false;
             _connected = null;
             _subscribe = new List<ISubscribeInOut>();
         }
@@ -210,6 +212,12 @@ namespace Backend.Connection
         public void Unsubscribe(ISubscribeInOut subscribeInOut)
         {
             _subscribe.Remove(subscribeInOut);
+        }
+
+        public void Delete()
+        {
+            Disconnect();
+            IsDeleted = true;
         }
     }
 }

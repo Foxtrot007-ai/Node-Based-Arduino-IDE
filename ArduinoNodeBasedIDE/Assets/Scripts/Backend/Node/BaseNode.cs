@@ -18,8 +18,8 @@ namespace Backend.Node
         
         public void Delete()
         {
-            InputsListInOut.ForEach(x => x.Disconnect());
-            OutputsListInOut.ForEach(x => x.Disconnect());
+            InputsListInOut.ForEach(x => x.Delete());
+            OutputsListInOut.ForEach(x => x.Delete());
             IsDeleted = true;
         }
     }
