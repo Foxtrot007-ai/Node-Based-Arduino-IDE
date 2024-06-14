@@ -13,7 +13,7 @@ namespace Backend.Connection
         public override InOutType InOutType => HelperInOut.ETypeToInOut(MyType.EType);
         public override string InOutName => MyType.TypeName;
 
-        public MyTypeInOut(IPlaceHolderNodeType parentNode, InOutSide side, IType myType) : 
+        public MyTypeInOut(BaseNode parentNode, InOutSide side, IType myType) : 
             base(parentNode, side)
         {
             _myType = myType;

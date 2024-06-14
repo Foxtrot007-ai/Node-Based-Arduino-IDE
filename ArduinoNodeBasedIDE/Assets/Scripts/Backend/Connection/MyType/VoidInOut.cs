@@ -5,7 +5,7 @@ namespace Backend.Connection.MyType
 {
     public class VoidInOut : MyTypeInOut
     {
-        public VoidInOut(IPlaceHolderNodeType parentNode, VoidType voidType)
+        public VoidInOut(BaseNode parentNode, VoidType voidType)
             : base(parentNode, InOutSide.Output, voidType)
         {
         }

@@ -4,6 +4,8 @@ using Backend.Exceptions.InOut;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
+using Tests.EditMode.ut.Backend.Mocks;
+using Tests.EditMode.ut.Backend.Node;
 
 namespace Tests.EditMode.ut.Backend.Connection
 {
@@ -56,7 +58,7 @@ namespace Tests.EditMode.ut.Backend.Connection
         public void ConnectionSelfException()
         {
             //given
-            var parent = NodeHelper.CreateBaseParent();
+            var parent = new BaseNodeMock();
             var baseInOut1 = InOutHelper.CreateBaseMock(InOutSide.Input, parent);
             var baseInOut2 = InOutHelper.CreateBaseMock(InOutSide.Output, parent);
             //when
@@ -157,15 +159,15 @@ namespace Tests.EditMode.ut.Backend.Connection
         public void ConnectionCycleException()
         {
             //given
-            var parent1 = NodeHelper.CreateBaseParent();
+            var parent1 = new BaseNodeMock();
             var baseIn1 = InOutHelper.CreateBaseMock(InOutSide.Input, parent1);
             var baseOut1 = InOutHelper.CreateBaseMock(InOutSide.Output, parent1);
 
-            var parent2 = NodeHelper.CreateBaseParent();
+            var parent2 = new BaseNodeMock();
             var baseIn2 = InOutHelper.CreateBaseMock(InOutSide.Input, parent2);
             var baseOut2 = InOutHelper.CreateBaseMock(InOutSide.Output, parent2);
 
-            var parent3 = NodeHelper.CreateBaseParent();
+            var parent3 = new BaseNodeMock();
             var baseIn3 = InOutHelper.CreateBaseMock(InOutSide.Input, parent3);
             var baseOut3 = InOutHelper.CreateBaseMock(InOutSide.Output, parent3);
 

@@ -1,7 +1,7 @@
 using Backend.Type;
 using Backend.Validator;
 
-namespace Tests.EditMode.ut.Backend.Type
+namespace Tests.EditMode.ut.Backend.Mocks
 {
     public class ClassTypeMock : ClassType
     {

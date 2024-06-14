@@ -10,26 +10,26 @@ namespace Backend.Connection
 {
     public abstract class InOut : IConnection
     {
-        public ConnectionPoint UIPoint { get; set; }
-        public IPlaceHolderNodeType ParentNode { get; }
-        private InOut _connected;
+        public virtual ConnectionPoint UIPoint { get; set; }
+        public BaseNode ParentNode { get; }
+        public virtual InOut ConnectedInOut { get; private set; }
         public InOutSide Side { get; }
         public abstract InOutType InOutType { get; }
         public abstract string InOutName { get; }
         public bool IsDeleted { get; private set; }
 
-        public IConnection Connected => _connected;
+        public virtual IConnection Connected => ConnectedInOut;
         private List<ISubscribeInOut> _subscribe;
-        protected InOut(IPlaceHolderNodeType parentNode, InOutSide side)
+        protected InOut(BaseNode parentNode, InOutSide side)
         {
             ParentNode = parentNode;
             Side = side;
             IsDeleted = false;
-            _connected = null;
+            ConnectedInOut = null;
             _subscribe = new List<ISubscribeInOut>();
         }
 
-        public void Connect(IConnection iConnection)
+        public virtual void Connect(IConnection iConnection)
         {
             PreCheck(iConnection);
             var input = Side == InOutSide.Input ? this : (InOut)iConnection;
@@ -63,7 +63,7 @@ namespace Backend.Connection
 
         private void ConnectHandler(InOut inOut)
         {
-            _connected = inOut;
+            ConnectedInOut = inOut;
         }
 
         protected virtual void AfterConnectHandler(InOut inOut)
@@ -78,7 +78,7 @@ namespace Backend.Connection
 
         public virtual void Disconnect()
         {
-            var inOut = _connected;
+            var inOut = ConnectedInOut;
 
             try
             {
@@ -106,7 +106,7 @@ namespace Backend.Connection
 
         private void DisconnectHandler(InOut inOut)
         {
-            _connected = null;
+            ConnectedInOut = null;
         }
 
         protected virtual void AfterDisconnectHandler(InOut inOut)
@@ -139,11 +139,11 @@ namespace Backend.Connection
 
         protected void ReCheck()
         {
-            if (_connected is null)
+            if (ConnectedInOut is null)
                 return;
             
-            var output = Side == InOutSide.Output ? this : (MyTypeInOut) _connected;
-            var input = Side == InOutSide.Input ? this : (MyTypeInOut) _connected;
+            var output = Side == InOutSide.Output ? this : (MyTypeInOut) ConnectedInOut;
+            var input = Side == InOutSide.Input ? this : (MyTypeInOut) ConnectedInOut;
             try
             {
                 output.Check(input);
@@ -157,7 +157,7 @@ namespace Backend.Connection
 
         private void CheckIsConnected(InOut inOut)
         {
-            if (_connected is not null || inOut._connected is not null)
+            if (ConnectedInOut is not null || inOut.ConnectedInOut is not null)
             {
                 throw new AlreadyConnectedException();
             }
@@ -181,8 +181,8 @@ namespace Backend.Connection
 
         private void CheckCycle(InOut inOut)
         {
-            var visited = new HashSet<IPlaceHolderNodeType> { ParentNode };
-            var toVisit = new Stack<IPlaceHolderNodeType>();
+            var visited = new HashSet<BaseNode> { ParentNode };
+            var toVisit = new Stack<BaseNode>();
             toVisit.Push(ParentNode);
 
             while (!toVisit.IsNullOrEmpty())
@@ -193,9 +193,9 @@ namespace Backend.Connection
                     throw new CycleException();
                 }
 
-                foreach (var iter in parent.InputsListInOut.Concat(parent.OutputsListInOut))
+                foreach (InOut iter in parent.InputsList.Concat(parent.OutputsList))
                 {
-                    var newParent = iter._connected?.ParentNode;
+                    var newParent = iter.ConnectedInOut?.ParentNode;
                     if (newParent is not null && visited.Add(newParent))
                     {
                         toVisit.Push(newParent);
@@ -204,17 +204,17 @@ namespace Backend.Connection
             }
         }
 
-        public void Subscribe(ISubscribeInOut subscribeInOut)
+        public virtual void Subscribe(ISubscribeInOut subscribeInOut)
         {
             _subscribe.Add(subscribeInOut);
         }
 
-        public void Unsubscribe(ISubscribeInOut subscribeInOut)
+        public virtual void Unsubscribe(ISubscribeInOut subscribeInOut)
         {
             _subscribe.Remove(subscribeInOut);
         }
 
-        public void Delete()
+        public virtual void Delete()
         {
             Disconnect();
             IsDeleted = true;

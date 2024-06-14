@@ -1,12 +1,13 @@
 using Backend.Connection;
-using Backend.Node;
 using Backend.Type;
+using Tests.EditMode.ut.Backend.Mocks;
+using Tests.EditMode.ut.Backend.Node;
 
 namespace Tests.EditMode.ut.Backend.Connection
 {
     public class MyTypeInOutMock : MyTypeInOut
     {
-        public MyTypeInOutMock(IPlaceHolderNodeType parentNode, InOutSide side, IType myType) : base(parentNode, side, myType)
+        public MyTypeInOutMock(BaseNodeMock parentNode, InOutSide side, IType myType) : base(parentNode, side, myType)
         {
         }
     } 

@@ -1,56 +1,57 @@
 using Backend.Connection;
 using Backend.Connection.MyType;
-using Backend.Node;
 using Backend.Type;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Connection;
+using Tests.EditMode.ut.Backend.Mocks;
+using Tests.EditMode.ut.Backend.Node;
 
 namespace Tests.EditMode.ut.Backend.Helpers
 {
     public static class InOutHelper
     {
         public static InOutMock CreateBaseMock(InOutSide side = InOutSide.Output,
-            IPlaceHolderNodeType parent = null)
+            BaseNodeMock parent = null)
         {
-            parent ??= NodeHelper.CreateBaseParent();
+            parent ??= new BaseNodeMock();
             var inOut = new InOutMock(parent, side);
-            NodeHelper.Add(parent, inOut, side);
+            parent.Add(inOut, side);
             return inOut;
         }
 
         public static MyTypeInOutMock CreateMyTypeInOutMock(InOutSide side = InOutSide.Output,
-            IPlaceHolderNodeType parent = null, IType myType = null)
+            BaseNodeMock parent = null, IType myType = null)
         {
-            parent ??= NodeHelper.CreateBaseParent();
+            parent ??= new BaseNodeMock();
             myType ??= TypeHelper.CreateMyTypeMock();
             var inOut = new MyTypeInOutMock(parent, side, myType);
-            NodeHelper.Add(parent, inOut, side);
+            parent.Add(inOut, side);
             return inOut;
         }
 
-        public static AnyInOut CreateAnyInOut(InOutSide side = InOutSide.Output, IPlaceHolderNodeType parent = null, IType myType = null)
+        public static AnyInOut CreateAnyInOut(InOutSide side = InOutSide.Output, BaseNodeMock parent = null, IType myType = null)
         {
-            parent ??= NodeHelper.CreateBaseParent();
+            parent ??= new BaseNodeMock();
             myType ??= TypeHelper.CreateMyTypeMock();
             var inOut = new AnyInOut(parent, side, myType);
-            NodeHelper.Add(parent, inOut, side);
+            parent.Add(inOut, side);
             return inOut;
         }
         
-        public static FlowInOut CreateFlowInOut(InOutSide side = InOutSide.Output, IPlaceHolderNodeType parent = null, string name = "test")
+        public static FlowInOut CreateFlowInOut(InOutSide side = InOutSide.Output, BaseNodeMock parent = null, string name = "test")
         {
-            parent ??= NodeHelper.CreateBaseParent();
+            parent ??= new BaseNodeMock();
             var inOut = new FlowInOut(parent, side, name);
-            NodeHelper.Add(parent, inOut, side);
+            parent.Add(inOut, side);
             return inOut;
         }
 
-        public static AutoInOut CreateAutoInOut(InOutSide side = InOutSide.Output, IPlaceHolderNodeType parent = null)
+        public static AutoInOut CreateAutoInOut(InOutSide side = InOutSide.Output, BaseNodeMock parent = null)
         {
-            parent ??= NodeHelper.CreateBaseParent();
+            parent ??= new BaseNodeMock();
             var inOut = new AutoInOut(parent, side);
-            NodeHelper.Add(parent, inOut, side);
+            parent.Add(inOut, side);
             return inOut;
         }
         

@@ -2,13 +2,13 @@ using System;
 using Backend.Type;
 using Backend.Validator;
 using NSubstitute;
-using Tests.EditMode.ut.Backend.Type;
+using Tests.EditMode.ut.Backend.Mocks;
 
 namespace Tests.EditMode.ut.Backend.Helpers
 {
-
     public static class TypeHelper
     {
+        public static readonly IType DefaultType = CreateMyTypeMock();
         public static IType CreateType(EType eType, string name = null)
         {
             switch (eType)

@@ -7,7 +7,7 @@ namespace Backend.Connection.MyType
 {
     public class AnyInOut : MyTypeInOut
     {
-        public AnyInOut(IPlaceHolderNodeType parentNode, InOutSide side, IType concreteType) : base(parentNode, side, concreteType)
+        public AnyInOut(BaseNode parentNode, InOutSide side, IType concreteType) : base(parentNode, side, concreteType)
         {
         }
         public virtual void ChangeMyType(IType iMyType)

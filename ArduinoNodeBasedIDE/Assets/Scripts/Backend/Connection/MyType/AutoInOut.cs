@@ -13,7 +13,7 @@ namespace Backend.Connection.MyType
         public override InOutType InOutType => MyType is null ? InOutType.Auto : base.InOutType;
 
 
-        public AutoInOut(IPlaceHolderNodeType parentNode, InOutSide side) : base(parentNode, side, null)
+        public AutoInOut(BaseNode parentNode, InOutSide side) : base(parentNode, side, null)
         {
         }
 

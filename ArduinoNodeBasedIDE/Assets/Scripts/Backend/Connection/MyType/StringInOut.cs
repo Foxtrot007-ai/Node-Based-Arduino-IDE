@@ -5,7 +5,7 @@ namespace Backend.Connection.MyType
 {
     public class StringInOut : MyTypeInOut
     {
-        public StringInOut(IPlaceHolderNodeType parentNode, InOutSide side, StringType stringType)
+        public StringInOut(BaseNode parentNode, InOutSide side, StringType stringType)
             : base(parentNode, side, stringType)
         {
         }
