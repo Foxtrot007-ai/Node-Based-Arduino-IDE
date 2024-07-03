@@ -30,10 +30,14 @@ namespace Backend.API
         public void Change(VariableManageDto variableManageDto);
         
         /*
-         * Create new instance of variable
-         * Might not be INode need to rethink (maybe split to set and get?)
+         * Create new instance of variable getter
          */
-        public INode CreateVariable();
+        public INode CreateGetVariable();
+        
+        /*
+         * Create new instance of variable setter
+         */
+        public INode CreateSetVariable();
         
         /*
          * Delete all instance of variable
