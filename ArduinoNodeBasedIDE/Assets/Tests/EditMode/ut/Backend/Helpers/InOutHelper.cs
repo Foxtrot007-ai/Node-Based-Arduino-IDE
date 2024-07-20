@@ -5,7 +5,7 @@ using NSubstitute;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Connection;
 using Tests.EditMode.ut.Backend.Mocks;
-using Tests.EditMode.ut.Backend.Node;
+using Tests.EditMode.ut.Backend.Mocks.Connection;
 
 namespace Tests.EditMode.ut.Backend.Helpers
 {

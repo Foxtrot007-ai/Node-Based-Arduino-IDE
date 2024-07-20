@@ -1,6 +1,8 @@
 using Backend.Connection;
+using Backend.Node;
+using NSubstitute;
 
-namespace Tests.EditMode.ut.Backend.Mocks
+namespace Tests.EditMode.ut.Backend.Mocks.Connection
 {
     public class InOutMock : InOut
     {
@@ -10,7 +12,7 @@ namespace Tests.EditMode.ut.Backend.Mocks
         {
         }
 
-        public InOutMock() : base(null, InOutSide.Input)
+        public InOutMock() : base(Substitute.For<BaseNode>(), InOutSide.Input)
         {
             
         }

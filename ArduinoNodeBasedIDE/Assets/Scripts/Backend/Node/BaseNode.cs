@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Backend.API;
 using Backend.Connection;
@@ -62,10 +63,11 @@ namespace Backend.Node
         protected abstract void CheckToCode();
         public virtual void ToCode(CodeManager codeManager)
         {
+            throw new NotImplementedException();
         }
         public virtual string ToCodeParam(CodeManager codeManager)
         {
-            return "";
+            throw new NotImplementedException();
         }
         protected void AddInputs(params InOut[] inputs)
         {

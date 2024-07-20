@@ -3,7 +3,7 @@ using Backend.Node;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
-using Tests.EditMode.ut.Backend.Mocks;
+using Tests.EditMode.ut.Backend.Mocks.Connection;
 
 namespace Tests.EditMode.ut.Backend.Node
 {
