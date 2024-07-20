@@ -35,6 +35,10 @@ namespace Backend.Type
         {
             return false;
         }
+        public string ToCode()
+        {
+            return char.ToUpper(TypeName[0]) + TypeName.Substring(1);
+        }
 
         protected bool Equals(ClassType other)
         {

@@ -6,5 +6,6 @@ namespace Backend.Type
     {
         public bool CanBeCast(IType iMyType);
         public bool IsAdapterNeed(IType iMyType); // return false if CanBeCast is false
+        public string ToCode();
     }
 }

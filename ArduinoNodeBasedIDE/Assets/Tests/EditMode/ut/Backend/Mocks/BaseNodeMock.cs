@@ -31,9 +31,5 @@ namespace Tests.EditMode.ut.Backend.Mocks
         {
             throw new System.NotImplementedException();
         }
-        public override string ToCode()
-        {
-            throw new System.NotImplementedException();
-        }
     }   
 }

@@ -27,6 +27,10 @@ namespace Backend.Type
                 _ => false,
             };
         }
+        public string ToCode()
+        {
+            return TypeName;
+        }
 
         public PrimitiveType(EType primitiveType)
         {

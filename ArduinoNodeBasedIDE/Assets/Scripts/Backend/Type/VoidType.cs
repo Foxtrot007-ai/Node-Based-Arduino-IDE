@@ -16,6 +16,10 @@ namespace Backend.Type
         {
             return false;
         }
+        public string ToCode()
+        {
+            throw new InvalidOperationException();
+        }
 
         protected bool Equals(VoidType other)
         {

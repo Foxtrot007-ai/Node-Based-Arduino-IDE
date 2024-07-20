@@ -20,6 +20,10 @@ namespace Backend.Type
                 _ => false,
             };
         }
+        public string ToCode()
+        {
+            return "std::string";
+        }
 
         protected bool Equals(StringType other)
         {

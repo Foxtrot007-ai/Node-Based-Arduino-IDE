@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Backend.API;
 using Backend.Connection;
 using Backend.Exceptions;
@@ -9,9 +8,9 @@ namespace Backend.Node
     public abstract class BaseNode : INode
     {
 
-        public virtual string NodeName { get; protected set;}
+        public virtual string NodeName { get; protected set; }
         public bool IsDeleted { get; private set; }
-        public virtual NodeType NodeType { get; protected set;}
+        public virtual NodeType NodeType { get; protected set; }
         public virtual List<IConnection> InputsList { get; }
         public virtual List<IConnection> OutputsList { get; }
 
@@ -25,7 +24,7 @@ namespace Backend.Node
             InputsList = new List<IConnection>();
             OutputsList = new List<IConnection>();
         }
-        
+
         public virtual void Delete()
         {
             InputsList.ForEach(x => ((InOut)x).Delete());
@@ -46,14 +45,28 @@ namespace Backend.Node
             }
         }
 
-        protected string ConnectedToCode(InOut inOut)
+        protected void ConnectedToCode(CodeManager codeManager, InOut inOut)
         {
-            return inOut.ConnectedInOut.ParentNode.ToCode();
+            inOut.ConnectedInOut.ParentNode.ToCode(codeManager);
         }
-        
-        protected abstract void CheckToCode();
-        public abstract string ToCode();
 
+        protected void NextToCode(CodeManager codeManager)
+        {
+            ConnectedToCode(codeManager, _nextNode);
+        }
+
+        protected string ConnectedToCodeParam(CodeManager codeManager, InOut inOut)
+        {
+            return inOut.ConnectedInOut.ParentNode.ToCodeParam(codeManager);
+        }
+        protected abstract void CheckToCode();
+        public virtual void ToCode(CodeManager codeManager)
+        {
+        }
+        public virtual string ToCodeParam(CodeManager codeManager)
+        {
+            return "";
+        }
         protected void AddInputs(params InOut[] inputs)
         {
             foreach (var input in inputs)
@@ -61,7 +74,7 @@ namespace Backend.Node
                 InputsList.Add(input);
             }
         }
-        
+
         protected void AddOutputs(params InOut[] outputs)
         {
             foreach (var input in outputs)

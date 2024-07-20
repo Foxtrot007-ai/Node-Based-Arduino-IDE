@@ -17,10 +17,6 @@ namespace Tests.EditMode.ut.Backend.Node
         {
             throw new System.NotImplementedException();
         }
-        public override string ToCode()
-        {
-            throw new System.NotImplementedException();
-        }
 
         private InOutMock _inOutMock;
 
