@@ -12,20 +12,20 @@ namespace Backend.Connection
     {
         public virtual ConnectionPoint UIPoint { get; set; }
         public BaseNode ParentNode { get; }
-        public virtual InOut ConnectedInOut { get; private set; }
+        private InOut _connected;
         public InOutSide Side { get; }
         public abstract InOutType InOutType { get; }
         public abstract string InOutName { get; }
         public bool IsDeleted { get; private set; }
 
-        public virtual IConnection Connected => ConnectedInOut;
+        public virtual IConnection Connected => _connected;
         private List<ISubscribeInOut> _subscribe;
         protected InOut(BaseNode parentNode, InOutSide side)
         {
             ParentNode = parentNode;
             Side = side;
             IsDeleted = false;
-            ConnectedInOut = null;
+            _connected = null;
             _subscribe = new List<ISubscribeInOut>();
         }
 
@@ -41,10 +41,10 @@ namespace Backend.Connection
                 input.BeforeConnectHandler(output);
 
                 output.Check(input);
-                
+
                 output.ConnectHandler(input);
                 input.ConnectHandler(output);
-                
+
                 output.AfterConnectHandler(input);
                 input.AfterConnectHandler(output);
             }
@@ -63,7 +63,7 @@ namespace Backend.Connection
 
         private void ConnectHandler(InOut inOut)
         {
-            ConnectedInOut = inOut;
+            _connected = inOut;
         }
 
         protected virtual void AfterConnectHandler(InOut inOut)
@@ -78,16 +78,16 @@ namespace Backend.Connection
 
         public virtual void Disconnect()
         {
-            var inOut = ConnectedInOut;
+            var inOut = _connected;
 
             try
             {
                 BeforeDisconnectHandler(inOut);
                 inOut.BeforeDisconnectHandler(this);
-            
+
                 DisconnectHandler(inOut);
                 inOut.DisconnectHandler(this);
-                
+
                 AfterDisconnectHandler(inOut);
                 inOut.AfterDisconnectHandler(this);
             }
@@ -98,7 +98,7 @@ namespace Backend.Connection
                 throw;
             }
         }
-        
+
         protected virtual void BeforeDisconnectHandler(InOut inOut)
         {
             ;
@@ -106,7 +106,7 @@ namespace Backend.Connection
 
         private void DisconnectHandler(InOut inOut)
         {
-            ConnectedInOut = null;
+            _connected = null;
         }
 
         protected virtual void AfterDisconnectHandler(InOut inOut)
@@ -118,14 +118,14 @@ namespace Backend.Connection
         {
             ;
         }
-        
+
         protected virtual void PreCheck(IConnection iConnection)
         {
             if (iConnection is not InOut inOut)
             {
                 throw new ArgumentNullException(null, "Connect argument cannot be null");
             }
-            
+
             CheckIsConnected(inOut);
             CheckSide(inOut);
             CheckSelfConnection(inOut);
@@ -139,16 +139,16 @@ namespace Backend.Connection
 
         protected void ReCheck()
         {
-            if (ConnectedInOut is null)
+            if (_connected is null)
                 return;
-            
-            var output = Side == InOutSide.Output ? this : (MyTypeInOut) ConnectedInOut;
-            var input = Side == InOutSide.Input ? this : (MyTypeInOut) ConnectedInOut;
+
+            var output = Side == InOutSide.Output ? this : (MyTypeInOut)_connected;
+            var input = Side == InOutSide.Input ? this : (MyTypeInOut)_connected;
             try
             {
                 output.Check(input);
             }
-            catch (InOutException e)
+            catch(InOutException e)
             {
                 Disconnect();
                 throw;
@@ -157,12 +157,12 @@ namespace Backend.Connection
 
         private void CheckIsConnected(InOut inOut)
         {
-            if (ConnectedInOut is not null || inOut.ConnectedInOut is not null)
+            if (_connected is not null || inOut._connected is not null)
             {
                 throw new AlreadyConnectedException();
             }
         }
-        
+
         private void CheckSide(InOut iInOut)
         {
             if (Side == iInOut.Side)
@@ -195,7 +195,7 @@ namespace Backend.Connection
 
                 foreach (InOut iter in parent.InputsList.Concat(parent.OutputsList))
                 {
-                    var newParent = iter.ConnectedInOut?.ParentNode;
+                    var newParent = iter._connected?.ParentNode;
                     if (newParent is not null && visited.Add(newParent))
                     {
                         toVisit.Push(newParent);

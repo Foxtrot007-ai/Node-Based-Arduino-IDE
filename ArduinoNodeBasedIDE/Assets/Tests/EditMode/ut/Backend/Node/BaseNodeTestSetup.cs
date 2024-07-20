@@ -43,13 +43,11 @@ namespace Tests.EditMode.ut.Backend.Node
         public void MakeUnconnected(InOut inOut)
         {
             inOut.Connected.Returns((InOut)null);
-            inOut.ConnectedInOut.Returns((InOut)null);
         }
 
         public void MakeConnected(InOut inOut, InOut inOut2)
         {
             inOut.Connected.Returns(inOut2);
-            inOut.ConnectedInOut.Returns(inOut2);
         }
         public void MakeConnected(InOut inOut)
         {

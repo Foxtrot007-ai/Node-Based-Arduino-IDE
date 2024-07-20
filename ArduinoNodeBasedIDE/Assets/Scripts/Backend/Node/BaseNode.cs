@@ -48,7 +48,7 @@ namespace Backend.Node
 
         protected void ConnectedToCode(CodeManager codeManager, InOut inOut)
         {
-            inOut.ConnectedInOut.ParentNode.ToCode(codeManager);
+            ((InOut)inOut.Connected).ParentNode.ToCode(codeManager);
         }
 
         protected void NextToCode(CodeManager codeManager)
@@ -58,7 +58,7 @@ namespace Backend.Node
 
         protected string ConnectedToCodeParam(CodeManager codeManager, InOut inOut)
         {
-            return inOut.ConnectedInOut.ParentNode.ToCodeParam(codeManager);
+            return ((InOut)inOut.Connected).ParentNode.ToCodeParam(codeManager);
         }
         protected abstract void CheckToCode();
         public virtual void ToCode(CodeManager codeManager)
