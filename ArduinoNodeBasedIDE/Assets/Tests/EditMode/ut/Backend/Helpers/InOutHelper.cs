@@ -14,7 +14,7 @@ namespace Tests.EditMode.ut.Backend.Helpers
         public static InOutMock CreateBaseMock(InOutSide side = InOutSide.Output,
             BaseNodeMock parent = null)
         {
-            parent ??= new BaseNodeMock();
+            parent ??= Substitute.ForPartsOf<BaseNodeMock>();
             var inOut = new InOutMock(parent, side);
             parent.Add(inOut, side);
             return inOut;
@@ -23,7 +23,7 @@ namespace Tests.EditMode.ut.Backend.Helpers
         public static MyTypeInOutMock CreateMyTypeInOutMock(InOutSide side = InOutSide.Output,
             BaseNodeMock parent = null, IType myType = null)
         {
-            parent ??= new BaseNodeMock();
+            parent ??= Substitute.ForPartsOf<BaseNodeMock>();
             myType ??= TypeHelper.CreateMyTypeMock();
             var inOut = new MyTypeInOutMock(parent, side, myType);
             parent.Add(inOut, side);
@@ -32,7 +32,7 @@ namespace Tests.EditMode.ut.Backend.Helpers
 
         public static AnyInOut CreateAnyInOut(InOutSide side = InOutSide.Output, BaseNodeMock parent = null, IType myType = null)
         {
-            parent ??= new BaseNodeMock();
+            parent ??= Substitute.ForPartsOf<BaseNodeMock>();
             myType ??= TypeHelper.CreateMyTypeMock();
             var inOut = new AnyInOut(parent, side, myType);
             parent.Add(inOut, side);
@@ -41,7 +41,7 @@ namespace Tests.EditMode.ut.Backend.Helpers
         
         public static FlowInOut CreateFlowInOut(InOutSide side = InOutSide.Output, BaseNodeMock parent = null, string name = "test")
         {
-            parent ??= new BaseNodeMock();
+            parent ??= Substitute.ForPartsOf<BaseNodeMock>();
             var inOut = new FlowInOut(parent, side, name);
             parent.Add(inOut, side);
             return inOut;
@@ -49,7 +49,7 @@ namespace Tests.EditMode.ut.Backend.Helpers
 
         public static AutoInOut CreateAutoInOut(InOutSide side = InOutSide.Output, BaseNodeMock parent = null)
         {
-            parent ??= new BaseNodeMock();
+            parent ??= Substitute.ForPartsOf<BaseNodeMock>();
             var inOut = new AutoInOut(parent, side);
             parent.Add(inOut, side);
             return inOut;

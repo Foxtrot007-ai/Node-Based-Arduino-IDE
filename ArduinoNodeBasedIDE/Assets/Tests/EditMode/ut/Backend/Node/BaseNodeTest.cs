@@ -1,3 +1,4 @@
+using Backend.Connection;
 using Backend.Exceptions;
 using Backend.Node;
 using NSubstitute;
@@ -12,7 +13,7 @@ namespace Tests.EditMode.ut.Backend.Node
     [Category("Node")]
     public class BaseNodeTest : BaseNode
     {
-        
+
         protected override void CheckToCode()
         {
             throw new System.NotImplementedException();
@@ -30,14 +31,15 @@ namespace Tests.EditMode.ut.Backend.Node
             _nextNode = Substitute.For<FlowInOutMock>();
             _nextNode.Connected.Returns(_nextNode);
             _inOutMock = Substitute.For<InOutMock>();
+            _inOutMock.InOutType.Returns(InOutType.Primitive);
         }
-        
+
         [Test]
         public void CheckIfConnectedShouldNotThrowWhenConnected()
         {
             Assert.DoesNotThrow(() => CheckIfConnected(_prevNode));
         }
-        
+
         [Test]
         public void CheckConnectedExceptionWhenNoConnectedTest()
         {
@@ -45,7 +47,7 @@ namespace Tests.EditMode.ut.Backend.Node
 
             var exception = Assert.Throws<InOutMustBeConnectedException>(() => CheckIfConnected(_inOutMock));
         }
-        
+
         [Test]
         public void CheckFLowConnectedTest()
         {
@@ -59,7 +61,7 @@ namespace Tests.EditMode.ut.Backend.Node
         public void RemoveFlowNothingToDo()
         {
             RemoveFlowInputs();
-            
+
             _nextNode.DidNotReceive().Disconnect();
             _prevNode.DidNotReceive().Disconnect();
         }
@@ -68,12 +70,12 @@ namespace Tests.EditMode.ut.Backend.Node
         public void AddAndRemoveFlowOnlyFlowInList()
         {
             AddFlowInputs();
-            
+
             Assert.AreEqual(1, InputsList.Count);
             Assert.AreEqual(1, OutputsList.Count);
             Assert.AreSame(_prevNode, InputsList[0]);
             Assert.AreSame(_nextNode, OutputsList[0]);
-            
+
             RemoveFlowInputs();
 
             _prevNode.Received().Disconnect();
@@ -87,16 +89,16 @@ namespace Tests.EditMode.ut.Backend.Node
         {
             AddInputs(_inOutMock);
             AddOutputs(_inOutMock);
-            
+
             AddFlowInputs();
-            
+
             Assert.AreEqual(2, InputsList.Count);
             Assert.AreEqual(2, OutputsList.Count);
             Assert.AreSame(_prevNode, InputsList[0]);
             Assert.AreSame(_nextNode, OutputsList[0]);
             Assert.AreSame(_inOutMock, InputsList[1]);
             Assert.AreSame(_inOutMock, OutputsList[1]);
-            
+
             RemoveFlowInputs();
 
             _prevNode.Received().Disconnect();
@@ -111,10 +113,43 @@ namespace Tests.EditMode.ut.Backend.Node
         public void DeleteTest()
         {
             AddFlowInputs();
-            
+
             Delete();
             _nextNode.Received().Delete();
             _prevNode.Received().Delete();
+        }
+
+        [Test]
+        public void RemoveInOutTest()
+        {
+            AddInputs(_inOutMock);
+            AddOutputs(_inOutMock);
+            RemoveInOut(_inOutMock);
+
+            Assert.AreEqual(0, InputsList.Count);
+            Assert.AreEqual(1, OutputsList.Count);
+            _inOutMock.Received().Delete();
+        }
+
+        [Test]
+        public void GetWithoutFlowTest()
+        {
+            AddFlowInputs();
+            AddInputs(_inOutMock);
+
+            var list = GetWithoutFlow(InputsList);
+            Assert.AreEqual(1, list.Count);
+            Assert.AreSame(_inOutMock, list[0]);
+        }
+
+        [Test]
+        public void GetWithoutFlowNoFlowInListTest()
+        {
+            AddInputs(_inOutMock);
+
+            var list = GetWithoutFlow(InputsList);
+            Assert.AreEqual(1, list.Count);
+            Assert.AreSame(_inOutMock, list[0]);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Backend.API;
 using Backend.Connection;
 using Backend.Exceptions;
@@ -85,6 +86,14 @@ namespace Backend.Node
             }
         }
 
+        protected virtual void RemoveInOut(IConnection iConnection)
+        {
+            var inOut = (InOut)iConnection;
+            var list = inOut.Side == InOutSide.Input ? InputsList : OutputsList;
+            list.Remove(inOut);
+            inOut.Delete();
+        }
+
         protected void AddFlowInputs()
         {
             InputsList.Insert(0, _prevNode);
@@ -104,6 +113,13 @@ namespace Backend.Node
                 OutputsList[0].Disconnect();
                 OutputsList.RemoveAt(0);
             }
+        }
+
+        protected List<IConnection> GetWithoutFlow(List<IConnection> list)
+        {
+            if (list.Count == 0)
+                return list;
+            return list[0].InOutType == InOutType.Flow ? list.Skip(1).ToList() : list;
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using Backend.Connection;
 using Backend.Exceptions.InOut;
+using Backend.Node;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
@@ -224,6 +225,21 @@ namespace Tests.EditMode.ut.Backend.Connection
             sub12.Received().DisconnectNotify(baseInOut2);
             sub12.DidNotReceiveWithAnyArgs().ConnectNotify(default);
         }
-        
+
+        [Test] 
+        public void DeleteTest()
+        {
+            var baseInOut1 = InOutHelper.CreateBaseMock(InOutSide.Input);
+            var baseInOut2 = InOutHelper.CreateBaseMock(InOutSide.Output);
+            baseInOut1.Connect(baseInOut2);
+            
+            baseInOut1.Delete();
+            
+            Assert.IsNull(baseInOut1.Connected);
+            Assert.True(baseInOut1.IsDeleted);
+
+            Assert.IsNull(baseInOut2.Connected);
+            Assert.False(baseInOut2.IsDeleted);
+        }
     }
 }
