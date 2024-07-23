@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Reflection;
 using Backend;
+using Backend.API;
 using Backend.Connection;
 using Backend.Node;
 using NSubstitute;
@@ -13,9 +15,7 @@ namespace Tests.EditMode.ut.Backend.Node
     {
         protected CodeManager _codeManagerMock;
         protected FlowInOutMock _prevMock;
-        protected FlowInOutMock _prevConnectedMock;
         protected FlowInOutMock _nextMock;
-        protected FlowInOutMock _nextConnectedMock;
         protected InOutMock _inOutMock;
 
         [SetUp]
@@ -23,9 +23,9 @@ namespace Tests.EditMode.ut.Backend.Node
         {
             _codeManagerMock = Substitute.For<CodeManager>();
             _prevMock = Substitute.For<FlowInOutMock>();
-            _prevConnectedMock = Substitute.For<FlowInOutMock>();
+            _prevMock.InOutType.Returns(InOutType.Flow);
             _nextMock = Substitute.For<FlowInOutMock>();
-            _nextConnectedMock = Substitute.For<FlowInOutMock>();
+            _nextMock.InOutType.Returns(InOutType.Flow);
             _inOutMock = Substitute.For<InOutMock>();
         }
 
@@ -37,27 +37,41 @@ namespace Tests.EditMode.ut.Backend.Node
 
         public void SetInOutMock<T>(BaseNode node, string name, InOut inOutMock)
         {
-            typeof(T).GetField(name, BindingFlags.NonPublic | BindingFlags.Instance).SetValue(node, inOutMock);
+            typeof(T)
+                .GetField(name, BindingFlags.NonPublic | BindingFlags.Instance)
+                .SetValue(node, inOutMock);
         }
 
-        public void MakeUnconnected(InOut inOut)
+        public void SetInputsList(BaseNode node, List<IConnection> inOutMocks)
         {
-            inOut.Connected.Returns((InOut)null);
+            typeof(BaseNode)
+                .GetProperty("InputsList", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                .SetValue(node, inOutMocks, null);
         }
 
-        public void MakeConnected(InOut inOut, InOut inOut2)
+        public void SetOutputsList(BaseNode node, List<IConnection> inOutMocks)
         {
-            inOut.Connected.Returns(inOut2);
+            typeof(BaseNode)
+                .GetProperty("OutputsList", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                .SetValue(node, inOutMocks, null);
         }
-        public void MakeConnected(InOut inOut)
+
+        public AnyInOutMock CreateAnyInOutMock()
         {
-            MakeConnected(inOut, _inOutMock);
+            var inOut = Substitute.For<AnyInOutMock>();
+            inOut.InOutType.Returns(InOutType.Dynamic);
+            return inOut;
         }
 
         public void MakeFlowConnected()
         {
-            MakeConnected(_prevMock, _prevConnectedMock);
-            MakeConnected(_nextMock, _nextConnectedMock);
+            _prevMock.MakeConnect();
+            _nextMock.MakeConnect();
+        }
+
+        public void ExpectNextToCode()
+        {
+            _nextMock.ExpectToCode(_codeManagerMock);
         }
     }
 }

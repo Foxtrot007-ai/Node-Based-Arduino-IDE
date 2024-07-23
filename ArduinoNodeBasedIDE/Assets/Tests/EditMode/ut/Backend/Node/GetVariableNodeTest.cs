@@ -1,6 +1,5 @@
 using System;
 using Backend;
-using Backend.Connection;
 using Backend.Exceptions;
 using Backend.Node.BuildIn;
 using NSubstitute;
@@ -27,7 +26,7 @@ namespace Tests.EditMode.ut.Backend.Node
             base.Init();
             _variableMock = Substitute.For<VariableMock>();
             _sut = Substitute.ForPartsOf<GetVariableNode>(_variableMock);
-            _valueMock = Substitute.For<AnyInOutMock>();
+            _valueMock = CreateAnyInOutMock();
             SetInOutMock<VariableNode>(_sut, "_value", _valueMock);
         }
 
@@ -40,7 +39,7 @@ namespace Tests.EditMode.ut.Backend.Node
         [Test]
         public void ToCodeParamThrowInOutMustBeConnectedException()
         {
-            MakeUnconnected(_valueMock);
+            _valueMock.MakeDisconnect();
 
             Assert.Throws<InOutMustBeConnectedException>(() => _sut.ToCodeParam(_codeManagerMock));
         }
@@ -48,7 +47,7 @@ namespace Tests.EditMode.ut.Backend.Node
         [Test]
         public void ToCodeParamTestThrowVariableNotSetException()
         {
-            MakeConnected(_valueMock);
+            _valueMock.MakeConnect();
             _codeManagerMock.GetVariableStatus(_variableMock).Returns(CodeManager.VariableStatus.Unknown);
 
             Assert.Throws<VariableNotSetException>(() => _sut.ToCodeParam(_codeManagerMock));
@@ -57,7 +56,7 @@ namespace Tests.EditMode.ut.Backend.Node
         [Test]
         public void ToCodeParamGenerateCode()
         {
-            MakeConnected(_valueMock);
+            _valueMock.MakeConnect();
             _variableMock.Name.Returns("test");
             _codeManagerMock.GetVariableStatus(_variableMock).Returns(CodeManager.VariableStatus.Set);
 

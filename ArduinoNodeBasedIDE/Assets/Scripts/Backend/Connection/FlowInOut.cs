@@ -6,7 +6,7 @@ namespace Backend.Connection
 {
     public class FlowInOut : InOut
     {
-        public override sealed InOutType InOutType => InOutType.Flow;
+        public override InOutType InOutType => InOutType.Flow;
         public override string InOutName { get; }
 
         public FlowInOut(BaseNode parentNode, InOutSide side, string name) : base(parentNode, side)

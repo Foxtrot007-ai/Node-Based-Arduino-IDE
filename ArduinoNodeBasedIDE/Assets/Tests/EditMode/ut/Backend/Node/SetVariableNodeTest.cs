@@ -26,7 +26,7 @@ namespace Tests.EditMode.ut.Backend.Node
             base.Init();
             _variableMock = Substitute.For<VariableMock>();
             _sut = Substitute.ForPartsOf<SetVariableNode>(_variableMock);
-            _valueMock = Substitute.For<AnyInOutMock>();
+            _valueMock = CreateAnyInOutMock();
             SetInOutMock<VariableNode>(_sut, "_value", _valueMock);
             SetFlowMocks(_sut);
         }
@@ -40,7 +40,7 @@ namespace Tests.EditMode.ut.Backend.Node
         [Test]
         public void ToCodeThrowInOutMustBeConnectedException()
         {
-            MakeUnconnected(_valueMock);
+            _valueMock.MakeDisconnect();
 
             Assert.Throws<InOutMustBeConnectedException>(() => _sut.ToCode(_codeManagerMock));
         }
@@ -49,16 +49,16 @@ namespace Tests.EditMode.ut.Backend.Node
         public void ToCodeNewVariableTest()
         {
             MakeFlowConnected();
-            MakeConnected(_valueMock);
+            _valueMock.MakeConnect();
             _codeManagerMock.GetVariableStatus(_variableMock).Returns(CodeManager.VariableStatus.Unknown);
             _variableMock.Type.ToCode().Returns("type");
             _variableMock.Name.Returns("test");
-            _inOutMock.ParentNode.ToCodeParam(_codeManagerMock).Returns("value");
+            _valueMock.ToCodeParamReturn(_codeManagerMock,"value");
             
             _sut.ToCode(_codeManagerMock);
             
             _codeManagerMock.Received().AddLine("type test = value;");
-            _nextConnectedMock.Received().ParentNode.ToCode(_codeManagerMock);
+            ExpectNextToCode();
         }
         
         [Test]
@@ -68,16 +68,17 @@ namespace Tests.EditMode.ut.Backend.Node
         public void ToCodeOldVariableTest(CodeManager.VariableStatus variableStatus)
         {
             MakeFlowConnected();
-            MakeConnected(_valueMock);
+            _valueMock.MakeConnect();
+            
             _codeManagerMock.GetVariableStatus(_variableMock).Returns(CodeManager.VariableStatus.Set);
             _variableMock.Type.ToCode().Returns("type");
             _variableMock.Name.Returns("test");
-            _inOutMock.ParentNode.ToCodeParam(_codeManagerMock).Returns("value");
+            _valueMock.ToCodeParamReturn(_codeManagerMock,"value");
             
             _sut.ToCode(_codeManagerMock);
             
             _codeManagerMock.Received().AddLine("test = value;");
-            _nextConnectedMock.Received().ParentNode.ToCode(_codeManagerMock);
+            ExpectNextToCode();
         }
     }
 }

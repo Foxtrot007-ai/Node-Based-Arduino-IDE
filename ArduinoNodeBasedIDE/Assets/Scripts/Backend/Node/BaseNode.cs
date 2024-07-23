@@ -13,8 +13,8 @@ namespace Backend.Node
         public virtual string NodeName { get; protected set; }
         public bool IsDeleted { get; private set; }
         public virtual NodeType NodeType { get; protected set; }
-        public virtual List<IConnection> InputsList { get; }
-        public virtual List<IConnection> OutputsList { get; }
+        public virtual List<IConnection> InputsList { get; private set; }
+        public virtual List<IConnection> OutputsList { get; private set; }
 
         protected FlowInOut _prevNode;
         protected FlowInOut _nextNode;

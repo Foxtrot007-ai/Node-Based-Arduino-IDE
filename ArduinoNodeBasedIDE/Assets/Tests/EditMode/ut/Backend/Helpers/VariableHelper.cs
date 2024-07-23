@@ -18,8 +18,8 @@ namespace Tests.EditMode.ut.Backend.Helpers
         {
             return new VariableManageDto
             {
-                Type = TypeHelper.CreateType(eType),
-                VariableName = varName
+                Type = TypeHelper.CreateMyTypeMock(eType),
+                VariableName = varName,
             };
         }
     }
