@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using Backend.API;
+using Backend.Connection;
 
 namespace Backend
 {
@@ -23,14 +25,14 @@ namespace Backend
             Variables = new Dictionary<IVariable, VariableStatus>();
             Includes = new HashSet<string>();
         }
-        
+
         public CodeManager(CodeManager codeManager)
         {
             CodeLines = new List<string>();
             Variables = new Dictionary<IVariable, VariableStatus>(codeManager.Variables);
             Includes = codeManager.Includes;
         }
-        
+
         public virtual void AddLibrary(string library)
         {
             Includes.Add(library);
@@ -56,15 +58,21 @@ namespace Backend
         {
             if (lines.Count > 1)
             {
-                AddLine("{");    
+                AddLine("{");
             }
 
             lines.ForEach(AddLine);
-            
+
             if (lines.Count > 1)
             {
-                AddLine("}");    
+                AddLine("}");
             }
+        }
+
+        public string BuildParamCode(IEnumerable<IConnection> paramsList)
+        {
+            var codeParams = paramsList.Select(x => ((InOut)x.Connected).ParentNode.ToCodeParam(this));
+            return string.Join(", ", codeParams);
         }
     }
 }

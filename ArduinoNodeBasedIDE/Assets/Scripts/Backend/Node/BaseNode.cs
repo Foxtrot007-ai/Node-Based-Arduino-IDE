@@ -13,8 +13,8 @@ namespace Backend.Node
         public virtual string NodeName { get; protected set; }
         public bool IsDeleted { get; private set; }
         public virtual NodeType NodeType { get; protected set; }
-        public virtual List<IConnection> InputsList { get; private set; }
-        public virtual List<IConnection> OutputsList { get; private set; }
+        public virtual List<IConnection> InputsList { get; private set; } = new();
+        public virtual List<IConnection> OutputsList { get; private set;} = new();
 
         protected FlowInOut _prevNode;
         protected FlowInOut _nextNode;
@@ -23,8 +23,6 @@ namespace Backend.Node
         {
             _prevNode = new FlowInOut(this, InOutSide.Input, "prev");
             _nextNode = new FlowInOut(this, InOutSide.Output, "next");
-            InputsList = new List<IConnection>();
-            OutputsList = new List<IConnection>();
         }
 
         public virtual void Delete()
@@ -61,7 +59,12 @@ namespace Backend.Node
         {
             return ((InOut)inOut.Connected).ParentNode.ToCodeParam(codeManager);
         }
-        protected abstract void CheckToCode();
+        protected virtual void CheckToCode()
+        {
+            InputsList.ForEach(x => CheckIfConnected((InOut)x));
+            OutputsList.ForEach(x => CheckIfConnected((InOut)x));
+        }
+
         public virtual void ToCode(CodeManager codeManager)
         {
             throw new NotImplementedException();

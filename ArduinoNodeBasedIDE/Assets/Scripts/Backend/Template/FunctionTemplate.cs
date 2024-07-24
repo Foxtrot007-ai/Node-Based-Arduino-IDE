@@ -21,7 +21,7 @@ namespace Backend.Template
             InputsTypes = functionJson.InputsType.Select(TypeConverter.ToIType).ToList();
 
             Category = library;
-            // _instanceType = typeof(FunctionNode);
+            _instanceType = typeof(FunctionNode);
         }
 
         public FunctionTemplate(long id, FunctionTemplateDto functionTemplateDto) : base(id, functionTemplateDto.FunctionName)
@@ -31,7 +31,7 @@ namespace Backend.Template
             OutputType = TypeConverter.ToIType(functionTemplateDto.OutputType);
 
             Category = functionTemplateDto.Library;
-            // _instanceType = typeof(FunctionNode);
+            _instanceType = typeof(FunctionNode);
         }
     }
 }
