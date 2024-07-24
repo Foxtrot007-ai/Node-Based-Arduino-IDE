@@ -11,7 +11,7 @@ namespace Backend.Type
 
         public ClassType(string classType) : this(classType, ClassTypeValidator.Instance)
         {
-            
+
         }
         protected ClassType(string classType, IClassTypeValidator validator) //Only for test purpose
         {
@@ -35,7 +35,7 @@ namespace Backend.Type
         {
             return false;
         }
-        public string ToCode()
+        public virtual string ToCode()
         {
             return char.ToUpper(TypeName[0]) + TypeName.Substring(1);
         }
@@ -50,7 +50,7 @@ namespace Backend.Type
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((ClassType) obj);
+            return Equals((ClassType)obj);
         }
 
         public static bool operator ==(ClassType left, ClassType right)
@@ -62,7 +62,7 @@ namespace Backend.Type
         {
             return !Equals(left, right);
         }
-        
+
         public override int GetHashCode()
         {
             return (TypeName != null ? TypeName.GetHashCode() : 0);

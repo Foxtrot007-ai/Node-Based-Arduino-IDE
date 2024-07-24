@@ -20,7 +20,7 @@ namespace Backend.Template
             Inputs = inputs.Select(TypeConverter.ToIType).ToList();
 
             Category = classType.TypeName;
-            // _instanceType = typeof(ClassConstructorNode);
+            _instanceType = typeof(ClassConstructorNode);
         }
     }
 }
