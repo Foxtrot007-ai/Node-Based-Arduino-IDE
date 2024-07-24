@@ -63,6 +63,13 @@ namespace Tests.EditMode.ut.Backend.Node
             return inOut;
         }
 
+        public ClassInOutMock CreateClassInOutMock()
+        {
+            var inOut = Substitute.For<ClassInOutMock>();
+            inOut.InOutType.Returns(InOutType.Class);
+            return inOut;
+        }
+
         public void MakeFlowConnected()
         {
             _prevMock.MakeConnect();

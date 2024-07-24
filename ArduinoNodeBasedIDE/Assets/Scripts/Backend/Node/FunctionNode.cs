@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Backend.API;
 using Backend.Connection;
 using Backend.Connection.MyType;
 using Backend.Template;
@@ -11,7 +8,7 @@ namespace Backend.Node
 {
     public class FunctionNode : BaseNode
     {
-        private FunctionTemplate _functionTemplate;
+        private readonly FunctionTemplate _functionTemplate;
         public override string NodeName => _functionTemplate.Name;
         public override NodeType NodeType => NodeType.Function;
 
@@ -28,41 +25,39 @@ namespace Backend.Node
             }
             else
             {
-                OutputsList.Add(new AnyInOut(this, InOutSide.Output, _functionTemplate.OutputType));
+                AddOutputs(new AnyInOut(this, InOutSide.Output, _functionTemplate.OutputType));
             }
 
-            _functionTemplate.InputsTypes.ForEach(x => InputsList.Add(new AnyInOut(this, InOutSide.Input, x)));
+            _functionTemplate.InputsTypes
+                .ForEach(type => AddInputs(new AnyInOut(this, InOutSide.Input, type)));
         }
 
         protected bool _isFlow()
         {
             return OutputsList[0].InOutType == InOutType.Flow;
         }
-        
+
         protected virtual string BuildCode(CodeManager codeManager)
         {
             var codeParam = codeManager.BuildParamCode(GetWithoutFlow(InputsList));
             return $"{NodeName}({codeParam})";
         }
 
-        public override void ToCode(CodeManager codeManager)
+        protected override void MakeCode(CodeManager codeManager)
         {
-            if (!_isFlow())
+            if (!IsFlow())
                 throw new NotImplementedException();
-
-            CheckToCode();
+            
             codeManager.AddLibrary(_functionTemplate.Library);
             codeManager.AddLine(BuildCode(codeManager) + ";");
-            NextToCode(codeManager);
         }
 
-        public override string ToCodeParam(CodeManager codeManager)
+        protected override string MakeCodeParam(CodeManager codeManager)
         {
-            if (_isFlow())
+            if (IsFlow())
                 throw new NotImplementedException();
 
             codeManager.AddLibrary(_functionTemplate.Library);
-            CheckToCode();
             return BuildCode(codeManager);
         }
     }

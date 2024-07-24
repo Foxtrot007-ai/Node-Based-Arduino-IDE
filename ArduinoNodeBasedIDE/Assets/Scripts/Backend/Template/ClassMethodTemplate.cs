@@ -15,14 +15,14 @@ namespace Backend.Template
             Class = classType;
 
             Category = classType.TypeName;
-            // _instanceType = typeof(ClassNode);
+            _instanceType = typeof(ClassMethodNode);
         }
         public ClassMethodTemplate(long id, FunctionTemplateDto functionTemplateDto, ClassType classType) : base(id, functionTemplateDto)
         {
             Class = classType;
 
             Category = classType.TypeName;
-            // _instanceType = typeof(ClassNode);
+            _instanceType = typeof(ClassMethodNode);
         }
     }
 }

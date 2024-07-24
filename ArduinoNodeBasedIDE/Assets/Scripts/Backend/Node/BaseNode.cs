@@ -124,5 +124,10 @@ namespace Backend.Node
                 return list;
             return list[0].InOutType == InOutType.Flow ? list.Skip(1).ToList() : list;
         }
+
+        protected bool IsFlow()
+        {
+            return OutputsList[0].InOutType == InOutType.Flow;
+        }
     }
 }
