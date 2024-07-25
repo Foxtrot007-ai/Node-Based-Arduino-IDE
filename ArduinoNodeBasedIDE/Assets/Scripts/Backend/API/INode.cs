@@ -33,7 +33,7 @@ namespace Backend.API
          * If true node is logicalDelete, need physical delete
          */
         public bool IsDeleted { get; }
-        
+
         /*
          * Node delete
          * Disconnect all connection

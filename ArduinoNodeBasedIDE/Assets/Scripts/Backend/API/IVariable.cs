@@ -2,19 +2,19 @@ using Backend.API.DTO;
 
 namespace Backend.API
 {
-    public interface IVariableManage
+    public interface IVariable
     {
         /*
          * Return name of variable
          */
         public string Name { get; }
-        
+
         /*
          * Return type of variable
          * Type cannot be Void
          */
         public IMyType Type { get; }
-        
+
         /*
          * Change Name or Type of variable
          * null if not change/or same value
@@ -28,21 +28,21 @@ namespace Backend.API
          *     do nothing (connection still exists)
          */
         public void Change(VariableManageDto variableManageDto);
-        
+
         /*
          * Create new instance of variable getter
          */
-        public INode CreateGetVariable();
-        
+        public INode CreateGetNode();
+
         /*
          * Create new instance of variable setter
          */
-        public INode CreateSetVariable();
-        
+        public INode CreateSetNode();
+
         /*
          * Delete all instance of variable
          * (backend will set logic delete to true)
          */
-        public void DeleteVariable();
+        public void Delete();
     }
 }

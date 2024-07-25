@@ -3,22 +3,22 @@ using Backend.API.DTO;
 
 namespace Backend.API
 {
-    public interface IVariableList
+    public interface IVariablesManager
     {
         /*
          * Get all VariablesManage as list !!!readOnly!!!
          */
-        public List<IVariableManage> VariableManages { get; }
+        public List<IVariable> Variables { get; }
 
         /*
          * Add new variable to list
          * Will make validation like if name is valid
          */
-        public IVariableManage AddVariable(VariableManageDto variableManageDto);
+        public IVariable AddVariable(VariableManageDto variableManageDto);
 
         /*
          * Find variable on list and call delete
          */
-        public void DeleteVariable(IVariableManage variableManage);
+        public void DeleteVariable(IVariable variable);
     }
 }

@@ -9,7 +9,7 @@ namespace Backend.API
          * For class it will return name of class
          */
         public string TypeName { get; }
-        
+
         /*
          * Return type
          */

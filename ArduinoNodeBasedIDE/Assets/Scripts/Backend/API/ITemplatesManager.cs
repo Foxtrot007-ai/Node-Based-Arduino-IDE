@@ -3,12 +3,12 @@ using Backend.API.DTO;
 
 namespace Backend.API
 {
-    public interface ITemplateManager
+    public interface ITemplatesManager
     {
         /*
          * Return list of every available templates (INodes)
          */
-        public List<ITemplate> GetTemplates();
+        public List<ITemplate> Templates { get; }
 
         /*
          * Add new function template
@@ -29,7 +29,7 @@ namespace Backend.API
          * Save in file
          */
         public void AddClassConstructorTemplate(string className, string library, List<string> inputs);
-        
+
         /*
          * Remove template by id, cannot remove buildIn templates
          */

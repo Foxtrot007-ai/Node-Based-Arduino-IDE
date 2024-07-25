@@ -1,20 +1,7 @@
-using Backend.API.DTO;
-
-namespace Backend.API
+namespace Backend.API.DTO
 {
-    public interface IFunctionManage
+    public interface IUserFunction : IFunction
     {
-
-        /*
-         * Start node of function flow
-         */
-        public INode StartNode { get; }
-
-        /*
-         * Function name
-         */
-        public string Name { get; }
-
         /*
          * Function outputType
          * Void if no output
@@ -26,8 +13,8 @@ namespace Backend.API
          * Empty list if 0 params
          * Param manage same as Variable
          */
-        public IVariableList InputList { get; }
-        
+        public IVariablesManager InputList { get; }
+
         /*
          * Change Name or Type of function
          * null if not change/or same value
@@ -45,12 +32,12 @@ namespace Backend.API
         /*
          * Create new instance of function
          */
-        public INode CreateFunction();
+        public INode CreateNode();
 
         /*
          * LogicDelete all instance of function (in other views)
          * LogicDelete all NodeBlock in function
          */
-        public void DeleteFunction();
+        public void Delete();
     }
 }
