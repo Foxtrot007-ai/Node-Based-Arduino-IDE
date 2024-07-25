@@ -4,6 +4,7 @@ using Backend;
 using Backend.API;
 using Backend.Connection;
 using Backend.Node;
+using Backend.Template;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Mocks.Connection;
@@ -17,6 +18,8 @@ namespace Tests.EditMode.ut.Backend.Node
         protected FlowInOutMock _prevMock;
         protected FlowInOutMock _nextMock;
         protected InOutMock _inOutMock;
+        protected BuildInTemplate _buildInTemplateMock;
+
 
         [SetUp]
         public virtual void Init()
@@ -27,6 +30,8 @@ namespace Tests.EditMode.ut.Backend.Node
             _nextMock = Substitute.For<FlowInOutMock>();
             _nextMock.InOutType.Returns(InOutType.Flow);
             _inOutMock = Substitute.For<InOutMock>();
+            _buildInTemplateMock = Substitute.For<BuildInTemplate>();
+
         }
 
         public void SetFlowMocks(BaseNode baseNode)
@@ -67,6 +72,13 @@ namespace Tests.EditMode.ut.Backend.Node
         {
             var inOut = Substitute.For<ClassInOutMock>();
             inOut.InOutType.Returns(InOutType.Class);
+            return inOut;
+        }
+
+        public AutoInOutMock CreateAutoInOutMock()
+        {
+            var inOut = Substitute.For<AutoInOutMock>();
+            inOut.InOutType.Returns(InOutType.Auto);
             return inOut;
         }
 
