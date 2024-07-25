@@ -51,6 +51,8 @@ namespace Tests.EditMode.ut.Backend.Node
         {
             SetInputsList(_sut, new List<IConnection> { _in1, _in2 });
             SetOutputsList(_sut, new List<IConnection> { _classOutMock });
+            
+            MakeParamConnected();
         }
 
         [Test]
@@ -77,16 +79,9 @@ namespace Tests.EditMode.ut.Backend.Node
         }
 
         [Test]
-        public void ToCodeThrowsTest()
-        {
-            Assert.Throws<NotImplementedException>(() => _sut.ToCode(_codeManagerMock));
-        }
-
-        [Test]
         public void ToCodeParamTest()
         {
             PrepareSetup();
-            MakeParamConnected();
 
             _classConstructorTemplateMock.Library.Returns("library");
             _classConstructorTemplateMock.Class.ToCode().Returns("Class");

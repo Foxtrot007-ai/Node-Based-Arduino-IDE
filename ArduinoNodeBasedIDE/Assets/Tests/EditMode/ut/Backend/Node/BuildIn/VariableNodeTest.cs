@@ -6,7 +6,7 @@ using NSubstitute.Extensions;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.mocks;
 
-namespace Tests.EditMode.ut.Backend.Node
+namespace Tests.EditMode.ut.Backend.Node.BuildIn
 {
     [TestFixture]
     [TestOf(nameof(VariableNode))]

@@ -12,9 +12,8 @@ namespace Backend.Node.BuildIn
             AddOutputs(_value);
         }
 
-        public override string ToCodeParam(CodeManager codeManager)
+        protected override string MakeCodeParam(CodeManager codeManager)
         {
-            CheckToCode();
             if (codeManager.GetVariableStatus(_variable) == CodeManager.VariableStatus.Unknown)
             {
                 throw new VariableNotSetException();

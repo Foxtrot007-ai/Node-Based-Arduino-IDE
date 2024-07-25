@@ -50,6 +50,9 @@ namespace Tests.EditMode.ut.Backend.Node
             _functionTemplateMock.OutputType.EType.Returns(EType.Void);
             SetInputsList(_sut, new List<IConnection> { _prevMock, _in1, _in2 });
             SetOutputsList(_sut, new List<IConnection> { _nextMock });
+
+            MakeFlowConnected();
+            MakeParamConnected();
         }
 
         private void PrepareNonVoidSetup()
@@ -57,6 +60,8 @@ namespace Tests.EditMode.ut.Backend.Node
             _functionTemplateMock.OutputType.EType.Returns(EType.Int);
             SetInputsList(_sut, new List<IConnection> { _in1, _in2 });
             SetOutputsList(_sut, new List<IConnection> { _out });
+
+            MakeParamConnected();
         }
 
         [Test]
@@ -117,8 +122,6 @@ namespace Tests.EditMode.ut.Backend.Node
         public void VoidToCodeTest()
         {
             PrepareVoidSetup();
-            MakeFlowConnected();
-            MakeParamConnected();
 
             _functionTemplateMock.Name.Returns("name");
             _functionTemplateMock.Library.Returns("library");
@@ -143,7 +146,6 @@ namespace Tests.EditMode.ut.Backend.Node
         public void NonVoidToCodeTest()
         {
             PrepareNonVoidSetup();
-            MakeParamConnected();
 
             _functionTemplateMock.Name.Returns("name");
             _functionTemplateMock.Library.Returns("library");

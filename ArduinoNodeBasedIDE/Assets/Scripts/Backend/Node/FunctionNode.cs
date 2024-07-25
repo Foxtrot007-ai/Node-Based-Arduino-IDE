@@ -8,13 +8,9 @@ namespace Backend.Node
 {
     public class FunctionNode : BaseNode
     {
-        private readonly FunctionTemplate _functionTemplate;
+        private FunctionTemplate _functionTemplate;
         public override string NodeName => _functionTemplate.Name;
         public override NodeType NodeType => NodeType.Function;
-
-        protected FunctionNode()
-        {
-        }
 
         public FunctionNode(FunctionTemplate functionTemplate)
         {

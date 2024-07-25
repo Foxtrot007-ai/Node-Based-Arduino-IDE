@@ -14,7 +14,7 @@ namespace Backend.Node
         public bool IsDeleted { get; private set; }
         public virtual NodeType NodeType { get; protected set; }
         public virtual List<IConnection> InputsList { get; private set; } = new();
-        public virtual List<IConnection> OutputsList { get; private set;} = new();
+        public virtual List<IConnection> OutputsList { get; private set; } = new();
 
         protected FlowInOut _prevNode;
         protected FlowInOut _nextNode;
@@ -65,14 +65,28 @@ namespace Backend.Node
             OutputsList.ForEach(x => CheckIfConnected((InOut)x));
         }
 
+        protected virtual void MakeCode(CodeManager codeManager)
+        {
+            throw new NotImplementedException();
+        }
+        protected virtual string MakeCodeParam(CodeManager codeManager)
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual void ToCode(CodeManager codeManager)
         {
-            throw new NotImplementedException();
+            CheckToCode();
+            MakeCode(codeManager);
+            NextToCode(codeManager);
         }
-        public virtual string ToCodeParam(CodeManager codeManager)
+
+        public string ToCodeParam(CodeManager codeManager)
         {
-            throw new NotImplementedException();
+            CheckToCode();
+            return MakeCodeParam(codeManager);
         }
+
         protected void AddInputs(params InOut[] inputs)
         {
             foreach (var input in inputs)
@@ -83,9 +97,9 @@ namespace Backend.Node
 
         protected void AddOutputs(params InOut[] outputs)
         {
-            foreach (var input in outputs)
+            foreach (var output in outputs)
             {
-                OutputsList.Add(input);
+                OutputsList.Add(output);
             }
         }
 

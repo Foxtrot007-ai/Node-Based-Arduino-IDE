@@ -11,15 +11,8 @@ namespace Backend.Node.BuildIn
             AddInputs(_value);
         }
 
-        protected override void CheckToCode()
+        protected override void MakeCode(CodeManager codeManager)
         {
-            base.CheckToCode();
-            CheckFlowConnected();
-        }
-
-        public override void ToCode(CodeManager codeManager)
-        {
-            CheckToCode();
             string prefix = "";
             if (codeManager.GetVariableStatus(_variable) == CodeManager.VariableStatus.Unknown)
             {
@@ -28,7 +21,6 @@ namespace Backend.Node.BuildIn
             }
 
             codeManager.AddLine($"{prefix}{_variable.Name} = {ConnectedToCodeParam(codeManager, _value)};");
-            NextToCode(codeManager);
         }
     }
 }

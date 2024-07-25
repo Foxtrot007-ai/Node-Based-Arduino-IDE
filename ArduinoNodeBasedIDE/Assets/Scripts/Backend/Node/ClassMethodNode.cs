@@ -15,7 +15,7 @@ namespace Backend.Node
         {
             _classMethodTemplate = classMethodTemplate;
             _classIn = new ClassInOut(this, InOutSide.Input, _classMethodTemplate.Class);
-            InputsList.Insert(IsFlow() ? 1 : 0, _classIn);
+            InputsList.Insert(_isFlow() ? 1 : 0, _classIn);
         }
 
         protected override string BuildCode(CodeManager codeManager)

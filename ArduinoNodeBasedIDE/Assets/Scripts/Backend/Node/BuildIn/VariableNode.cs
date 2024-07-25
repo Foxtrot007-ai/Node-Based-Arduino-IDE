@@ -16,11 +16,6 @@ namespace Backend.Node.BuildIn
             variable.AddRef(this);
         }
 
-        protected override void CheckToCode()
-        {
-            CheckIfConnected(_value);
-        }
-
         public virtual void ChangeType(IType type)
         {
             _value.ChangeMyType(type);

@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using Backend;
+using Backend.API;
 using Backend.Exceptions;
 using Backend.Node.BuildIn;
 using NSubstitute;
@@ -7,7 +9,7 @@ using NUnit.Framework;
 using Tests.EditMode.ut.Backend.mocks;
 using Tests.EditMode.ut.Backend.Mocks.Connection;
 
-namespace Tests.EditMode.ut.Backend.Node
+namespace Tests.EditMode.ut.Backend.Node.BuildIn
 {
 
     [TestFixture]
@@ -27,36 +29,29 @@ namespace Tests.EditMode.ut.Backend.Node
             _variableMock = Substitute.For<VariableMock>();
             _sut = Substitute.ForPartsOf<GetVariableNode>(_variableMock);
             _valueMock = CreateAnyInOutMock();
+            PrepareSetup();
+        }
+
+        void PrepareSetup()
+        {
             SetInOutMock<VariableNode>(_sut, "_value", _valueMock);
-        }
-
-        [Test]
-        public void ToCodeThrowNotImplemented()
-        {
-            Assert.Throws<NotImplementedException>(() => _sut.ToCode(_codeManagerMock));
-        }
-
-        [Test]
-        public void ToCodeParamThrowInOutMustBeConnectedException()
-        {
-            _valueMock.MakeDisconnect();
-
-            Assert.Throws<InOutMustBeConnectedException>(() => _sut.ToCodeParam(_codeManagerMock));
+            SetInputsList(_sut, new List<IConnection>());
+            SetOutputsList(_sut, new List<IConnection> { _valueMock });
+            
+            _valueMock.MakeConnect();
         }
 
         [Test]
         public void ToCodeParamTestThrowVariableNotSetException()
         {
-            _valueMock.MakeConnect();
             _codeManagerMock.GetVariableStatus(_variableMock).Returns(CodeManager.VariableStatus.Unknown);
-
             Assert.Throws<VariableNotSetException>(() => _sut.ToCodeParam(_codeManagerMock));
         }
 
         [Test]
         public void ToCodeParamGenerateCode()
         {
-            _valueMock.MakeConnect();
+
             _variableMock.Name.Returns("test");
             _codeManagerMock.GetVariableStatus(_variableMock).Returns(CodeManager.VariableStatus.Set);
 

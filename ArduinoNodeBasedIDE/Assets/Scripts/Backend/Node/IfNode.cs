@@ -1,20 +1,19 @@
 ﻿using Backend.Connection;
 using Backend.Connection.MyType;
+using Backend.Node.BuildIn;
+using Backend.Template;
 using Backend.Type;
 
 namespace Backend.Node
 {
-    public class IfNode : BaseNode
+    public class IfNode : BuildInNode
     {
-
-        private readonly FlowInOut _true;
-        private readonly FlowInOut _false;
-        private readonly PrimitiveInOut _predicate;
-
-        public override string NodeName => "If";
+        private FlowInOut _true;
+        private FlowInOut _false;
+        private PrimitiveInOut _predicate;
         public override NodeType NodeType => NodeType.If;
 
-        public IfNode()
+        public IfNode (BuildInTemplate buildInTemplate) : base(buildInTemplate)
         {
             AddFlowInputs();
             _predicate = new PrimitiveInOut(this, InOutSide.Input, new PrimitiveType(EType.Bool));
@@ -33,23 +32,20 @@ namespace Backend.Node
             CheckIfConnected(_true);
         }
 
-        public override void ToCode(CodeManager codeManager)
+        protected override void MakeCode(CodeManager codeManager)
         {
-            CheckToCode();
             codeManager.AddLine($"if ({ConnectedToCodeParam(codeManager, _predicate)})");
 
             var trueCopy = new CodeManager(codeManager);
             ConnectedToCode(trueCopy, _true);
             codeManager.AddLines(trueCopy.CodeLines);
 
-            if (_false is not null)
+            if (_false.Connected is not null)
             {
                 var falseCopy = new CodeManager(codeManager);
                 ConnectedToCode(falseCopy, _false);
                 codeManager.AddLines(falseCopy.CodeLines);
             }
-
-            NextToCode(codeManager);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Linq;
 using Backend.Connection;
 using Backend.Connection.MyType;
 using Backend.Template;
@@ -7,23 +8,20 @@ namespace Backend.Node
     public class ClassConstructorNode : BaseNode
     {
 
-        private ClassConstructorTemplate _classConstructorTemplate;
+        private readonly ClassConstructorTemplate _classConstructorTemplate;
 
         public ClassConstructorNode(ClassConstructorTemplate classConstructorTemplate)
         {
             _classConstructorTemplate = classConstructorTemplate;
 
-            foreach (var input in _classConstructorTemplate.Inputs)
-            {
-                InputsList.Add(new AnyInOut(this, InOutSide.Input, input));
-            }
+            _classConstructorTemplate.Inputs
+                .ForEach(type => AddInputs(new AnyInOut(this, InOutSide.Input, type)));
 
-            OutputsList.Add(new ClassInOut(this, InOutSide.Input, _classConstructorTemplate.Class));
+            AddOutputs(new ClassInOut(this, InOutSide.Input, _classConstructorTemplate.Class));
         }
 
-        public override string ToCodeParam(CodeManager codeManager)
+        protected override string MakeCodeParam(CodeManager codeManager)
         {
-            CheckToCode();
             codeManager.AddLibrary(_classConstructorTemplate.Library);
 
             var codeParam = codeManager.BuildParamCode(InputsList);
