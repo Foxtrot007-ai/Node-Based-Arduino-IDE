@@ -19,7 +19,7 @@ namespace Tests.EditMode.ut.Backend.Type
         {
             _primitiveType = new PrimitiveType(EType.Int);
         }
-        
+
         private static List<EType> _notPrimitive = new()
         {
             EType.Class,
@@ -59,40 +59,40 @@ namespace Tests.EditMode.ut.Backend.Type
             //then
             Assert.AreEqual(type, primitiveType.EType);
         }
-        
+
         private static readonly List<(IType, bool)> _castParam = new()
         {
-            (TypeHelper.CreateClassTypeMock("test"), false),
+            (MockHelper.CreateClassType("test"), false),
             (new VoidType(), false),
             (new PrimitiveType(EType.LongLong), true),
             (new StringType(), true),
         };
-        
+
         [Test]
         [TestCaseSource(nameof(_castParam))]
         public void CanBeCastParamTest((IType, bool) param)
         {
             var (type, expect) = param;
-            Assert.AreEqual(expect,_primitiveType.CanBeCast(type));
+            Assert.AreEqual(expect, _primitiveType.CanBeCast(type));
         }
 
         private static readonly List<(IType, bool)> _adapterParam = new()
         {
-            (TypeHelper.CreateClassTypeMock("test"), false),
+            (MockHelper.CreateClassType("test"), false),
             (new VoidType(), false),
             (new PrimitiveType(EType.LongLong), false),
             (new StringType(), true),
         };
-        
+
         [Test]
         [TestCaseSource(nameof(_adapterParam))]
         public void IsAdapterNeedParamTest((IType, bool) param)
         {
             var (type, expect) = param;
-            Assert.AreEqual(expect,_primitiveType.IsAdapterNeed(type));
+            Assert.AreEqual(expect, _primitiveType.IsAdapterNeed(type));
         }
-        
-        [Test] 
+
+        [Test]
         public void NotEqual()
         {
             //given

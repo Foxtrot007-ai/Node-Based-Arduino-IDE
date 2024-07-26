@@ -6,8 +6,8 @@ namespace Backend.Type
 {
     public class ClassType : IType
     {
-        public EType EType => EType.Class;
-        public string TypeName { get; }
+        public virtual EType EType => EType.Class;
+        public virtual string TypeName { get; }
 
         public ClassType(string classType) : this(classType, ClassTypeValidator.Instance)
         {
@@ -21,6 +21,10 @@ namespace Backend.Type
             }
 
             TypeName = classType;
+        }
+
+        protected ClassType()
+        {
         }
 
         public bool CanBeCast(IType iMyType)

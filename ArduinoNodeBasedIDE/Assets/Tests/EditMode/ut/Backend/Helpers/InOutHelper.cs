@@ -24,7 +24,7 @@ namespace Tests.EditMode.ut.Backend.Helpers
             BaseNodeMock parent = null, IType myType = null)
         {
             parent ??= Substitute.ForPartsOf<BaseNodeMock>();
-            myType ??= TypeHelper.CreateMyTypeMock();
+            myType ??= MockHelper.CreateType();
             var inOut = new MyTypeInOutMock(parent, side, myType);
             parent.Add(inOut, side);
             return inOut;
@@ -33,12 +33,12 @@ namespace Tests.EditMode.ut.Backend.Helpers
         public static AnyInOut CreateAnyInOut(InOutSide side = InOutSide.Output, BaseNodeMock parent = null, IType myType = null)
         {
             parent ??= Substitute.ForPartsOf<BaseNodeMock>();
-            myType ??= TypeHelper.CreateMyTypeMock();
+            myType ??= MockHelper.CreateType();
             var inOut = new AnyInOut(parent, side, myType);
             parent.Add(inOut, side);
             return inOut;
         }
-        
+
         public static FlowInOut CreateFlowInOut(InOutSide side = InOutSide.Output, BaseNodeMock parent = null, string name = "test")
         {
             parent ??= Substitute.ForPartsOf<BaseNodeMock>();
@@ -54,7 +54,7 @@ namespace Tests.EditMode.ut.Backend.Helpers
             parent.Add(inOut, side);
             return inOut;
         }
-        
+
         public static void ExpectAreConnected(InOut inOut1, InOut inOut2)
         {
             Assert.AreSame(inOut1, inOut2.Connected);

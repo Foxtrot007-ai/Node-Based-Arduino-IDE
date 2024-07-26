@@ -23,7 +23,7 @@ namespace Tests.EditMode.ut.Backend
         [SetUp]
         public void Init()
         {
-            _baseDto = VariableHelper.CreateDto();
+            _baseDto = DtoHelper.CreateVariableManage();
             _variablesManagerMock = Substitute.For<VariablesManager>();
             _variablesManagerMock.IsDtoValid(_baseDto).Returns(true);
             _sut = new Variable(_variablesManagerMock, _baseDto);
@@ -40,7 +40,7 @@ namespace Tests.EditMode.ut.Backend
         [Test]
         public void ConstructorTest()
         {
-            var dto = VariableHelper.CreateDto();
+            var dto = DtoHelper.CreateVariableManage();
             var newSut = new Variable(_variablesManagerMock, dto);
             _variablesManagerMock.Received().AddRef(newSut);
             ExpectEqualDto(dto);
@@ -49,7 +49,7 @@ namespace Tests.EditMode.ut.Backend
         [Test]
         public void ChangeVariableNullName()
         {
-            var newDto = VariableHelper.CreateDto(null);
+            var newDto = DtoHelper.CreateVariableManage(null);
             _variablesManagerMock.IsDtoValid(newDto).Returns(true);
             _sut.Change(newDto);
 
@@ -69,7 +69,7 @@ namespace Tests.EditMode.ut.Backend
         [Test]
         public void ChangeVariableNotValidName()
         {
-            var newDto = VariableHelper.CreateDto("test2");
+            var newDto = DtoHelper.CreateVariableManage("test2");
             _variablesManagerMock.IsDtoValid(newDto).Returns(false);
 
             var exception = Assert.Throws<InvalidVariableManageDto>(() => _sut.Change(newDto));
@@ -81,7 +81,7 @@ namespace Tests.EditMode.ut.Backend
         [Test]
         public void ChangeVariableNameSameType()
         {
-            var newDto = VariableHelper.CreateDto("test2");
+            var newDto = DtoHelper.CreateVariableManage("test2");
             _variablesManagerMock.IsDtoValid(newDto).Returns(true);
 
             _sut.Change(newDto);
@@ -94,7 +94,7 @@ namespace Tests.EditMode.ut.Backend
         [Test]
         public void ChangeVariableNameAndType()
         {
-            var newDto = VariableHelper.CreateDto(EType.String, "test2");
+            var newDto = DtoHelper.CreateVariableManage(EType.String, "test2");
             _variablesManagerMock.IsDtoValid(newDto).Returns(true);
 
             _sut.Change(newDto);

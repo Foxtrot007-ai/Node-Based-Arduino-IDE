@@ -2,11 +2,9 @@ using System.Collections.Generic;
 using Backend.API;
 using Backend.Connection;
 using Backend.Connection.MyType;
-using Backend.Node;
 using Backend.Node.BuildIn;
 using NSubstitute;
 using NUnit.Framework;
-using Tests.EditMode.ut.Backend.Mocks.Connection;
 
 namespace Tests.EditMode.ut.Backend.Node.BuildIn
 {
@@ -16,25 +14,16 @@ namespace Tests.EditMode.ut.Backend.Node.BuildIn
     public class ReturnNodeTest : BaseNodeTestSetup
     {
         private ReturnNode _sut;
-        private AutoInOutMock _autoIn;
 
         [SetUp]
-        public override void Init()
+        public void Init()
         {
-            base.Init();
-            _autoIn = CreateAutoInOutMock();
             _sut = new ReturnNode(_buildInTemplateMock);
 
-            PrepareSetup();
-        }
+            PrepareBaseSetup(_sut);
 
-        private void PrepareSetup()
-        {
-            SetInOutMock<BaseNode>(_sut, "_prevNode", _prevMock);
-            SetInOutMock<ReturnNode>(_sut, "_returnIn", _autoIn);
-            SetInputsList(_sut, new List<IConnection> { _prevMock, _autoIn });
-
-            _prevMock.MakeConnect();
+            SetInOutMock<ReturnNode>("_returnIn", _auto1);
+            SetInputsList(_prevMock, _auto1);
         }
 
         [Test]
@@ -52,7 +41,7 @@ namespace Tests.EditMode.ut.Backend.Node.BuildIn
         [Test]
         public void ToCodeAutoNotConnectedTest()
         {
-            _autoIn.MakeDisconnect();
+            _auto1.MakeDisconnect();
             _sut.ToCode(_codeManagerMock);
 
             _codeManagerMock.Received().AddLine("return ;");
@@ -61,8 +50,8 @@ namespace Tests.EditMode.ut.Backend.Node.BuildIn
         [Test]
         public void ToCodeAutoConnectedTest()
         {
-            _autoIn.ToCodeParamReturn(_codeManagerMock, "test");
-            _autoIn.MakeConnect();
+            _auto1.ToCodeParamReturn(_codeManagerMock, "test");
+            _auto1.MakeConnect();
 
             _sut.ToCode(_codeManagerMock);
 

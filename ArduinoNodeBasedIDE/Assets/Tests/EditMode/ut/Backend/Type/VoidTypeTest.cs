@@ -20,12 +20,12 @@ namespace Tests.EditMode.ut.Backend.Type
 
         private static readonly List<(IType, bool)> _castParam = new()
         {
-            (TypeHelper.CreateClassTypeMock("wrong"), false),
+            (MockHelper.CreateClassType("wrong"), false),
             (new PrimitiveType(EType.Int), false),
             (new StringType(), false),
             (new VoidType(), false),
         };
-        
+
         [Test]
         [TestCaseSource(nameof(_castParam))]
         public void CanBeCastFalse((IType, bool) param)

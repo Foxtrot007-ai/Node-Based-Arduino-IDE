@@ -17,10 +17,18 @@ namespace Tests.EditMode.ut.Backend.Type
         private IClassTypeValidator _validator;
         private ClassType _classType;
 
-        [OneTimeSetUp]
+        public static ClassType CreateClassTypeMock(string name)
+        {
+            var validator = Substitute.For<IClassTypeValidator>();
+            validator.IsClassType(name).Returns(true);
+            var classType = new ClassTypeMock(name, validator);
+            return classType;
+        }
+
+        [SetUp]
         public void Setup()
         {
-            _classType = TypeHelper.CreateClassTypeMock("good");
+            _classType = CreateClassTypeMock("good");
             _validator = Substitute.For<IClassTypeValidator>();
             _validator.IsClassType(Arg.Any<string>()).Returns(false);
             _validator.IsClassType("test").Returns(true);
@@ -52,11 +60,11 @@ namespace Tests.EditMode.ut.Backend.Type
 
         private static readonly List<(IType, bool)> _castParam = new()
         {
-            (TypeHelper.CreateClassTypeMock("wrong"), false),
+            (CreateClassTypeMock("wrong"), false),
             (new PrimitiveType(EType.Int), false),
             (new StringType(), false),
             (new VoidType(), false),
-            (TypeHelper.CreateClassTypeMock("good"), true),
+            (CreateClassTypeMock("good"), true),
         };
 
         [Test]

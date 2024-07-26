@@ -9,7 +9,6 @@ using Backend.Type;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
-using Tests.EditMode.ut.Backend.Mocks.Connection;
 
 namespace Tests.EditMode.ut.Backend.Node
 {
@@ -19,57 +18,38 @@ namespace Tests.EditMode.ut.Backend.Node
     public class ClassMethodNodeTest : BaseNodeTestSetup
     {
         private ClassMethodTemplate _classMethodTemplate;
-        private ClassInOutMock _classInMock;
         private ClassType _classTypeMock;
-        private AnyInOutMock _in1, _in2, _out;
 
         private ClassMethodNode _sut;
 
         [SetUp]
-        public override void Init()
+        public void Init()
         {
-            base.Init();
-            _in1 = CreateAnyInOutMock();
-            _in2 = CreateAnyInOutMock();
-            _out = CreateAnyInOutMock();
-            _classInMock = CreateClassInOutMock();
-            _classTypeMock = TypeHelper.CreateClassTypeMock("Test");
+            _classTypeMock = MockHelper.CreateClassType("Test");
 
             _classMethodTemplate = Substitute.For<ClassMethodTemplate>();
             _classMethodTemplate.InputsTypes.Returns(new List<IType>());
             _classMethodTemplate.Class.Returns(_classTypeMock);
-            var type = TypeHelper.CreateMyTypeMock(EType.Int);
+            var type = MockHelper.CreateType(EType.Int);
             _classMethodTemplate.OutputType.Returns(type);
 
             _sut = new ClassMethodNode(_classMethodTemplate);
-            SetInOutMock<ClassMethodNode>(_sut, "_classIn", _classInMock);
+            PrepareBaseSetup(_sut);
+            SetInOutMock<ClassMethodNode>("_classIn", _class1);
         }
 
-        private void MakeParamConnected()
-        {
-            _classInMock.MakeConnect();
-            _in1.MakeConnect();
-            _in2.MakeConnect();
-            _out.MakeConnect();
-        }
         private void PrepareVoidSetup()
         {
-            SetFlowMocks(_sut);
             _classMethodTemplate.OutputType.EType.Returns(EType.Void);
-            SetInputsList(_sut, new List<IConnection> { _prevMock, _classInMock, _in1, _in2 });
-            SetOutputsList(_sut, new List<IConnection> { _nextMock });
-
-            MakeFlowConnected();
-            MakeParamConnected();
+            SetInputsList(_prevMock, _class1, _any1, _any2);
+            SetOutputsList(_nextMock);
         }
 
         private void PrepareNonVoidSetup()
         {
             _classMethodTemplate.OutputType.EType.Returns(EType.Int);
-            SetInputsList(_sut, new List<IConnection> { _classInMock, _in1, _in2 });
-            SetOutputsList(_sut, new List<IConnection> { _out });
-
-            MakeParamConnected();
+            SetInputsList(_class1, _any1, _any2);
+            SetOutputsList(_any3);
         }
 
         [Test]
@@ -77,8 +57,8 @@ namespace Tests.EditMode.ut.Backend.Node
         {
             _classMethodTemplate.Class.Returns(_classTypeMock);
             _classMethodTemplate.OutputType.EType.Returns(EType.Void);
-            var type1 = TypeHelper.CreateMyTypeMock(EType.Int);
-            var type2 = TypeHelper.CreateMyTypeMock(EType.Bool);
+            var type1 = MockHelper.CreateType(EType.Int);
+            var type2 = MockHelper.CreateType(EType.Bool);
             _classMethodTemplate.InputsTypes.Returns(new List<IType>
             {
                 type1,
@@ -101,11 +81,11 @@ namespace Tests.EditMode.ut.Backend.Node
         public void NonVoidConstructorTest()
         {
             _classMethodTemplate.Class.Returns(_classTypeMock);
-            var outType = TypeHelper.CreateMyTypeMock(EType.Int);
+            var outType = MockHelper.CreateType(EType.Int);
             _classMethodTemplate.OutputType.Returns(outType);
 
-            var type1 = TypeHelper.CreateMyTypeMock(EType.Int);
-            var type2 = TypeHelper.CreateMyTypeMock(EType.Bool);
+            var type1 = MockHelper.CreateType(EType.Int);
+            var type2 = MockHelper.CreateType(EType.Bool);
             _classMethodTemplate.InputsTypes.Returns(new List<IType>
             {
                 type1,
@@ -138,9 +118,9 @@ namespace Tests.EditMode.ut.Backend.Node
             _classMethodTemplate.Name.Returns("name");
             _classMethodTemplate.Library.Returns("library");
 
-            _classInMock.ToCodeParamReturn(_codeManagerMock, "class");
-            _in1.ToCodeParamReturn(_codeManagerMock, "test1");
-            _in2.ToCodeParamReturn(_codeManagerMock, "test2");
+            _class1.ToCodeParamReturn(_codeManagerMock, "class");
+            _any1.ToCodeParamReturn(_codeManagerMock, "test1");
+            _any2.ToCodeParamReturn(_codeManagerMock, "test2");
 
             _sut.ToCode(_codeManagerMock);
 
@@ -164,9 +144,9 @@ namespace Tests.EditMode.ut.Backend.Node
             _classMethodTemplate.Name.Returns("name");
             _classMethodTemplate.Library.Returns("library");
 
-            _classInMock.ToCodeParamReturn(_codeManagerMock, "class");
-            _in1.ToCodeParamReturn(_codeManagerMock, "test1");
-            _in2.ToCodeParamReturn(_codeManagerMock, "test2");
+            _class1.ToCodeParamReturn(_codeManagerMock, "class");
+            _any1.ToCodeParamReturn(_codeManagerMock, "test1");
+            _any2.ToCodeParamReturn(_codeManagerMock, "test2");
 
             var code = _sut.ToCodeParam(_codeManagerMock);
 

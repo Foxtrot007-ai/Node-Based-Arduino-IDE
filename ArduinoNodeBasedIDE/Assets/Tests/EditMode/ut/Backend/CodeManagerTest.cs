@@ -14,13 +14,13 @@ namespace Tests.EditMode.ut.Backend
     public class CodeManagerTest
     {
         private CodeManager _sut;
-        private VariableMock _variableMock;
+        private Variable _variableMock;
 
         [SetUp]
         public void Init()
         {
             _sut = new CodeManager();
-            _variableMock = Substitute.For<VariableMock>();
+            _variableMock = Substitute.For<Variable>();
         }
         [Test]
         public void CopyConstructorTest()

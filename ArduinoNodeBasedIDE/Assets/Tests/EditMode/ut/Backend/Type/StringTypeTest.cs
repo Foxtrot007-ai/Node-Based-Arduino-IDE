@@ -5,7 +5,7 @@ using Tests.EditMode.ut.Backend.Helpers;
 
 namespace Tests.EditMode.ut.Backend.Type
 {
-    
+
     [TestFixture]
     [TestOf(typeof(StringType))]
     [Category("Type")]
@@ -18,15 +18,15 @@ namespace Tests.EditMode.ut.Backend.Type
         {
             _stringType = new StringType();
         }
-        
+
         private static readonly List<(IType, bool)> _castParam = new()
         {
-            (TypeHelper.CreateClassTypeMock("test"), false),
+            (MockHelper.CreateClassType("test"), false),
             (new VoidType(), false),
             (new PrimitiveType(EType.LongLong), true),
             (new StringType(), true),
         };
-        
+
         [Test]
         [TestCaseSource(nameof(_castParam))]
         public void CanBeCastParamTest((IType, bool) param)
@@ -37,15 +37,15 @@ namespace Tests.EditMode.ut.Backend.Type
             //then 
             Assert.AreEqual(expect, _stringType.CanBeCast(type));
         }
-        
+
         private static readonly List<(IType, bool)> _adpterParam = new()
         {
-            (TypeHelper.CreateClassTypeMock("test"), false),
+            (MockHelper.CreateClassType("test"), false),
             (new VoidType(), false),
             (new PrimitiveType(EType.LongLong), true),
             (new StringType(), false),
         };
-        
+
         [Test]
         [TestCaseSource(nameof(_adpterParam))]
         public void IsAdapterNeedParamTest((IType, bool) param)
@@ -56,7 +56,7 @@ namespace Tests.EditMode.ut.Backend.Type
             //then 
             Assert.AreEqual(expect, _stringType.IsAdapterNeed(type));
         }
-        
+
         [Test]
         public void Equal()
         {

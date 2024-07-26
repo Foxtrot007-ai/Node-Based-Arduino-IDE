@@ -3,22 +3,22 @@ using Backend.Type;
 
 namespace Tests.EditMode.ut.Backend.Helpers
 {
-    public static class VariableHelper
+    public static class DtoHelper
     {
-        public static VariableManageDto CreateDto(string varName = "test")
+        public static VariableManageDto CreateVariableManage(string varName = "test")
         {
             return new VariableManageDto
             {
-                Type = TypeHelper.DefaultType,
+                Type = MockHelper.DefaultType,
                 VariableName = varName
             };
         }
 
-        public static VariableManageDto CreateDto(EType eType, string varName)
+        public static VariableManageDto CreateVariableManage(EType eType, string varName)
         {
             return new VariableManageDto
             {
-                Type = TypeHelper.CreateMyTypeMock(eType),
+                Type = MockHelper.CreateType(eType),
                 VariableName = varName,
             };
         }

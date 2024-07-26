@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Backend;
 using Backend.API;
 using Backend.Node.BuildIn;
 using NSubstitute;
@@ -14,15 +15,16 @@ namespace Tests.EditMode.ut.Backend.Node.BuildIn
     [Category("Node")]
     public class VariableNodeTest : BaseNodeTestSetup
     {
-        private VariableMock _variableMock;
+        private Variable _variableMock;
         private VariableNodeMock _sut;
 
         [SetUp]
-        public override void Init()
+        public void Init()
         {
-            base.Init();
-            _variableMock = Substitute.For<VariableMock>();
+            _variableMock = Substitute.For<Variable>();
             _sut = Substitute.ForPartsOf<VariableNodeMock>(_variableMock);
+
+            PrepareBaseSetup(_sut);
         }
 
         [Test]
@@ -36,13 +38,12 @@ namespace Tests.EditMode.ut.Backend.Node.BuildIn
         [Test]
         public void DeleteVariableNodeTest()
         {
-            var list = new List<IConnection> { _inOutMock };
-            _sut.Configure().InputsList.Returns(list);
+            SetInputsList(_any1);
 
             _sut.Delete();
 
             _variableMock.Received().DeleteRef(_sut);
-            _inOutMock.Received().Delete();
+            _any1.Received().Delete();
             Assert.True(_sut.IsDeleted);
         }
     }

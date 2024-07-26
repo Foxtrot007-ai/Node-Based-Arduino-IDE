@@ -3,7 +3,6 @@ using Backend.Connection.MyType;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
-using TypeHelper = Tests.EditMode.ut.Backend.Helpers.TypeHelper;
 
 namespace Tests.EditMode.ut.Backend.Connection
 {
@@ -38,15 +37,15 @@ namespace Tests.EditMode.ut.Backend.Connection
         public void ShouldNotSetTypeAfterConnectAndDisconnectWhenTypeWasChange()
         {
             //given
-            var newMyType = TypeHelper.CreateMyTypeMock();
+            var newMyType = MockHelper.CreateType();
             _autoInput.ChangeMyType(newMyType);
             Assert.AreSame(newMyType, _autoInput.MyType);
             //when
             InOutHelper.Connect(_autoInput, _myTypeOutput);
-            
+
             Assert.AreNotSame(_autoInput.MyType, _myTypeOutput.MyType);
             Assert.AreSame(newMyType, _autoInput.MyType);
-            
+
             _autoInput.Disconnect();
             InOutHelper.ExpectAreNotConnected(_autoInput, _myTypeOutput);
             Assert.AreNotSame(_autoInput.MyType, _myTypeOutput.MyType);
@@ -57,7 +56,7 @@ namespace Tests.EditMode.ut.Backend.Connection
         public void ShouldSetNullTypeAfterReset()
         {
             //given
-            var newMyType = TypeHelper.CreateMyTypeMock();
+            var newMyType = MockHelper.CreateType();
             _autoInput.ChangeMyType(newMyType);
             Assert.AreSame(newMyType, _autoInput.MyType);
             //when
@@ -65,19 +64,19 @@ namespace Tests.EditMode.ut.Backend.Connection
             //then
             Assert.Null(_autoInput.MyType);
         }
-        
+
         [Test]
         public void ShouldSetTypeToConnectedTypeAfterReset()
         {
             //given
-            var newMyType = TypeHelper.CreateMyTypeMock();
+            var newMyType = MockHelper.CreateType();
             _autoInput.ChangeMyType(newMyType);
             Assert.AreSame(newMyType, _autoInput.MyType);
             //when
             InOutHelper.Connect(_autoInput, _myTypeOutput);
             Assert.AreNotSame(_autoInput.MyType, _myTypeOutput.MyType);
             Assert.AreSame(newMyType, _autoInput.MyType);
-            
+
             _autoInput.ResetMyType();
             //then 
             InOutHelper.ExpectAreConnected(_autoInput, _myTypeOutput);
@@ -94,7 +93,7 @@ namespace Tests.EditMode.ut.Backend.Connection
 
             Assert.AreSame(anyOutput.MyType, _autoInput.MyType);
             //when
-            var newType = TypeHelper.CreateMyTypeMock();
+            var newType = MockHelper.CreateType();
             newType.CanBeCast(newType).Returns(true);
             anyOutput.ChangeMyType(newType);
             Assert.AreSame(newType, anyOutput.MyType);
@@ -102,7 +101,7 @@ namespace Tests.EditMode.ut.Backend.Connection
             InOutHelper.ExpectAreConnected(_autoInput, anyOutput);
             Assert.AreSame(anyOutput.MyType, _autoInput.MyType);
         }
-        
+
         [Test]
         public void MyTypeShouldBeNullIfAutoAutoConnection()
         {

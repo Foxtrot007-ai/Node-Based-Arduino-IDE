@@ -16,7 +16,7 @@ namespace Tests.EditMode.ut.Backend.Connection
     public class AnyInOutTest
     {
         private AnyInOut _anyInput;
-        
+
         [SetUp]
         public void Init()
         {
@@ -32,18 +32,18 @@ namespace Tests.EditMode.ut.Backend.Connection
             //then 
             Assert.AreEqual("Cannot change type to null.", exception.Message);
         }
-        
+
         [Test]
         public void ChangeTypeVoidWrongTypeException()
         {
             //given
             //when
-            var newType = TypeHelper.CreateMyTypeMock(EType.Void);
+            var newType = MockHelper.CreateType(EType.Void);
             var exception = Assert.Throws<WrongTypeException>(() => _anyInput.ChangeMyType(newType));
             //then 
             Assert.AreEqual("Cannot change type to void for input side.", exception.Message);
         }
-        
+
         [Test]
         public void ChangeTypeDisconnectAndCannotBeCastException()
         {
@@ -51,7 +51,7 @@ namespace Tests.EditMode.ut.Backend.Connection
             var output = InOutHelper.CreateMyTypeInOutMock();
             InOutHelper.Connect(_anyInput, output);
 
-            var newType = TypeHelper.CreateMyTypeMock();
+            var newType = MockHelper.CreateType();
             output.MyType.CanBeCast(newType).Returns(false);
             //when
             Assert.Throws<CannotBeCastException>(() => _anyInput.ChangeMyType(newType));
@@ -67,7 +67,7 @@ namespace Tests.EditMode.ut.Backend.Connection
             var output = InOutHelper.CreateMyTypeInOutMock();
             InOutHelper.Connect(_anyInput, output);
 
-            var newType = TypeHelper.CreateMyTypeMock();
+            var newType = MockHelper.CreateType();
             output.MyType.CanBeCast(newType).Returns(true);
             output.MyType.IsAdapterNeed(newType).Returns(true);
             //when
@@ -76,15 +76,15 @@ namespace Tests.EditMode.ut.Backend.Connection
             Assert.AreSame(newType, _anyInput.MyType);
             InOutHelper.ExpectNullConnected(_anyInput, output);
         }
-        
+
         [Test]
         public void ChangeTypeNoDisconnect()
         {
             //given
             var output = InOutHelper.CreateMyTypeInOutMock();
             InOutHelper.Connect(_anyInput, output);
-            
-            var newType = TypeHelper.CreateMyTypeMock();
+
+            var newType = MockHelper.CreateType();
             output.MyType.CanBeCast(newType).Returns(true);
             output.MyType.IsAdapterNeed(newType).Returns(false);
             //when

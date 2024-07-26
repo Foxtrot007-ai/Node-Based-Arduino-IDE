@@ -23,19 +23,19 @@ namespace Tests.EditMode.ut.Backend
         [Test]
         public void IsDtoValidVoidType()
         {
-            Assert.IsFalse(_sut.IsDtoValid(VariableHelper.CreateDto(EType.Void, "test")));
+            Assert.IsFalse(_sut.IsDtoValid(DtoHelper.CreateVariableManage(EType.Void, "test")));
         }
 
         [Test]
         public void IsDtoValidTrue()
         {
-            Assert.IsTrue(_sut.IsDtoValid(VariableHelper.CreateDto()));
+            Assert.IsTrue(_sut.IsDtoValid(DtoHelper.CreateVariableManage()));
         }
 
         [Test]
         public void IsDtoValidDuplicate()
         {
-            var dto = VariableHelper.CreateDto();
+            var dto = DtoHelper.CreateVariableManage();
             _sut.AddVariable(dto);
 
             Assert.IsFalse(_sut.IsDtoValid(dto));
@@ -44,8 +44,8 @@ namespace Tests.EditMode.ut.Backend
         [Test]
         public void ShouldCreate2Variables()
         {
-            var variable1 = _sut.AddVariable(VariableHelper.CreateDto("test1"));
-            var variable2 = _sut.AddVariable(VariableHelper.CreateDto("test2"));
+            var variable1 = _sut.AddVariable(DtoHelper.CreateVariableManage("test1"));
+            var variable2 = _sut.AddVariable(DtoHelper.CreateVariableManage("test2"));
 
             Assert.AreEqual(2, _sut.Variables.Count);
             Assert.AreSame(variable1, _sut.Variables[0]);
@@ -55,7 +55,7 @@ namespace Tests.EditMode.ut.Backend
         [Test]
         public void ShouldDeleteVariable()
         {
-            var variable1 = Substitute.For<VariableMock>();
+            var variable1 = Substitute.For<Variable>();
             _sut.AddRef(variable1);
 
             _sut.DeleteVariable(variable1);

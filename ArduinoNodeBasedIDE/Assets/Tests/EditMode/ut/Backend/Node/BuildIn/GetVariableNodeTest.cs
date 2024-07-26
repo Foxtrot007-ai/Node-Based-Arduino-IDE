@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Backend;
 using Backend.API;
@@ -7,7 +6,6 @@ using Backend.Node.BuildIn;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.mocks;
-using Tests.EditMode.ut.Backend.Mocks.Connection;
 
 namespace Tests.EditMode.ut.Backend.Node.BuildIn
 {
@@ -19,26 +17,19 @@ namespace Tests.EditMode.ut.Backend.Node.BuildIn
     public class GetVariableNodeTes : BaseNodeTestSetup
     {
         private VariableNode _sut;
-        private VariableMock _variableMock;
-        private AnyInOutMock _valueMock;
+        private Variable _variableMock;
 
         [SetUp]
-        public override void Init()
+        public void Init()
         {
-            base.Init();
-            _variableMock = Substitute.For<VariableMock>();
+            _variableMock = Substitute.For<Variable>();
             _sut = Substitute.ForPartsOf<GetVariableNode>(_variableMock);
-            _valueMock = CreateAnyInOutMock();
-            PrepareSetup();
-        }
 
-        void PrepareSetup()
-        {
-            SetInOutMock<VariableNode>(_sut, "_value", _valueMock);
-            SetInputsList(_sut, new List<IConnection>());
-            SetOutputsList(_sut, new List<IConnection> { _valueMock });
-            
-            _valueMock.MakeConnect();
+            PrepareBaseSetup(_sut);
+
+            SetInOutMock<VariableNode>("_value", _any1);
+            SetInputsList();
+            SetOutputsList(_any1);
         }
 
         [Test]

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Backend.API;
 using Backend.Connection;
-using Backend.Node;
 using Backend.Node.BuildIn;
 using NUnit.Framework;
 
@@ -15,19 +14,13 @@ namespace Tests.EditMode.ut.Backend.Node.BuildIn
         private StartNode _sut;
 
         [SetUp]
-        public override void Init()
+        public void Init()
         {
-            base.Init();
             _sut = new StartNode(_buildInTemplateMock);
 
-            PrepareSetup();
-        }
+            PrepareBaseSetup(_sut);
 
-        private void PrepareSetup()
-        {
-            SetInOutMock<BaseNode>(_sut, "_nextNode", _nextMock);
-            SetOutputsList(_sut, new List<IConnection> { _nextMock });
-            _nextMock.MakeConnect();
+            SetOutputsList(_nextMock);
         }
 
         [Test]
