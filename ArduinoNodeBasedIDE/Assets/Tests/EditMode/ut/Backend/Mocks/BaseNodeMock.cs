@@ -27,9 +27,5 @@ namespace Tests.EditMode.ut.Backend.Mocks
                     break;
             }
         }
-        protected override void CheckToCode()
-        {
-            throw new System.NotImplementedException();
-        }
     }   
 }

@@ -22,7 +22,7 @@ namespace Tests.EditMode.ut.Backend.Node
 
         protected AnyInOutMock _any1, _any2, _any3;
         protected AutoInOutMock _auto1;
-        protected ClassInOutMock _class1;
+        protected TypeInOutMock _class1;
 
         private BaseNode _sut;
 

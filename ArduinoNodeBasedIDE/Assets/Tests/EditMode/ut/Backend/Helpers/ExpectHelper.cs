@@ -9,7 +9,7 @@ namespace Tests.EditMode.ut.Backend.Helpers
     {
         public static void TypeEqual(IType type, IConnection inOut)
         {
-            Assert.AreEqual(type, ((MyTypeInOut)inOut).MyType);
+            Assert.AreEqual(type, ((TypeInOut)inOut).MyType);
         }
         
     }

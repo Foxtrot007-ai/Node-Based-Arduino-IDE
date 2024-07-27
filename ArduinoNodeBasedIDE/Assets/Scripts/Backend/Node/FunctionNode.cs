@@ -1,6 +1,5 @@
 using System;
 using Backend.Connection;
-using Backend.Connection.MyType;
 using Backend.Template;
 using Backend.Type;
 

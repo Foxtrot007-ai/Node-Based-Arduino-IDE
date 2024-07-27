@@ -1,7 +1,6 @@
 using System;
 using Backend.API;
 using Backend.Connection;
-using Backend.Connection.MyType;
 using Backend.Function;
 using Backend.Type;
 

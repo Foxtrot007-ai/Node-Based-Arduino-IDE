@@ -17,14 +17,16 @@ namespace Backend.Connection
         public abstract InOutType InOutType { get; }
         public abstract string InOutName { get; }
         public bool IsDeleted { get; private set; }
+        public virtual bool IsOptional { get; }
 
         public virtual IConnection Connected => _connected;
         private List<ISubscribeInOut> _subscribe;
-        protected InOut(BaseNode parentNode, InOutSide side)
+        protected InOut(BaseNode parentNode, InOutSide side, bool isOptional = false)
         {
             ParentNode = parentNode;
             Side = side;
             IsDeleted = false;
+            IsOptional = isOptional;
             _connected = null;
             _subscribe = new List<ISubscribeInOut>();
         }
@@ -142,8 +144,8 @@ namespace Backend.Connection
             if (_connected is null)
                 return;
 
-            var output = Side == InOutSide.Output ? this : (MyTypeInOut)_connected;
-            var input = Side == InOutSide.Input ? this : (MyTypeInOut)_connected;
+            var output = Side == InOutSide.Output ? this : (TypeInOut)_connected;
+            var input = Side == InOutSide.Input ? this : (TypeInOut)_connected;
             try
             {
                 output.Check(input);

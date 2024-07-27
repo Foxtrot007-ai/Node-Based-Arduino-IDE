@@ -24,13 +24,15 @@ namespace Tests.EditMode.ut.Backend.Helpers
         {
             var inOut = Substitute.For<AnyInOutMock>();
             inOut.InOutType.Returns(InOutType.Dynamic);
+            inOut.IsOptional.Returns(false);
             return inOut;
         }
 
-        public static ClassInOutMock CreateClassInOut()
+        public static TypeInOutMock CreateClassInOut()
         {
-            var inOut = Substitute.For<ClassInOutMock>();
+            var inOut = Substitute.For<TypeInOutMock>();
             inOut.InOutType.Returns(InOutType.Class);
+            inOut.IsOptional.Returns(false);
             return inOut;
         }
 
@@ -38,6 +40,7 @@ namespace Tests.EditMode.ut.Backend.Helpers
         {
             var inOut = Substitute.For<AutoInOutMock>();
             inOut.InOutType.Returns(InOutType.Auto);
+            inOut.IsOptional.Returns(false);
             return inOut;
         }
 
@@ -45,6 +48,7 @@ namespace Tests.EditMode.ut.Backend.Helpers
         {
             var inOut = Substitute.For<FlowInOutMock>();
             inOut.InOutType.Returns(InOutType.Flow);
+            inOut.IsOptional.Returns(false);
             return inOut;
         }
 

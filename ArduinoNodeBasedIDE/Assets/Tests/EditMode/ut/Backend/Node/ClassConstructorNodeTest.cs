@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Backend.Connection.MyType;
+using Backend.Connection;
 using Backend.Node;
 using Backend.Template;
 using Backend.Type;
@@ -61,7 +61,7 @@ namespace Tests.EditMode.ut.Backend.Node
             Assert.AreSame(type2, ((AnyInOut)newSut.InputsList[1]).MyType);
 
             Assert.AreEqual(1, newSut.OutputsList.Count);
-            Assert.AreSame(_classTypeMock, ((ClassInOut)newSut.OutputsList[0]).MyType);
+            Assert.AreSame(_classTypeMock, ((TypeInOut)newSut.OutputsList[0]).MyType);
         }
 
         [Test]

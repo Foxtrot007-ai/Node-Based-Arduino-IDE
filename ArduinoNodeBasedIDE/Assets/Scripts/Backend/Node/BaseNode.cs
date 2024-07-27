@@ -9,7 +9,6 @@ namespace Backend.Node
 {
     public abstract class BaseNode : INode
     {
-
         public virtual string NodeName { get; protected set; }
         public bool IsDeleted { get; private set; }
         public virtual NodeType NodeType { get; protected set; }
@@ -32,14 +31,9 @@ namespace Backend.Node
             IsDeleted = true;
         }
 
-        protected void CheckFlowConnected()
+        private void CheckIfConnected(InOut inOut)
         {
-            CheckIfConnected(_prevNode);
-            CheckIfConnected(_nextNode);
-        }
-        protected void CheckIfConnected(InOut inOut)
-        {
-            if (inOut.Connected == null)
+            if (!inOut.IsOptional && inOut.Connected == null)
             {
                 throw new InOutMustBeConnectedException(inOut);
             }
@@ -50,16 +44,11 @@ namespace Backend.Node
             ((InOut)inOut.Connected).ParentNode.ToCode(codeManager);
         }
 
-        protected void NextToCode(CodeManager codeManager)
-        {
-            ConnectedToCode(codeManager, _nextNode);
-        }
-
         protected string ConnectedToCodeParam(CodeManager codeManager, InOut inOut)
         {
             return ((InOut)inOut.Connected).ParentNode.ToCodeParam(codeManager);
         }
-        protected virtual void CheckToCode()
+        protected void CheckToCode()
         {
             InputsList.ForEach(x => CheckIfConnected((InOut)x));
             OutputsList.ForEach(x => CheckIfConnected((InOut)x));
@@ -78,10 +67,10 @@ namespace Backend.Node
         {
             CheckToCode();
             MakeCode(codeManager);
-            NextToCode(codeManager);
+            ConnectedToCode(codeManager, _nextNode);
         }
 
-        public string ToCodeParam(CodeManager codeManager)
+        public virtual string ToCodeParam(CodeManager codeManager)
         {
             CheckToCode();
             return MakeCodeParam(codeManager);

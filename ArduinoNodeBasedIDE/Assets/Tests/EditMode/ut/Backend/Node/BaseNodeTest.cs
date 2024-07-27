@@ -14,11 +14,6 @@ namespace Tests.EditMode.ut.Backend.Node
     public class BaseNodeTest : BaseNode
     {
 
-        protected override void CheckToCode()
-        {
-            throw new System.NotImplementedException();
-        }
-
         private InOutMock _inOutMock;
 
         [SetUp]
@@ -35,28 +30,25 @@ namespace Tests.EditMode.ut.Backend.Node
         }
 
         [Test]
-        public void CheckIfConnectedShouldNotThrowWhenConnected()
+        public void CheckToCodeThrowTest()
         {
-            Assert.DoesNotThrow(() => CheckIfConnected(_prevNode));
-        }
+            AddInputs(_prevNode, _inOutMock);
+            _inOutMock.Connected.Returns((InOut)null);
 
+            var exception = Assert.Throws<InOutMustBeConnectedException>(CheckToCode);
+            
+            Assert.AreSame(_inOutMock, exception.InOut);
+        }
         [Test]
-        public void CheckConnectedExceptionWhenNoConnectedTest()
+        public void CheckoToCodeNotThrowForOptional()
         {
-            _inOutMock.Connected.ReturnsNull();
-
-            var exception = Assert.Throws<InOutMustBeConnectedException>(() => CheckIfConnected(_inOutMock));
+            AddInputs(_prevNode, _inOutMock);
+            _inOutMock.IsOptional.Returns(true);
+            _inOutMock.Connected.Returns((InOut)null);
+            
+            CheckToCode();
         }
-
-        [Test]
-        public void CheckFLowConnectedTest()
-        {
-            CheckFlowConnected();
-
-            _prevNode.Connected.Received();
-            _nextNode.Connected.Received();
-        }
-
+        
         [Test]
         public void RemoveFlowNothingToDo()
         {

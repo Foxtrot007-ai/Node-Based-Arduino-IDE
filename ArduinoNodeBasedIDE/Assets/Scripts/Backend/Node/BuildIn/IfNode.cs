@@ -1,35 +1,26 @@
 ﻿using Backend.Connection;
-using Backend.Connection.MyType;
-using Backend.Node.BuildIn;
 using Backend.Template;
 using Backend.Type;
 
-namespace Backend.Node
+namespace Backend.Node.BuildIn
 {
     public class IfNode : BuildInNode
     {
         private FlowInOut _true;
         private FlowInOut _false;
-        private PrimitiveInOut _predicate;
+        private TypeInOut _predicate;
         public override NodeType NodeType => NodeType.If;
 
         public IfNode (BuildInTemplate buildInTemplate) : base(buildInTemplate)
         {
             AddFlowInputs();
-            _predicate = new PrimitiveInOut(this, InOutSide.Input, new PrimitiveType(EType.Bool));
+            _predicate = new TypeInOut(this, InOutSide.Input, new PrimitiveType(EType.Bool));
             AddInputs(_predicate);
 
             _true = new FlowInOut(this, InOutSide.Output, " true");
-            _false = new FlowInOut(this, InOutSide.Output, " false");
+            _false = new FlowInOut(this, InOutSide.Output, " false", true);
 
             AddOutputs(_true, _false);
-        }
-
-        protected override void CheckToCode()
-        {
-            CheckFlowConnected();
-            CheckIfConnected(_predicate);
-            CheckIfConnected(_true);
         }
 
         protected override void MakeCode(CodeManager codeManager)

@@ -1,8 +1,7 @@
-using Backend.API;
 using Backend.Node;
 using Backend.Type;
 
-namespace Backend.Connection.MyType
+namespace Backend.Connection
 {
     public class AutoInOut : AnyInOut
     {
@@ -13,7 +12,7 @@ namespace Backend.Connection.MyType
         public override InOutType InOutType => MyType is null ? InOutType.Auto : base.InOutType;
 
 
-        public AutoInOut(BaseNode parentNode, InOutSide side) : base(parentNode, side, null)
+        public AutoInOut(BaseNode parentNode, InOutSide side, bool isOptional = false) : base(parentNode, side, null, isOptional)
         {
         }
 
@@ -30,10 +29,10 @@ namespace Backend.Connection.MyType
         protected override void BeforeConnectHandler(InOut inOut)   //remove?
         {
             base.BeforeConnectHandler(inOut);
-            MyTypeInOut myTypeInOut = (MyTypeInOut)inOut;
+            TypeInOut typeInOut = (TypeInOut)inOut;
             if (!_wasMyTypeSet)
             {
-                _myType = myTypeInOut.MyType;
+                _myType = typeInOut.MyType;
             }
         }
         
@@ -60,14 +59,14 @@ namespace Backend.Connection.MyType
                 _myType = null;
                 return;
             }
-            _myType = (Connected as MyTypeInOut).MyType;
+            _myType = (Connected as TypeInOut).MyType;
         }
 
         private IType GetMyType()
         {
             if (Connected is not AutoInOut autoInOut)
             {
-                return _wasMyTypeSet ? _myType : (Connected as MyTypeInOut)?.MyType;
+                return _wasMyTypeSet ? _myType : (Connected as TypeInOut)?.MyType;
             }
             
             return autoInOut._wasMyTypeSet ? autoInOut._myType : null;

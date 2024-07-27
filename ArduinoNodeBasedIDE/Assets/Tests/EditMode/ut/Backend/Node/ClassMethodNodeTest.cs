@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Backend.API;
 using Backend.Connection;
-using Backend.Connection.MyType;
 using Backend.Node;
 using Backend.Template;
 using Backend.Type;
@@ -69,7 +67,7 @@ namespace Tests.EditMode.ut.Backend.Node
 
             Assert.AreEqual(4, newSut.InputsList.Count);
             Assert.IsInstanceOf<FlowInOut>(newSut.InputsList[0]);
-            Assert.AreSame(_classTypeMock, ((ClassInOut)newSut.InputsList[1]).MyType);
+            Assert.AreSame(_classTypeMock, ((TypeInOut)newSut.InputsList[1]).MyType);
             Assert.AreSame(type1, ((AnyInOut)newSut.InputsList[2]).MyType);
             Assert.AreSame(type2, ((AnyInOut)newSut.InputsList[3]).MyType);
 
@@ -95,7 +93,7 @@ namespace Tests.EditMode.ut.Backend.Node
             var newSut = new ClassMethodNode(_classMethodTemplate);
 
             Assert.AreEqual(3, newSut.InputsList.Count);
-            Assert.AreSame(_classTypeMock, ((ClassInOut)newSut.InputsList[0]).MyType);
+            Assert.AreSame(_classTypeMock, ((TypeInOut)newSut.InputsList[0]).MyType);
             Assert.AreSame(type1, ((AnyInOut)newSut.InputsList[1]).MyType);
             Assert.AreSame(type2, ((AnyInOut)newSut.InputsList[2]).MyType);
 

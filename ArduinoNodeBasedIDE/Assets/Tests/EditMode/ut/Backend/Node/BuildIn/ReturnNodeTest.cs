@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using Backend.API;
 using Backend.Connection;
-using Backend.Connection.MyType;
 using Backend.Node.BuildIn;
 using NSubstitute;
 using NUnit.Framework;
@@ -24,6 +21,7 @@ namespace Tests.EditMode.ut.Backend.Node.BuildIn
 
             SetInOutMock<ReturnNode>("_returnIn", _auto1);
             SetInputsList(_prevMock, _auto1);
+            _auto1.IsOptional.Returns(true);
         }
 
         [Test]

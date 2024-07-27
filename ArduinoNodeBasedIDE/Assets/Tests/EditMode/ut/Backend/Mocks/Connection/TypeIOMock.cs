@@ -1,15 +1,14 @@
 using Backend;
 using Backend.Connection;
-using Backend.Connection.MyType;
 using Backend.Node;
 using NSubstitute;
 
 namespace Tests.EditMode.ut.Backend.Mocks.Connection
 {
-    public class ClassInOutMock : ClassInOut
+    public class TypeInOutMock : TypeInOut
     {
         public InOutMock _connectedMock;
-        public ClassInOutMock() : base(Substitute.For<BaseNode>(), InOutSide.Output, null)
+        public TypeInOutMock() : base(Substitute.For<BaseNode>(), InOutSide.Output, null)
         {
             _connectedMock = Substitute.For<InOutMock>();
         }

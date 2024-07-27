@@ -1,6 +1,5 @@
 using System;
 using Backend.Connection;
-using Backend.Connection.MyType;
 using Backend.Exceptions;
 using Backend.Exceptions.InOut;
 using Backend.Type;
@@ -48,7 +47,7 @@ namespace Tests.EditMode.ut.Backend.Connection
         public void ChangeTypeDisconnectAndCannotBeCastException()
         {
             //given
-            var output = InOutHelper.CreateMyTypeInOutMock();
+            var output = InOutHelper.CreateTypeInOut();
             InOutHelper.Connect(_anyInput, output);
 
             var newType = MockHelper.CreateType();
@@ -64,7 +63,7 @@ namespace Tests.EditMode.ut.Backend.Connection
         public void ChangeTypeDisconnectAndNeedAdapterException()
         {
             //given
-            var output = InOutHelper.CreateMyTypeInOutMock();
+            var output = InOutHelper.CreateTypeInOut();
             InOutHelper.Connect(_anyInput, output);
 
             var newType = MockHelper.CreateType();
@@ -81,7 +80,7 @@ namespace Tests.EditMode.ut.Backend.Connection
         public void ChangeTypeNoDisconnect()
         {
             //given
-            var output = InOutHelper.CreateMyTypeInOutMock();
+            var output = InOutHelper.CreateTypeInOut();
             InOutHelper.Connect(_anyInput, output);
 
             var newType = MockHelper.CreateType();

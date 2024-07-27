@@ -1,5 +1,4 @@
 using Backend.Connection;
-using Backend.Connection.MyType;
 using Backend.Type;
 
 namespace Backend.Node.BuildIn

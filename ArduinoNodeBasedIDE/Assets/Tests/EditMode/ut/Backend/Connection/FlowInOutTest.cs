@@ -23,7 +23,7 @@ namespace Tests.EditMode.ut.Backend.Connection
         private static List<InOut> _wrong = new()
         {
             InOutHelper.CreateBaseMock(),
-            InOutHelper.CreateMyTypeInOutMock(),
+            InOutHelper.CreateTypeInOut(),
         };
 
         [Test]

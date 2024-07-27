@@ -1,5 +1,4 @@
 using Backend.Connection;
-using Backend.Connection.MyType;
 using Backend.Template;
 using Backend.Type;
 
@@ -7,12 +6,12 @@ namespace Backend.Node.BuildIn
 {
     public class WhileNode : BuildInNode
     {
-        private PrimitiveInOut _predicate;
+        private TypeInOut _predicate;
         private FlowInOut _loop;
         
         public WhileNode(BuildInTemplate buildInTemplate) : base(buildInTemplate)
         {
-            _predicate = new PrimitiveInOut(this, InOutSide.Input, new PrimitiveType(EType.Bool));
+            _predicate = new TypeInOut(this, InOutSide.Input, new PrimitiveType(EType.Bool));
             AddInputs(_prevNode, _predicate);
  
             _loop = new FlowInOut(this, InOutSide.Output, "body");

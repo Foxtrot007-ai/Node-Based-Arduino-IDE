@@ -1,6 +1,5 @@
 using System.Linq;
 using Backend.Connection;
-using Backend.Connection.MyType;
 using Backend.Template;
 
 namespace Backend.Node
@@ -8,13 +7,13 @@ namespace Backend.Node
     public class ClassMethodNode : FunctionNode
     {
         private readonly ClassMethodTemplate _classMethodTemplate;
-        private ClassInOut _classIn;
+        private TypeInOut _classIn;
         public override NodeType NodeType => NodeType.Method;
 
         public ClassMethodNode(ClassMethodTemplate classMethodTemplate) : base(classMethodTemplate)
         {
             _classMethodTemplate = classMethodTemplate;
-            _classIn = new ClassInOut(this, InOutSide.Input, _classMethodTemplate.Class);
+            _classIn = new TypeInOut(this, InOutSide.Input, _classMethodTemplate.Class);
             InputsList.Insert(_isFlow() ? 1 : 0, _classIn);
         }
 

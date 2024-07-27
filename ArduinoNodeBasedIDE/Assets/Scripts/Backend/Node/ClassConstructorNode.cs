@@ -1,6 +1,5 @@
 using System.Linq;
 using Backend.Connection;
-using Backend.Connection.MyType;
 using Backend.Template;
 
 namespace Backend.Node
@@ -17,7 +16,7 @@ namespace Backend.Node
             _classConstructorTemplate.Inputs
                 .ForEach(type => AddInputs(new AnyInOut(this, InOutSide.Input, type)));
 
-            AddOutputs(new ClassInOut(this, InOutSide.Input, _classConstructorTemplate.Class));
+            AddOutputs(new TypeInOut(this, InOutSide.Input, _classConstructorTemplate.Class));
         }
 
         protected override string MakeCodeParam(CodeManager codeManager)

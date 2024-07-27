@@ -1,5 +1,4 @@
 using Backend.Connection;
-using Backend.Connection.MyType;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
@@ -12,12 +11,12 @@ namespace Tests.EditMode.ut.Backend.Connection
     public class AutoInOutTest
     {
         private AutoInOut _autoInput;
-        private MyTypeInOut _myTypeOutput;
+        private TypeInOut _myTypeOutput;
         [SetUp]
         public void Init()
         {
             _autoInput = InOutHelper.CreateAutoInOut(InOutSide.Input);
-            _myTypeOutput = InOutHelper.CreateMyTypeInOutMock();
+            _myTypeOutput = InOutHelper.CreateTypeInOut();
         }
 
         [Test]

@@ -1,5 +1,4 @@
 using Backend.Connection;
-using Backend.Connection.MyType;
 using Backend.Type;
 using NSubstitute;
 using NUnit.Framework;
@@ -20,12 +19,12 @@ namespace Tests.EditMode.ut.Backend.Helpers
             return inOut;
         }
 
-        public static MyTypeInOutMock CreateMyTypeInOutMock(InOutSide side = InOutSide.Output,
+        public static TypeInOut CreateTypeInOut(InOutSide side = InOutSide.Output,
             BaseNodeMock parent = null, IType myType = null)
         {
             parent ??= Substitute.ForPartsOf<BaseNodeMock>();
             myType ??= MockHelper.CreateType();
-            var inOut = new MyTypeInOutMock(parent, side, myType);
+            var inOut = new TypeInOut(parent, side, myType);
             parent.Add(inOut, side);
             return inOut;
         }
@@ -77,7 +76,7 @@ namespace Tests.EditMode.ut.Backend.Helpers
             Assert.AreSame(inOut2, inOut1.Connected);
         }
 
-        public static void Connect(MyTypeInOut input, MyTypeInOut output)
+        public static void Connect(TypeInOut input, TypeInOut output)
         {
             output.MyType.CanBeCast(input.MyType).Returns(true);
             output.MyType.IsAdapterNeed(input.MyType).Returns(false);

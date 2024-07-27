@@ -1,6 +1,5 @@
 using Backend;
 using Backend.Connection;
-using Backend.Connection.MyType;
 using Backend.Node;
 using Backend.Type;
 using NSubstitute;

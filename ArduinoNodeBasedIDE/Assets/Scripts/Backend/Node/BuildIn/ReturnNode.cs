@@ -1,5 +1,4 @@
 using Backend.Connection;
-using Backend.Connection.MyType;
 using Backend.Template;
 
 namespace Backend.Node.BuildIn
@@ -10,13 +9,8 @@ namespace Backend.Node.BuildIn
 
         public ReturnNode(BuildInTemplate buildInTemplate) : base(buildInTemplate)
         {
-            _returnIn = new AutoInOut(this, InOutSide.Input);
+            _returnIn = new AutoInOut(this, InOutSide.Input, true);
             AddInputs(_prevNode, _returnIn);
-        }
-
-        protected override void CheckToCode()
-        {
-            CheckIfConnected(_prevNode);
         }
 
         public override void ToCode(CodeManager codeManager)

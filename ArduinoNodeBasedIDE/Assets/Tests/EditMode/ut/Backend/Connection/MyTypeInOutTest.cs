@@ -9,16 +9,16 @@ using Tests.EditMode.ut.Backend.Helpers;
 namespace Tests.EditMode.ut.Backend.Connection
 {
     [TestFixture]
-    [TestOf(nameof(MyTypeInOut))]
+    [TestOf(nameof(TypeInOut))]
     [Category("InOut")]
-    public class MyTypeInOutTest
+    public class TypeInOutTest
     {
-        private MyTypeInOut _myTypeInput;
+        private TypeInOut _myTypeInput;
 
         [SetUp]
         public void Init()
         {
-            _myTypeInput = InOutHelper.CreateMyTypeInOutMock(InOutSide.Input);
+            _myTypeInput = InOutHelper.CreateTypeInOut(InOutSide.Input);
         }
 
         private static List<InOut> _wrong = new()
@@ -41,7 +41,7 @@ namespace Tests.EditMode.ut.Backend.Connection
         public void ConnectionCannotBeCastException()
         {
             //given
-            var output = InOutHelper.CreateMyTypeInOutMock();
+            var output = InOutHelper.CreateTypeInOut();
             output.MyType.CanBeCast(_myTypeInput.MyType).Returns(false);
             //when
             var exception = Assert.Throws<CannotBeCastException>(() => _myTypeInput.Connect(output));
@@ -54,7 +54,7 @@ namespace Tests.EditMode.ut.Backend.Connection
         public void ConnectionNeedAdapterException()
         {
             //given
-            var output = InOutHelper.CreateMyTypeInOutMock();
+            var output = InOutHelper.CreateTypeInOut();
             output.MyType.CanBeCast(_myTypeInput.MyType).Returns(true);
             output.MyType.IsAdapterNeed(_myTypeInput.MyType).Returns(true);
             //when
@@ -68,7 +68,7 @@ namespace Tests.EditMode.ut.Backend.Connection
         public void ConnectionOk()
         {
             //given
-            var output = InOutHelper.CreateMyTypeInOutMock();
+            var output = InOutHelper.CreateTypeInOut();
             output.MyType.CanBeCast(_myTypeInput.MyType).Returns(true);
             output.MyType.IsAdapterNeed(_myTypeInput.MyType).Returns(false);
 
@@ -84,7 +84,7 @@ namespace Tests.EditMode.ut.Backend.Connection
         public void ShouldNotCheckIfConnectToAuto()
         {
             //given
-            var output = InOutHelper.CreateMyTypeInOutMock(InOutSide.Output);
+            var output = InOutHelper.CreateTypeInOut(InOutSide.Output);
             var input = InOutHelper.CreateAutoInOut(InOutSide.Input);
             //when
             output.Connect(input);
