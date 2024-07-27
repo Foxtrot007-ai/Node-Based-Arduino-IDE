@@ -5,7 +5,9 @@ using Backend.API;
 using Backend.Connection;
 using Backend.Node;
 using Backend.Template;
+using Backend.Type;
 using NSubstitute;
+using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
 using Tests.EditMode.ut.Backend.Mocks.Connection;
 
@@ -88,6 +90,36 @@ namespace Tests.EditMode.ut.Backend.Node
         public void ExpectNextToCode()
         {
             _nextMock.ExpectToCode(_codeManagerMock);
+        }
+
+        public void EqualSizeInput(int size)
+        {
+            Assert.AreEqual(size, _sut.InputsList.Count);
+        }
+        
+        public void EqualSizeOutput(int size)
+        {
+            Assert.AreEqual(size, _sut.OutputsList.Count);
+        }
+        
+        public void EqualInput(InOut inOut, int index)
+        {
+            Assert.AreEqual(inOut, _sut.InputsList[index]);
+        }
+
+        public void EqualTypeInput(IType type, int index)
+        {
+            ExpectHelper.TypeEqual(type, _sut.InputsList[index]);
+        }
+        
+        public void EqualOutput(InOut inOut, int index)
+        {
+            Assert.AreEqual(inOut, _sut.OutputsList[index]);
+        }
+        
+        public void EqualTypeOutput(IType type, int index)
+        {
+            ExpectHelper.TypeEqual(type, _sut.OutputsList[index]);
         }
     }
 }

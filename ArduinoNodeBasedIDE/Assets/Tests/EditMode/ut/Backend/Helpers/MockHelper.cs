@@ -1,3 +1,6 @@
+using System.Reflection;
+using Backend;
+using Backend.API;
 using Backend.Connection;
 using Backend.Type;
 using NSubstitute;
@@ -9,6 +12,14 @@ namespace Tests.EditMode.ut.Backend.Helpers
     public static class MockHelper
     {
         public static readonly IType DefaultType = CreateType();
+
+        public static void SetField<T, U>(T owner, string fieldName, U value)
+        {
+            typeof(T)
+                .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance)
+                .SetValue(owner, value);
+        }
+        
         public static AnyInOutMock CreateAnyInOut()
         {
             var inOut = Substitute.For<AnyInOutMock>();
@@ -51,6 +62,21 @@ namespace Tests.EditMode.ut.Backend.Helpers
             classType.TypeName.Returns(name);
 
             return classType;
+        }
+
+        public static Variable CreateVariable(EType eType = EType.Int)
+        {
+            var variable = Substitute.For<Variable>();
+            var type = CreateType(eType);
+            variable.Type.Returns(type);
+            return variable;
+        }
+
+        public static Variable CreateVariable(IType type)
+        {
+            var variable = Substitute.For<Variable>();
+            variable.Type.Returns(type);
+            return variable;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Backend
 {
     public class VariablesManager : IVariablesManager
     {
-        public List<IVariable> Variables { get; } = new();
+        public virtual List<IVariable> Variables { get; } = new();
 
         public virtual IVariable AddVariable(VariableManageDto variableManageDto)
         {

@@ -18,22 +18,22 @@ namespace Backend.Type
         }
         public string ToCode()
         {
-            throw new InvalidOperationException();
+            return "void";
         }
 
         protected bool Equals(VoidType other)
         {
             return true;
         }
-        
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((VoidType) obj);
+            return Equals((VoidType)obj);
         }
-        
+
         public static bool operator ==(VoidType left, VoidType right)
         {
             return Equals(left, right);
@@ -43,7 +43,7 @@ namespace Backend.Type
         {
             return !Equals(left, right);
         }
-        
+
         public override int GetHashCode()
         {
             return GetType().GetHashCode();

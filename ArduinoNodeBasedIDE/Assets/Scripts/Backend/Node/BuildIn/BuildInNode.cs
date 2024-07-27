@@ -7,7 +7,10 @@ namespace Backend.Node.BuildIn
 
         private readonly BuildInTemplate _buildInTemplate;
         public override string NodeName => _buildInTemplate.Name;
-        
+
+        protected BuildInNode()
+        {
+        }
         public BuildInNode(BuildInTemplate buildInTemplate)
         {
             _buildInTemplate = buildInTemplate;

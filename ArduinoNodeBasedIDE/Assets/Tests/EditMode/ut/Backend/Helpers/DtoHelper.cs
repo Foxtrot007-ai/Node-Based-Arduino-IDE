@@ -22,5 +22,23 @@ namespace Tests.EditMode.ut.Backend.Helpers
                 VariableName = varName,
             };
         }
+
+        public static FunctionManageDto CreateFunctionManage(string name = "test")
+        {
+            return new FunctionManageDto
+            {
+                FunctionName = name,
+                OutputType = MockHelper.DefaultType,
+            };
+        }
+        
+        public static FunctionManageDto CreateFunctionManage(string name, EType eType)
+        {
+            return new FunctionManageDto
+            {
+                FunctionName = name,
+                OutputType = MockHelper.CreateType(eType),
+            };
+        }
     }
 }

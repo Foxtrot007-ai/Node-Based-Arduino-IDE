@@ -15,6 +15,9 @@ namespace Backend
         private List<VariableNode> _refs = new();
         private readonly VariablesManager _variablesManager;
 
+        protected Variable()
+        {
+        }
         public Variable(VariablesManager variablesManager, VariableManageDto variableManageDto)
         {
             _variablesManager = variablesManager;
