@@ -37,14 +37,14 @@ namespace Tests.EditMode.ut.Backend.Node
         
         private void PrepareVoidSetup()
         {
-            SetInputsList(_prevMock, _any1, _any2);
+            SetInputsList(_prevMock, _type1, _type2);
             SetOutputsList(_nextMock);
         }
 
         private void PrepareNonVoidSetup()
         {
-            SetInputsList(_any1, _any2);
-            SetOutputsList(_any3);
+            SetInputsList(_type1, _type2);
+            SetOutputsList(_type3);
         }
 
         [Test]
@@ -65,12 +65,12 @@ namespace Tests.EditMode.ut.Backend.Node
             var sut = new UserFunctionNode(_userFunctionMock);
             
             Assert.AreEqual(3, sut.InputsList.Count);
-            Assert.IsInstanceOf<FlowInOut>(sut.InputsList[0]);
+            Assert.IsInstanceOf<FlowIO>(sut.InputsList[0]);
             ExpectHelper.TypeEqual(type1, sut.InputsList[1]);
             ExpectHelper.TypeEqual(type2, sut.InputsList[2]);
 
             Assert.AreEqual(1, sut.OutputsList.Count);
-            Assert.IsInstanceOf<FlowInOut>(sut.OutputsList[0]);
+            Assert.IsInstanceOf<FlowIO>(sut.OutputsList[0]);
             _userFunctionMock.Received().AddRef(sut);
         }
         
@@ -113,8 +113,8 @@ namespace Tests.EditMode.ut.Backend.Node
 
             EqualSizeInput(4);
             EqualInput(_prevMock, 0);
-            EqualInput(_any1, 1);
-            EqualInput(_any2, 2);
+            EqualInput(_type1, 1);
+            EqualInput(_type2, 2);
             EqualTypeInput(type, 3);
             
             EqualSizeOutput(1);
@@ -129,8 +129,8 @@ namespace Tests.EditMode.ut.Backend.Node
             _sut.RemoveParam(0);
             
             _prevMock.DidNotReceive().Delete();
-            _any1.Received().Delete();
-            _any2.DidNotReceive().Delete();
+            _type1.Received().Delete();
+            _type2.DidNotReceive().Delete();
             _nextMock.DidNotReceive().Delete();
         }
 
@@ -142,8 +142,8 @@ namespace Tests.EditMode.ut.Backend.Node
             _sut.RemoveParam(0);
             
             _prevMock.DidNotReceive().Delete();
-            _any1.Received().Delete();
-            _any2.DidNotReceive().Delete();
+            _type1.Received().Delete();
+            _type2.DidNotReceive().Delete();
             _nextMock.DidNotReceive().Delete();
         }
 
@@ -158,12 +158,12 @@ namespace Tests.EditMode.ut.Backend.Node
 
             EqualSizeInput(3);
             EqualInput(_prevMock, 0);
-            EqualInput(_any1, 1);
-            EqualInput(_any2, 2);
+            EqualInput(_type1, 1);
+            EqualInput(_type2, 2);
 
             EqualSizeOutput(1);
             EqualOutput(_nextMock, 0);
-            _any3.Received().Delete();
+            _type3.Received().Delete();
         }
 
         [Test]
@@ -179,8 +179,8 @@ namespace Tests.EditMode.ut.Backend.Node
             _nextMock.Received().Disconnect();
             
             EqualSizeInput(2);
-            EqualInput(_any1, 0);
-            EqualInput(_any2, 1);
+            EqualInput(_type1, 0);
+            EqualInput(_type2, 1);
             
             EqualSizeOutput(1);
             EqualTypeOutput(type, 0);
@@ -199,12 +199,12 @@ namespace Tests.EditMode.ut.Backend.Node
             _nextMock.DidNotReceive().Disconnect();
             
             EqualSizeInput(2);
-            EqualInput(_any1, 0);
-            EqualInput(_any2, 1);
+            EqualInput(_type1, 0);
+            EqualInput(_type2, 1);
             
             EqualSizeOutput(1);
-            EqualOutput(_any3, 0);
-            _any3.Received().ChangeMyType(type);
+            EqualOutput(_type3, 0);
+            _type3.Received().ChangeType(type);
         }
         
         [Test]
@@ -220,8 +220,8 @@ namespace Tests.EditMode.ut.Backend.Node
             PrepareVoidSetup();
 
             _userFunctionMock.Name.Returns("name");
-            _any1.ToCodeParamReturn(_codeManagerMock, "test1");
-            _any2.ToCodeParamReturn(_codeManagerMock, "test2");
+            _type1.ToCodeParamReturn(_codeManagerMock, "test1");
+            _type2.ToCodeParamReturn(_codeManagerMock, "test2");
 
             _sut.ToCode(_codeManagerMock);
 
@@ -243,8 +243,8 @@ namespace Tests.EditMode.ut.Backend.Node
             PrepareNonVoidSetup();
 
             _userFunctionMock.Name.Returns("name");
-            _any1.ToCodeParamReturn(_codeManagerMock, "test1");
-            _any2.ToCodeParamReturn(_codeManagerMock, "test2");
+            _type1.ToCodeParamReturn(_codeManagerMock, "test1");
+            _type2.ToCodeParamReturn(_codeManagerMock, "test2");
 
             var code = _sut.ToCodeParam(_codeManagerMock);
 

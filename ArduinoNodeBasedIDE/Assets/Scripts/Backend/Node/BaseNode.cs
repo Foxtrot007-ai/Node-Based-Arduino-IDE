@@ -15,43 +15,43 @@ namespace Backend.Node
         public virtual List<IConnection> InputsList { get; private set; } = new();
         public virtual List<IConnection> OutputsList { get; private set; } = new();
 
-        protected FlowInOut _prevNode;
-        protected FlowInOut _nextNode;
+        protected FlowIO _prevNode;
+        protected FlowIO _nextNode;
 
         protected BaseNode()
         {
-            _prevNode = new FlowInOut(this, InOutSide.Input, "prev");
-            _nextNode = new FlowInOut(this, InOutSide.Output, "next");
+            _prevNode = new FlowIO(this, IOSide.Input, "prev");
+            _nextNode = new FlowIO(this, IOSide.Output, "next");
         }
 
         public virtual void Delete()
         {
-            InputsList.ForEach(x => ((InOut)x).Delete());
-            OutputsList.ForEach(x => ((InOut)x).Delete());
+            InputsList.ForEach(x => ((BaseIO)x).Delete());
+            OutputsList.ForEach(x => ((BaseIO)x).Delete());
             IsDeleted = true;
         }
 
-        private void CheckIfConnected(InOut inOut)
+        private void CheckIfConnected(BaseIO baseIO)
         {
-            if (!inOut.IsOptional && inOut.Connected == null)
+            if (!baseIO.IsOptional && baseIO.Connected == null)
             {
-                throw new InOutMustBeConnectedException(inOut);
+                throw new InOutMustBeConnectedException(baseIO);
             }
         }
 
-        protected void ConnectedToCode(CodeManager codeManager, InOut inOut)
+        protected void ConnectedToCode(CodeManager codeManager, BaseIO baseIO)
         {
-            ((InOut)inOut.Connected).ParentNode.ToCode(codeManager);
+            ((BaseIO)baseIO.Connected).ParentNode.ToCode(codeManager);
         }
 
-        protected string ConnectedToCodeParam(CodeManager codeManager, InOut inOut)
+        protected string ConnectedToCodeParam(CodeManager codeManager, BaseIO baseIO)
         {
-            return ((InOut)inOut.Connected).ParentNode.ToCodeParam(codeManager);
+            return ((BaseIO)baseIO.Connected).ParentNode.ToCodeParam(codeManager);
         }
         protected void CheckToCode()
         {
-            InputsList.ForEach(x => CheckIfConnected((InOut)x));
-            OutputsList.ForEach(x => CheckIfConnected((InOut)x));
+            InputsList.ForEach(x => CheckIfConnected((BaseIO)x));
+            OutputsList.ForEach(x => CheckIfConnected((BaseIO)x));
         }
 
         protected virtual void MakeCode(CodeManager codeManager)
@@ -76,7 +76,7 @@ namespace Backend.Node
             return MakeCodeParam(codeManager);
         }
 
-        protected void AddInputs(params InOut[] inputs)
+        protected void AddInputs(params BaseIO[] inputs)
         {
             foreach (var input in inputs)
             {
@@ -84,7 +84,7 @@ namespace Backend.Node
             }
         }
 
-        protected void AddOutputs(params InOut[] outputs)
+        protected void AddOutputs(params BaseIO[] outputs)
         {
             foreach (var output in outputs)
             {
@@ -94,8 +94,8 @@ namespace Backend.Node
 
         protected virtual void RemoveInOut(IConnection iConnection)
         {
-            var inOut = (InOut)iConnection;
-            var list = inOut.Side == InOutSide.Input ? InputsList : OutputsList;
+            var inOut = (BaseIO)iConnection;
+            var list = inOut.Side == IOSide.Input ? InputsList : OutputsList;
             list.Remove(inOut);
             inOut.Delete();
         }
@@ -108,13 +108,13 @@ namespace Backend.Node
 
         protected void RemoveFlowInputs()
         {
-            if (InputsList.Count != 0 && InputsList[0].InOutType == InOutType.Flow)
+            if (InputsList.Count != 0 && InputsList[0].IOType == IOType.Flow)
             {
                 InputsList[0].Disconnect();
                 InputsList.RemoveAt(0);
             }
 
-            if (OutputsList.Count != 0 && OutputsList[0].InOutType == InOutType.Flow)
+            if (OutputsList.Count != 0 && OutputsList[0].IOType == IOType.Flow)
             {
                 OutputsList[0].Disconnect();
                 OutputsList.RemoveAt(0);
@@ -125,12 +125,12 @@ namespace Backend.Node
         {
             if (list.Count == 0)
                 return list;
-            return list[0].InOutType == InOutType.Flow ? list.Skip(1).ToList() : list;
+            return list[0].IOType == IOType.Flow ? list.Skip(1).ToList() : list;
         }
 
         protected bool IsFlow()
         {
-            return OutputsList[0].InOutType == InOutType.Flow;
+            return OutputsList[0].IOType == IOType.Flow;
         }
     }
 }

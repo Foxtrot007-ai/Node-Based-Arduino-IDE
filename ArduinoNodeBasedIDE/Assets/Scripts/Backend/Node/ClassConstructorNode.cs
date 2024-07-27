@@ -14,9 +14,9 @@ namespace Backend.Node
             _classConstructorTemplate = classConstructorTemplate;
 
             _classConstructorTemplate.Inputs
-                .ForEach(type => AddInputs(new AnyInOut(this, InOutSide.Input, type)));
+                .ForEach(type => AddInputs(new TypeIO(this, IOSide.Input, type)));
 
-            AddOutputs(new TypeInOut(this, InOutSide.Input, _classConstructorTemplate.Class));
+            AddOutputs(new TypeIO(this, IOSide.Input, _classConstructorTemplate.Class));
         }
 
         protected override string MakeCodeParam(CodeManager codeManager)

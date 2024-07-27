@@ -5,27 +5,27 @@ namespace Tests.EditMode.ut.Backend.Mocks
 {
     public class BaseNodeMock : BaseNode
     {
-        public void AddInputs(InOut input)
+        public void AddInputs(BaseIO input)
         {
             InputsList.Add(input);
         }
 
-        public void AddOutputs(InOut output)
+        public void AddOutputs(BaseIO output)
         {
             OutputsList.Add(output);
         }
 
-        public void Add(InOut inOut, InOutSide side)
+        public void Add(BaseIO baseIO, IOSide side)
         {
             switch (side)
             {
-                case InOutSide.Input:
-                    AddInputs(inOut);
+                case IOSide.Input:
+                    AddInputs(baseIO);
                     break;
-                case InOutSide.Output:
-                    AddOutputs(inOut);
+                case IOSide.Output:
+                    AddOutputs(baseIO);
                     break;
             }
         }
-    }   
+    }
 }

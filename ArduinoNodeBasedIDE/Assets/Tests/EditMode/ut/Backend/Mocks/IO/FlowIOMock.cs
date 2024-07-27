@@ -3,14 +3,14 @@ using Backend.Connection;
 using Backend.Node;
 using NSubstitute;
 
-namespace Tests.EditMode.ut.Backend.Mocks.Connection
+namespace Tests.EditMode.ut.Backend.Mocks.IO
 {
-    public class FlowInOutMock : FlowInOut
+    public class FlowIOMock : FlowIO
     {
-        public InOutMock _connectedMock;
-        public FlowInOutMock() : base(Substitute.For<BaseNode>(), InOutSide.Input, "test")
+        public BaseIOMock _connectedMock;
+        public FlowIOMock() : base(Substitute.For<BaseNode>(), IOSide.Input, "test")
         {
-            _connectedMock = Substitute.For<InOutMock>();
+            _connectedMock = Substitute.For<BaseIOMock>();
         }
         
         public void MakeConnect()
@@ -20,7 +20,7 @@ namespace Tests.EditMode.ut.Backend.Mocks.Connection
 
         public void MakeDisconnect()
         {
-            Connected.Returns((InOut)null);
+            Connected.Returns((BaseIO)null);
         }
 
         public void ExpectToCode(CodeManager codeManager)

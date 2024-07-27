@@ -2,7 +2,7 @@
 
 namespace Backend.Exceptions.InOut
 {
-    public class WrongConnectionTypeException : InOutException
+    public class WrongConnectionTypeException : IOException
     {
         
     }

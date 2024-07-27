@@ -6,18 +6,18 @@ namespace Backend.Node.BuildIn
     public abstract class VariableNode : BaseNode
     {
         protected Variable _variable;
-        protected AnyInOut _value;
+        protected TypeIO _value;
 
-        protected VariableNode(Variable variable, InOutSide side)
+        protected VariableNode(Variable variable, IOSide side)
         {
             _variable = variable;
-            _value = new AnyInOut(this, side, variable.Type);
+            _value = new TypeIO(this, side, variable.Type);
             variable.AddRef(this);
         }
 
         public virtual void ChangeType(IType type)
         {
-            _value.ChangeMyType(type);
+            _value.ChangeType(type);
         }
 
         public override void Delete()

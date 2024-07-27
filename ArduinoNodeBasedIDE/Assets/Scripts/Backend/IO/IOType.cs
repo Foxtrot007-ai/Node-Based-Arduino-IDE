@@ -1,6 +1,6 @@
 ﻿namespace Backend.Connection
 {
-    public enum InOutType
+    public enum IOType
     {
         Flow,
         Void,

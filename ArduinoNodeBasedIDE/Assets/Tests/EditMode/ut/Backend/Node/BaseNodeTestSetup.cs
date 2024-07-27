@@ -9,20 +9,20 @@ using Backend.Type;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
-using Tests.EditMode.ut.Backend.Mocks.Connection;
+using Tests.EditMode.ut.Backend.Mocks.IO;
 
 namespace Tests.EditMode.ut.Backend.Node
 {
     public class BaseNodeTestSetup
     {
         protected CodeManager _codeManagerMock;
-        protected FlowInOutMock _prevMock;
-        protected FlowInOutMock _nextMock;
+        protected FlowIOMock _prevMock;
+        protected FlowIOMock _nextMock;
         protected BuildInTemplate _buildInTemplateMock;
 
-        protected AnyInOutMock _any1, _any2, _any3;
-        protected AutoInOutMock _auto1;
-        protected TypeInOutMock _class1;
+        protected TypeIOMock _type1, _type2, _type3;
+        protected AutoIOMock _auto1;
+        protected TypeIOMock _class1;
 
         private BaseNode _sut;
 
@@ -30,16 +30,16 @@ namespace Tests.EditMode.ut.Backend.Node
         {
             _buildInTemplateMock = Substitute.For<BuildInTemplate>();
             _codeManagerMock = Substitute.For<CodeManager>();
-            _prevMock = MockHelper.CreateFLowInOut();
-            _nextMock = MockHelper.CreateFLowInOut();
-            _any1 = MockHelper.CreateAnyInOut();
-            _any2 = MockHelper.CreateAnyInOut();
-            _any3 = MockHelper.CreateAnyInOut();
-            _auto1 = MockHelper.CreateAutoInOut();
-            _class1 = MockHelper.CreateClassInOut();
+            _prevMock = MockHelper.CreateFlowIO();
+            _nextMock = MockHelper.CreateFlowIO();
+            _type1 = MockHelper.CreateTypeIO();
+            _type2 = MockHelper.CreateTypeIO();
+            _type3 = MockHelper.CreateTypeIO();
+            _auto1 = MockHelper.CreateAutoIO();
+            _class1 = MockHelper.CreateClassIO();
 
             _sut = sut;
-            
+
             SetFlowMocks();
             MakeAllConnected();
         }
@@ -48,9 +48,9 @@ namespace Tests.EditMode.ut.Backend.Node
         {
             _prevMock.MakeConnect();
             _nextMock.MakeConnect();
-            _any1.MakeConnect();
-            _any2.MakeConnect();
-            _any3.MakeConnect();
+            _type1.MakeConnect();
+            _type2.MakeConnect();
+            _type3.MakeConnect();
             _auto1.MakeConnect();
             _class1.MakeConnect();
         }
@@ -60,11 +60,11 @@ namespace Tests.EditMode.ut.Backend.Node
             SetInOutMock<BaseNode>("_nextNode", _nextMock);
         }
 
-        public void SetInOutMock<T>(string name, InOut inOutMock)
+        public void SetInOutMock<T>(string name, BaseIO baseIOMock)
         {
             typeof(T)
                 .GetField(name, BindingFlags.NonPublic | BindingFlags.Instance)
-                .SetValue(_sut, inOutMock);
+                .SetValue(_sut, baseIOMock);
         }
 
         public void SetInputsList(params IConnection[] inOutMocks)
@@ -73,14 +73,14 @@ namespace Tests.EditMode.ut.Backend.Node
                 .GetProperty("InputsList", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                 .SetValue(_sut, inOutMocks.ToList(), null);
         }
-        
+
         public void SetOutputsList(params IConnection[] inOutMocks)
         {
             typeof(BaseNode)
                 .GetProperty("OutputsList", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                 .SetValue(_sut, inOutMocks.ToList(), null);
         }
-        
+
         public void MakeFlowConnected()
         {
             _prevMock.MakeConnect();
@@ -96,27 +96,27 @@ namespace Tests.EditMode.ut.Backend.Node
         {
             Assert.AreEqual(size, _sut.InputsList.Count);
         }
-        
+
         public void EqualSizeOutput(int size)
         {
             Assert.AreEqual(size, _sut.OutputsList.Count);
         }
-        
-        public void EqualInput(InOut inOut, int index)
+
+        public void EqualInput(BaseIO baseIO, int index)
         {
-            Assert.AreEqual(inOut, _sut.InputsList[index]);
+            Assert.AreEqual(baseIO, _sut.InputsList[index]);
         }
 
         public void EqualTypeInput(IType type, int index)
         {
             ExpectHelper.TypeEqual(type, _sut.InputsList[index]);
         }
-        
-        public void EqualOutput(InOut inOut, int index)
+
+        public void EqualOutput(BaseIO baseIO, int index)
         {
-            Assert.AreEqual(inOut, _sut.OutputsList[index]);
+            Assert.AreEqual(baseIO, _sut.OutputsList[index]);
         }
-        
+
         public void EqualTypeOutput(IType type, int index)
         {
             ExpectHelper.TypeEqual(type, _sut.OutputsList[index]);

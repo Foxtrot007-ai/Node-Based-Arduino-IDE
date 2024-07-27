@@ -8,34 +8,34 @@ using Castle.Core.Internal;
 
 namespace Backend.Connection
 {
-    public abstract class InOut : IConnection
+    public abstract class BaseIO : IConnection
     {
         public virtual ConnectionPoint UIPoint { get; set; }
         public BaseNode ParentNode { get; }
-        private InOut _connected;
-        public InOutSide Side { get; }
-        public abstract InOutType InOutType { get; }
-        public abstract string InOutName { get; }
+        private BaseIO _connected;
+        public IOSide Side { get; }
+        public abstract IOType IOType { get; }
+        public abstract string IOName { get; }
         public bool IsDeleted { get; private set; }
         public virtual bool IsOptional { get; }
 
         public virtual IConnection Connected => _connected;
-        private List<ISubscribeInOut> _subscribe;
-        protected InOut(BaseNode parentNode, InOutSide side, bool isOptional = false)
+        private List<ISubscribeIO> _subscribe;
+        protected BaseIO(BaseNode parentNode, IOSide side, bool isOptional = false)
         {
             ParentNode = parentNode;
             Side = side;
             IsDeleted = false;
             IsOptional = isOptional;
             _connected = null;
-            _subscribe = new List<ISubscribeInOut>();
+            _subscribe = new List<ISubscribeIO>();
         }
 
         public virtual void Connect(IConnection iConnection)
         {
             PreCheck(iConnection);
-            var input = Side == InOutSide.Input ? this : (InOut)iConnection;
-            var output = Side == InOutSide.Output ? this : (InOut)iConnection;
+            var input = Side == IOSide.Input ? this : (BaseIO)iConnection;
+            var output = Side == IOSide.Output ? this : (BaseIO)iConnection;
             // Connect output to input
             try
             {
@@ -58,22 +58,22 @@ namespace Backend.Connection
             }
         }
 
-        protected virtual void BeforeConnectHandler(InOut inOut)
+        protected virtual void BeforeConnectHandler(BaseIO baseIO)
         {
             ;
         }
 
-        private void ConnectHandler(InOut inOut)
+        private void ConnectHandler(BaseIO baseIO)
         {
-            _connected = inOut;
+            _connected = baseIO;
         }
 
-        protected virtual void AfterConnectHandler(InOut inOut)
+        protected virtual void AfterConnectHandler(BaseIO baseIO)
         {
             _subscribe.ForEach(x => x.ConnectNotify(this));
         }
 
-        protected virtual void ErrorConnectHandler(InOut inOut, Exception exception)
+        protected virtual void ErrorConnectHandler(BaseIO baseIO, Exception exception)
         {
             ;
         }
@@ -101,29 +101,29 @@ namespace Backend.Connection
             }
         }
 
-        protected virtual void BeforeDisconnectHandler(InOut inOut)
+        protected virtual void BeforeDisconnectHandler(BaseIO baseIO)
         {
             ;
         }
 
-        private void DisconnectHandler(InOut inOut)
+        private void DisconnectHandler(BaseIO baseIO)
         {
             _connected = null;
         }
 
-        protected virtual void AfterDisconnectHandler(InOut inOut)
+        protected virtual void AfterDisconnectHandler(BaseIO baseIO)
         {
             _subscribe.ForEach(x => x.DisconnectNotify(this));
         }
 
-        protected virtual void ErrorDisconnectHandler(InOut inOut, Exception exception)
+        protected virtual void ErrorDisconnectHandler(BaseIO baseIO, Exception exception)
         {
             ;
         }
 
         protected virtual void PreCheck(IConnection iConnection)
         {
-            if (iConnection is not InOut inOut)
+            if (iConnection is not BaseIO inOut)
             {
                 throw new ArgumentNullException(null, "Connect argument cannot be null");
             }
@@ -134,7 +134,7 @@ namespace Backend.Connection
             CheckCycle(inOut);
         }
 
-        protected virtual void Check(InOut input)
+        protected virtual void Check(BaseIO input)
         {
             ;
         }
@@ -144,44 +144,44 @@ namespace Backend.Connection
             if (_connected is null)
                 return;
 
-            var output = Side == InOutSide.Output ? this : (TypeInOut)_connected;
-            var input = Side == InOutSide.Input ? this : (TypeInOut)_connected;
+            var output = Side == IOSide.Output ? this : (TypeIO)_connected;
+            var input = Side == IOSide.Input ? this : (TypeIO)_connected;
             try
             {
                 output.Check(input);
             }
-            catch(InOutException e)
+            catch(IOException e)
             {
                 Disconnect();
                 throw;
             }
         }
 
-        private void CheckIsConnected(InOut inOut)
+        private void CheckIsConnected(BaseIO baseIO)
         {
-            if (_connected is not null || inOut._connected is not null)
+            if (_connected is not null || baseIO._connected is not null)
             {
                 throw new AlreadyConnectedException();
             }
         }
 
-        private void CheckSide(InOut iInOut)
+        private void CheckSide(BaseIO baseIO)
         {
-            if (Side == iInOut.Side)
+            if (Side == baseIO.Side)
             {
                 throw new SameSideException();
             }
         }
 
-        private void CheckSelfConnection(InOut iInOut)
+        private void CheckSelfConnection(BaseIO baseIO)
         {
-            if (iInOut.ParentNode == ParentNode)
+            if (baseIO.ParentNode == ParentNode)
             {
                 throw new SelfConnectionException();
             }
         }
 
-        private void CheckCycle(InOut inOut)
+        private void CheckCycle(BaseIO baseIO)
         {
             var visited = new HashSet<BaseNode> { ParentNode };
             var toVisit = new Stack<BaseNode>();
@@ -190,12 +190,12 @@ namespace Backend.Connection
             while (!toVisit.IsNullOrEmpty())
             {
                 var parent = toVisit.Pop();
-                if (parent == inOut.ParentNode)
+                if (parent == baseIO.ParentNode)
                 {
                     throw new CycleException();
                 }
 
-                foreach (InOut iter in parent.InputsList.Concat(parent.OutputsList))
+                foreach (BaseIO iter in parent.InputsList.Concat(parent.OutputsList))
                 {
                     var newParent = iter._connected?.ParentNode;
                     if (newParent is not null && visited.Add(newParent))
@@ -206,14 +206,14 @@ namespace Backend.Connection
             }
         }
 
-        public virtual void Subscribe(ISubscribeInOut subscribeInOut)
+        public virtual void Subscribe(ISubscribeIO subscribeIO)
         {
-            _subscribe.Add(subscribeInOut);
+            _subscribe.Add(subscribeIO);
         }
 
-        public virtual void Unsubscribe(ISubscribeInOut subscribeInOut)
+        public virtual void Unsubscribe(ISubscribeIO subscribeIO)
         {
-            _subscribe.Remove(subscribeInOut);
+            _subscribe.Remove(subscribeIO);
         }
 
         public virtual void Delete()

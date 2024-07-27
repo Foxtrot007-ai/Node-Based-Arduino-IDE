@@ -6,15 +6,15 @@ namespace Backend.Node.BuildIn
 {
     public class WhileNode : BuildInNode
     {
-        private TypeInOut _predicate;
-        private FlowInOut _loop;
-        
+        private TypeIO _predicate;
+        private FlowIO _loop;
+
         public WhileNode(BuildInTemplate buildInTemplate) : base(buildInTemplate)
         {
-            _predicate = new TypeInOut(this, InOutSide.Input, new PrimitiveType(EType.Bool));
+            _predicate = new TypeIO(this, IOSide.Input, new PrimitiveType(EType.Bool));
             AddInputs(_prevNode, _predicate);
- 
-            _loop = new FlowInOut(this, InOutSide.Output, "body");
+
+            _loop = new FlowIO(this, IOSide.Output, "body");
             AddOutputs(_nextNode, _loop);
         }
 

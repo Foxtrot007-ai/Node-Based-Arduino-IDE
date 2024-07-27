@@ -21,7 +21,7 @@ namespace Backend.Node
 
             _userFunction.InputList
                 .Variables
-                .ForEach(param => AddInputs(new AnyInOut(this, InOutSide.Input, (IType)param.Type)));
+                .ForEach(param => AddInputs(new TypeIO(this, IOSide.Input, (IType)param.Type)));
 
             if (userFunction.OutputType.EType == EType.Void)
             {
@@ -29,13 +29,13 @@ namespace Backend.Node
             }
             else
             {
-                AddOutputs(new AnyInOut(this, InOutSide.Input, (IType)userFunction.OutputType));
+                AddOutputs(new TypeIO(this, IOSide.Input, (IType)userFunction.OutputType));
             }
         }
 
         public virtual void AddParam(IVariable param)
         {
-            AddInputs(new AnyInOut(this, InOutSide.Input, (IType)param.Type));
+            AddInputs(new TypeIO(this, IOSide.Input, (IType)param.Type));
         }
 
         public virtual void RemoveParam(int index)
@@ -55,11 +55,11 @@ namespace Backend.Node
                 if (IsFlow())
                 {
                     RemoveFlowInputs();
-                    AddOutputs(new AnyInOut(this, InOutSide.Output, (IType)type));
+                    AddOutputs(new TypeIO(this, IOSide.Output, (IType)type));
                 }
                 else
                 {
-                    ((AnyInOut)OutputsList[0]).ChangeMyType((IType)type);
+                    ((TypeIO)OutputsList[0]).ChangeType((IType)type);
                 }
             }
         }

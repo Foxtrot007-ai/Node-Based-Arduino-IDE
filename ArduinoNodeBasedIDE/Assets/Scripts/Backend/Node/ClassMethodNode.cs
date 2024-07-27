@@ -7,13 +7,13 @@ namespace Backend.Node
     public class ClassMethodNode : FunctionNode
     {
         private readonly ClassMethodTemplate _classMethodTemplate;
-        private TypeInOut _classIn;
+        private TypeIO _classIn;
         public override NodeType NodeType => NodeType.Method;
 
         public ClassMethodNode(ClassMethodTemplate classMethodTemplate) : base(classMethodTemplate)
         {
             _classMethodTemplate = classMethodTemplate;
-            _classIn = new TypeInOut(this, InOutSide.Input, _classMethodTemplate.Class);
+            _classIn = new TypeIO(this, IOSide.Input, _classMethodTemplate.Class);
             InputsList.Insert(_isFlow() ? 1 : 0, _classIn);
         }
 

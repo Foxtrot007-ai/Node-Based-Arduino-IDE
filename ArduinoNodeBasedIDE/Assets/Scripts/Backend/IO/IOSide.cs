@@ -1,6 +1,6 @@
 ﻿namespace Backend.Connection
 {
-    public enum InOutSide
+    public enum IOSide
     {
         Input,
         Output,

@@ -3,18 +3,18 @@ using Backend.Type;
 
 namespace Backend.Connection
 {
-    public static class HelperInOut
+    public static class HelperIO
     {
-        public static InOutType ETypeToInOut(EType eType)
+        public static IOType ETypeToInOut(EType eType)
         {
             switch (eType)
             {
                 case EType.Void:
-                    return InOutType.Void;
+                    return IOType.Void;
                 case EType.Class:
-                    return InOutType.Class;
+                    return IOType.Class;
                 case EType.String:
-                    return InOutType.String;
+                    return IOType.String;
                 case EType.Short:
                 case EType.Int:
                 case EType.Long:
@@ -22,7 +22,7 @@ namespace Backend.Connection
                 case EType.Float:
                 case EType.Double:
                 case EType.Bool:
-                    return InOutType.Primitive;
+                    return IOType.Primitive;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(eType), eType, null);
             }

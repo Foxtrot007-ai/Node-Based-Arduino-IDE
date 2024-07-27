@@ -1,4 +1,5 @@
 using Backend.Connection;
+using Backend.IO;
 using Backend.Node.BuildIn;
 using NSubstitute;
 using NUnit.Framework;
@@ -30,8 +31,8 @@ namespace Tests.EditMode.ut.Backend.Node.BuildIn
             var sut = new ReturnNode(_buildInTemplateMock);
 
             Assert.AreEqual(2, _sut.InputsList.Count);
-            Assert.IsInstanceOf<FlowInOut>(sut.InputsList[0]);
-            Assert.IsInstanceOf<AutoInOut>(sut.InputsList[1]);
+            Assert.IsInstanceOf<FlowIO>(sut.InputsList[0]);
+            Assert.IsInstanceOf<AutoIO>(sut.InputsList[1]);
 
             Assert.AreEqual(0, sut.OutputsList.Count);
         }

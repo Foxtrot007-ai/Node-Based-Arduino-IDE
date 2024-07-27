@@ -5,7 +5,7 @@ using Backend.Connection;
 using Backend.Type;
 using NSubstitute;
 using Tests.EditMode.ut.Backend.Mocks;
-using Tests.EditMode.ut.Backend.Mocks.Connection;
+using Tests.EditMode.ut.Backend.Mocks.IO;
 
 namespace Tests.EditMode.ut.Backend.Helpers
 {
@@ -19,35 +19,35 @@ namespace Tests.EditMode.ut.Backend.Helpers
                 .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance)
                 .SetValue(owner, value);
         }
+
+        public static TypeIOMock CreateTypeIO()
+        {
+            var inOut = Substitute.For<TypeIOMock>();
+            inOut.IOType.Returns(IOType.Dynamic);
+            inOut.IsOptional.Returns(false);
+            return inOut;
+        }
         
-        public static AnyInOutMock CreateAnyInOut()
+        public static TypeIOMock CreateClassIO()
         {
-            var inOut = Substitute.For<AnyInOutMock>();
-            inOut.InOutType.Returns(InOutType.Dynamic);
+            var inOut = Substitute.For<TypeIOMock>();
+            inOut.IOType.Returns(IOType.Class);
             inOut.IsOptional.Returns(false);
             return inOut;
         }
 
-        public static TypeInOutMock CreateClassInOut()
+        public static AutoIOMock CreateAutoIO()
         {
-            var inOut = Substitute.For<TypeInOutMock>();
-            inOut.InOutType.Returns(InOutType.Class);
+            var inOut = Substitute.For<AutoIOMock>();
+            inOut.IOType.Returns(IOType.Auto);
             inOut.IsOptional.Returns(false);
             return inOut;
         }
 
-        public static AutoInOutMock CreateAutoInOut()
+        public static FlowIOMock CreateFlowIO()
         {
-            var inOut = Substitute.For<AutoInOutMock>();
-            inOut.InOutType.Returns(InOutType.Auto);
-            inOut.IsOptional.Returns(false);
-            return inOut;
-        }
-
-        public static FlowInOutMock CreateFLowInOut()
-        {
-            var inOut = Substitute.For<FlowInOutMock>();
-            inOut.InOutType.Returns(InOutType.Flow);
+            var inOut = Substitute.For<FlowIOMock>();
+            inOut.IOType.Returns(IOType.Flow);
             inOut.IsOptional.Returns(false);
             return inOut;
         }

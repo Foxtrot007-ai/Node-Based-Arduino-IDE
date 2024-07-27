@@ -1,6 +1,6 @@
 namespace Backend.Exceptions.InOut
 {
-    public class CycleException : InOutException
+    public class CycleException : IOException
     {
         
     }

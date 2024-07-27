@@ -6,7 +6,7 @@ namespace Backend.Node.BuildIn
     {
         public override string NodeName => "Set" + _variable.Name;
 
-        public SetVariableNode(Variable variable) : base(variable, InOutSide.Input)
+        public SetVariableNode(Variable variable) : base(variable, IOSide.Input)
         {
             AddInputs(_value);
         }

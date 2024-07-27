@@ -2,7 +2,7 @@
 
 namespace Backend.Exceptions.InOut
 {
-    public class InOutException : Exception
+    public class IOException : Exception
     {
         
     }

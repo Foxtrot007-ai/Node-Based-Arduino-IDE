@@ -7,7 +7,7 @@ namespace Backend.Node.BuildIn
     {
         public override string NodeName => "Get" + _variable.Name;
 
-        public GetVariableNode(Variable variable) : base(variable, InOutSide.Output)
+        public GetVariableNode(Variable variable) : base(variable, IOSide.Output)
         {
             AddOutputs(_value);
         }

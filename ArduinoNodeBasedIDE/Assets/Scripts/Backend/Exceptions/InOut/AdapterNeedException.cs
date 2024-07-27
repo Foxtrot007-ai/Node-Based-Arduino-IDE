@@ -1,6 +1,6 @@
 namespace Backend.Exceptions.InOut
 {
-    public class AdapterNeedException : InOutException
+    public class AdapterNeedException : IOException
     {
         
     }

@@ -20,16 +20,16 @@ namespace Backend.Node
             }
             else
             {
-                AddOutputs(new AnyInOut(this, InOutSide.Output, _functionTemplate.OutputType));
+                AddOutputs(new TypeIO(this, IOSide.Output, _functionTemplate.OutputType));
             }
 
             _functionTemplate.InputsTypes
-                .ForEach(type => AddInputs(new AnyInOut(this, InOutSide.Input, type)));
+                .ForEach(type => AddInputs(new TypeIO(this, IOSide.Input, type)));
         }
 
         protected bool _isFlow()
         {
-            return OutputsList[0].InOutType == InOutType.Flow;
+            return OutputsList[0].IOType == IOType.Flow;
         }
 
         protected virtual string BuildCode(CodeManager codeManager)
@@ -42,7 +42,7 @@ namespace Backend.Node
         {
             if (!IsFlow())
                 throw new NotImplementedException();
-            
+
             codeManager.AddLibrary(_functionTemplate.Library);
             codeManager.AddLine(BuildCode(codeManager) + ";");
         }

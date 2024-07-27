@@ -1,66 +1,57 @@
 using Backend.Connection;
+using Backend.IO;
 using Backend.Type;
 using NSubstitute;
 using NUnit.Framework;
-using Tests.EditMode.ut.Backend.Connection;
 using Tests.EditMode.ut.Backend.Mocks;
-using Tests.EditMode.ut.Backend.Mocks.Connection;
+using Tests.EditMode.ut.Backend.Mocks.IO;
 
 namespace Tests.EditMode.ut.Backend.Helpers
 {
-    public static class InOutHelper
+    public static class IOHelper
     {
-        public static InOutMock CreateBaseMock(InOutSide side = InOutSide.Output,
+        public static BaseIOMock CreateBaseMock(IOSide side = IOSide.Output,
             BaseNodeMock parent = null)
         {
             parent ??= Substitute.ForPartsOf<BaseNodeMock>();
-            var inOut = new InOutMock(parent, side);
+            var inOut = new BaseIOMock(parent, side);
             parent.Add(inOut, side);
             return inOut;
         }
 
-        public static TypeInOut CreateTypeInOut(InOutSide side = InOutSide.Output,
+        public static TypeIO CreateTypeIO(IOSide side = IOSide.Output,
             BaseNodeMock parent = null, IType myType = null)
         {
             parent ??= Substitute.ForPartsOf<BaseNodeMock>();
             myType ??= MockHelper.CreateType();
-            var inOut = new TypeInOut(parent, side, myType);
+            var inOut = new TypeIO(parent, side, myType);
             parent.Add(inOut, side);
             return inOut;
         }
 
-        public static AnyInOut CreateAnyInOut(InOutSide side = InOutSide.Output, BaseNodeMock parent = null, IType myType = null)
+        public static FlowIO CreateFlowIO(IOSide side = IOSide.Output, BaseNodeMock parent = null, string name = "test")
         {
             parent ??= Substitute.ForPartsOf<BaseNodeMock>();
-            myType ??= MockHelper.CreateType();
-            var inOut = new AnyInOut(parent, side, myType);
+            var inOut = new FlowIO(parent, side, name);
             parent.Add(inOut, side);
             return inOut;
         }
 
-        public static FlowInOut CreateFlowInOut(InOutSide side = InOutSide.Output, BaseNodeMock parent = null, string name = "test")
+        public static AutoIO CreateAutoIO(IOSide side = IOSide.Output, BaseNodeMock parent = null)
         {
             parent ??= Substitute.ForPartsOf<BaseNodeMock>();
-            var inOut = new FlowInOut(parent, side, name);
+            var inOut = new AutoIO(parent, side);
             parent.Add(inOut, side);
             return inOut;
         }
 
-        public static AutoInOut CreateAutoInOut(InOutSide side = InOutSide.Output, BaseNodeMock parent = null)
-        {
-            parent ??= Substitute.ForPartsOf<BaseNodeMock>();
-            var inOut = new AutoInOut(parent, side);
-            parent.Add(inOut, side);
-            return inOut;
-        }
-
-        public static void ExpectAreConnected(InOut inOut1, InOut inOut2)
+        public static void ExpectAreConnected(BaseIO inOut1, BaseIO inOut2)
         {
             Assert.AreSame(inOut1, inOut2.Connected);
             Assert.AreSame(inOut2, inOut1.Connected);
         }
 
-        public static void ExpectNullConnected(params InOut[] list)
+        public static void ExpectNullConnected(params BaseIO[] list)
         {
             foreach (var inOut in list)
             {
@@ -68,7 +59,7 @@ namespace Tests.EditMode.ut.Backend.Helpers
             }
         }
 
-        public static void ExpectAreNotConnected(InOut inOut1, InOut inOut2)
+        public static void ExpectAreNotConnected(BaseIO inOut1, BaseIO inOut2)
         {
             if (inOut1.Connected is null || inOut2.Connected is null) return;
 
@@ -76,7 +67,7 @@ namespace Tests.EditMode.ut.Backend.Helpers
             Assert.AreSame(inOut2, inOut1.Connected);
         }
 
-        public static void Connect(TypeInOut input, TypeInOut output)
+        public static void Connect(TypeIO input, TypeIO output)
         {
             output.MyType.CanBeCast(input.MyType).Returns(true);
             output.MyType.IsAdapterNeed(input.MyType).Returns(false);

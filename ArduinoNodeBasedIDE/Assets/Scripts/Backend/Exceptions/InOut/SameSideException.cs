@@ -2,7 +2,7 @@
 
 namespace Backend.Exceptions.InOut
 {
-    public class SameSideException : InOutException
+    public class SameSideException : IOException
     {
         
     }

@@ -35,7 +35,7 @@ namespace Tests.EditMode.ut.Backend.Node
 
         private void PrepareSetup()
         {
-            SetInputsList(_any1, _any2);
+            SetInputsList(_type1, _type2);
             SetOutputsList(_class1);
 
             MakeAllConnected();
@@ -57,11 +57,11 @@ namespace Tests.EditMode.ut.Backend.Node
             var newSut = new ClassConstructorNode(_classConstructorTemplateMock);
 
             Assert.AreEqual(2, newSut.InputsList.Count);
-            Assert.AreSame(type1, ((AnyInOut)newSut.InputsList[0]).MyType);
-            Assert.AreSame(type2, ((AnyInOut)newSut.InputsList[1]).MyType);
+            Assert.AreSame(type1, ((TypeIO)newSut.InputsList[0]).MyType);
+            Assert.AreSame(type2, ((TypeIO)newSut.InputsList[1]).MyType);
 
             Assert.AreEqual(1, newSut.OutputsList.Count);
-            Assert.AreSame(_classTypeMock, ((TypeInOut)newSut.OutputsList[0]).MyType);
+            Assert.AreSame(_classTypeMock, ((TypeIO)newSut.OutputsList[0]).MyType);
         }
 
         [Test]
@@ -72,8 +72,8 @@ namespace Tests.EditMode.ut.Backend.Node
             _classConstructorTemplateMock.Library.Returns("library");
             _classConstructorTemplateMock.Class.ToCode().Returns("Class");
 
-            _any1.ToCodeParamReturn(_codeManagerMock, "test1");
-            _any2.ToCodeParamReturn(_codeManagerMock, "test2");
+            _type1.ToCodeParamReturn(_codeManagerMock, "test1");
+            _type2.ToCodeParamReturn(_codeManagerMock, "test2");
 
             var code = _sut.ToCodeParam(_codeManagerMock);
 

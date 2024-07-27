@@ -3,8 +3,7 @@ using Backend;
 using Backend.API;
 using NSubstitute;
 using NUnit.Framework;
-using Tests.EditMode.ut.Backend.mocks;
-using Tests.EditMode.ut.Backend.Mocks.Connection;
+using Tests.EditMode.ut.Backend.Mocks.IO;
 
 namespace Tests.EditMode.ut.Backend
 {
@@ -88,15 +87,15 @@ namespace Tests.EditMode.ut.Backend
         [Test]
         public void BuildParamTest()
         {
-            var any1 = Substitute.For<AnyInOutMock>();
+            var any1 = Substitute.For<TypeIOMock>();
             any1.MakeConnect();
             any1.ToCodeParamReturn(_sut, "test1");
 
-            var any2 = Substitute.For<AnyInOutMock>();
+            var any2 = Substitute.For<TypeIOMock>();
             any2.MakeConnect();
             any2.ToCodeParamReturn(_sut, "test2");
 
-            var any3 = Substitute.For<AnyInOutMock>();
+            var any3 = Substitute.For<TypeIOMock>();
             any3.MakeConnect();
             any3.ToCodeParamReturn(_sut, "test3");
 

@@ -39,15 +39,15 @@ namespace Tests.EditMode.ut.Backend.Node
         private void PrepareVoidSetup()
         {
             _classMethodTemplate.OutputType.EType.Returns(EType.Void);
-            SetInputsList(_prevMock, _class1, _any1, _any2);
+            SetInputsList(_prevMock, _class1, _type1, _type2);
             SetOutputsList(_nextMock);
         }
 
         private void PrepareNonVoidSetup()
         {
             _classMethodTemplate.OutputType.EType.Returns(EType.Int);
-            SetInputsList(_class1, _any1, _any2);
-            SetOutputsList(_any3);
+            SetInputsList(_class1, _type1, _type2);
+            SetOutputsList(_type3);
         }
 
         [Test]
@@ -66,13 +66,13 @@ namespace Tests.EditMode.ut.Backend.Node
             var newSut = new ClassMethodNode(_classMethodTemplate);
 
             Assert.AreEqual(4, newSut.InputsList.Count);
-            Assert.IsInstanceOf<FlowInOut>(newSut.InputsList[0]);
-            Assert.AreSame(_classTypeMock, ((TypeInOut)newSut.InputsList[1]).MyType);
-            Assert.AreSame(type1, ((AnyInOut)newSut.InputsList[2]).MyType);
-            Assert.AreSame(type2, ((AnyInOut)newSut.InputsList[3]).MyType);
+            Assert.IsInstanceOf<FlowIO>(newSut.InputsList[0]);
+            Assert.AreSame(_classTypeMock, ((TypeIO)newSut.InputsList[1]).MyType);
+            Assert.AreSame(type1, ((TypeIO)newSut.InputsList[2]).MyType);
+            Assert.AreSame(type2, ((TypeIO)newSut.InputsList[3]).MyType);
 
             Assert.AreEqual(1, newSut.OutputsList.Count);
-            Assert.IsInstanceOf<FlowInOut>(newSut.OutputsList[0]);
+            Assert.IsInstanceOf<FlowIO>(newSut.OutputsList[0]);
         }
 
         [Test]
@@ -93,12 +93,12 @@ namespace Tests.EditMode.ut.Backend.Node
             var newSut = new ClassMethodNode(_classMethodTemplate);
 
             Assert.AreEqual(3, newSut.InputsList.Count);
-            Assert.AreSame(_classTypeMock, ((TypeInOut)newSut.InputsList[0]).MyType);
-            Assert.AreSame(type1, ((AnyInOut)newSut.InputsList[1]).MyType);
-            Assert.AreSame(type2, ((AnyInOut)newSut.InputsList[2]).MyType);
+            Assert.AreSame(_classTypeMock, ((TypeIO)newSut.InputsList[0]).MyType);
+            Assert.AreSame(type1, ((TypeIO)newSut.InputsList[1]).MyType);
+            Assert.AreSame(type2, ((TypeIO)newSut.InputsList[2]).MyType);
 
             Assert.AreEqual(1, newSut.OutputsList.Count);
-            Assert.AreSame(outType, ((AnyInOut)newSut.OutputsList[0]).MyType);
+            Assert.AreSame(outType, ((TypeIO)newSut.OutputsList[0]).MyType);
         }
 
         [Test]
@@ -117,8 +117,8 @@ namespace Tests.EditMode.ut.Backend.Node
             _classMethodTemplate.Library.Returns("library");
 
             _class1.ToCodeParamReturn(_codeManagerMock, "class");
-            _any1.ToCodeParamReturn(_codeManagerMock, "test1");
-            _any2.ToCodeParamReturn(_codeManagerMock, "test2");
+            _type1.ToCodeParamReturn(_codeManagerMock, "test1");
+            _type2.ToCodeParamReturn(_codeManagerMock, "test2");
 
             _sut.ToCode(_codeManagerMock);
 
@@ -143,8 +143,8 @@ namespace Tests.EditMode.ut.Backend.Node
             _classMethodTemplate.Library.Returns("library");
 
             _class1.ToCodeParamReturn(_codeManagerMock, "class");
-            _any1.ToCodeParamReturn(_codeManagerMock, "test1");
-            _any2.ToCodeParamReturn(_codeManagerMock, "test2");
+            _type1.ToCodeParamReturn(_codeManagerMock, "test1");
+            _type2.ToCodeParamReturn(_codeManagerMock, "test2");
 
             var code = _sut.ToCodeParam(_codeManagerMock);
 

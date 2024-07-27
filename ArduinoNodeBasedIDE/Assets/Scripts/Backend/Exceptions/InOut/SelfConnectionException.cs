@@ -1,6 +1,6 @@
 namespace Backend.Exceptions.InOut
 {
-    public class SelfConnectionException : InOutException
+    public class SelfConnectionException : IOException
     {
     
     }

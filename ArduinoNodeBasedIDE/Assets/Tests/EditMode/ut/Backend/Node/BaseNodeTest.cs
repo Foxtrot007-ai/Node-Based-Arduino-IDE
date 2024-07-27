@@ -2,9 +2,8 @@ using Backend.Connection;
 using Backend.Exceptions;
 using Backend.Node;
 using NSubstitute;
-using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
-using Tests.EditMode.ut.Backend.Mocks.Connection;
+using Tests.EditMode.ut.Backend.Mocks.IO;
 
 namespace Tests.EditMode.ut.Backend.Node
 {
@@ -14,37 +13,37 @@ namespace Tests.EditMode.ut.Backend.Node
     public class BaseNodeTest : BaseNode
     {
 
-        private InOutMock _inOutMock;
+        private BaseIOMock _baseIOMock;
 
         [SetUp]
         public void Init()
         {
             InputsList.Clear();
             OutputsList.Clear();
-            _prevNode = Substitute.For<FlowInOutMock>();
+            _prevNode = Substitute.For<FlowIOMock>();
             _prevNode.Connected.Returns(_prevNode);
-            _nextNode = Substitute.For<FlowInOutMock>();
+            _nextNode = Substitute.For<FlowIOMock>();
             _nextNode.Connected.Returns(_nextNode);
-            _inOutMock = Substitute.For<InOutMock>();
-            _inOutMock.InOutType.Returns(InOutType.Primitive);
+            _baseIOMock = Substitute.For<BaseIOMock>();
+            _baseIOMock.IOType.Returns(IOType.Primitive);
         }
 
         [Test]
         public void CheckToCodeThrowTest()
         {
-            AddInputs(_prevNode, _inOutMock);
-            _inOutMock.Connected.Returns((InOut)null);
+            AddInputs(_prevNode, _baseIOMock);
+            _baseIOMock.Connected.Returns((BaseIO)null);
 
             var exception = Assert.Throws<InOutMustBeConnectedException>(CheckToCode);
             
-            Assert.AreSame(_inOutMock, exception.InOut);
+            Assert.AreSame(_baseIOMock, exception.InOut);
         }
         [Test]
         public void CheckoToCodeNotThrowForOptional()
         {
-            AddInputs(_prevNode, _inOutMock);
-            _inOutMock.IsOptional.Returns(true);
-            _inOutMock.Connected.Returns((InOut)null);
+            AddInputs(_prevNode, _baseIOMock);
+            _baseIOMock.IsOptional.Returns(true);
+            _baseIOMock.Connected.Returns((BaseIO)null);
             
             CheckToCode();
         }
@@ -79,8 +78,8 @@ namespace Tests.EditMode.ut.Backend.Node
         [Test]
         public void AddAndRemoveFlowOtherOnList()
         {
-            AddInputs(_inOutMock);
-            AddOutputs(_inOutMock);
+            AddInputs(_baseIOMock);
+            AddOutputs(_baseIOMock);
 
             AddFlowInputs();
 
@@ -88,8 +87,8 @@ namespace Tests.EditMode.ut.Backend.Node
             Assert.AreEqual(2, OutputsList.Count);
             Assert.AreSame(_prevNode, InputsList[0]);
             Assert.AreSame(_nextNode, OutputsList[0]);
-            Assert.AreSame(_inOutMock, InputsList[1]);
-            Assert.AreSame(_inOutMock, OutputsList[1]);
+            Assert.AreSame(_baseIOMock, InputsList[1]);
+            Assert.AreSame(_baseIOMock, OutputsList[1]);
 
             RemoveFlowInputs();
 
@@ -97,8 +96,8 @@ namespace Tests.EditMode.ut.Backend.Node
             _nextNode.Received().Disconnect();
             Assert.AreEqual(1, InputsList.Count);
             Assert.AreEqual(1, OutputsList.Count);
-            Assert.AreSame(_inOutMock, InputsList[0]);
-            Assert.AreSame(_inOutMock, OutputsList[0]);
+            Assert.AreSame(_baseIOMock, InputsList[0]);
+            Assert.AreSame(_baseIOMock, OutputsList[0]);
         }
 
         [Test]
@@ -114,34 +113,34 @@ namespace Tests.EditMode.ut.Backend.Node
         [Test]
         public void RemoveInOutTest()
         {
-            AddInputs(_inOutMock);
-            AddOutputs(_inOutMock);
-            RemoveInOut(_inOutMock);
+            AddInputs(_baseIOMock);
+            AddOutputs(_baseIOMock);
+            RemoveInOut(_baseIOMock);
 
             Assert.AreEqual(0, InputsList.Count);
             Assert.AreEqual(1, OutputsList.Count);
-            _inOutMock.Received().Delete();
+            _baseIOMock.Received().Delete();
         }
 
         [Test]
         public void GetWithoutFlowTest()
         {
             AddFlowInputs();
-            AddInputs(_inOutMock);
+            AddInputs(_baseIOMock);
 
             var list = GetWithoutFlow(InputsList);
             Assert.AreEqual(1, list.Count);
-            Assert.AreSame(_inOutMock, list[0]);
+            Assert.AreSame(_baseIOMock, list[0]);
         }
 
         [Test]
         public void GetWithoutFlowNoFlowInListTest()
         {
-            AddInputs(_inOutMock);
+            AddInputs(_baseIOMock);
 
             var list = GetWithoutFlow(InputsList);
             Assert.AreEqual(1, list.Count);
-            Assert.AreSame(_inOutMock, list[0]);
+            Assert.AreSame(_baseIOMock, list[0]);
         }
     }
 }

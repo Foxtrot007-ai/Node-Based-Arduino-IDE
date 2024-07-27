@@ -1,16 +1,18 @@
 using Backend;
 using Backend.Connection;
+using Backend.IO;
 using Backend.Node;
 using NSubstitute;
 
-namespace Tests.EditMode.ut.Backend.Mocks.Connection
+namespace Tests.EditMode.ut.Backend.Mocks.IO
 {
-    public class TypeInOutMock : TypeInOut
+    public class AutoIOMock : AutoIO
     {
-        public InOutMock _connectedMock;
-        public TypeInOutMock() : base(Substitute.For<BaseNode>(), InOutSide.Output, null)
+        public BaseIOMock _connectedMock;
+
+        public AutoIOMock() : base(Substitute.For<BaseNode>(), IOSide.Input)
         {
-            _connectedMock = Substitute.For<InOutMock>();
+            _connectedMock = Substitute.For<BaseIOMock>();
         }
 
         public void MakeConnect()
@@ -20,7 +22,7 @@ namespace Tests.EditMode.ut.Backend.Mocks.Connection
 
         public void MakeDisconnect()
         {
-            Connected.Returns((InOut)null);
+            Connected.Returns((BaseIO)null);
         }
 
         public void ToCodeParamReturn(CodeManager codeManager, string code)

@@ -1,6 +1,6 @@
 ﻿namespace Backend.Exceptions.InOut
 {
-    public class NotChangeableException : InOutException
+    public class NotChangeableException : IOException
     {
         
     }

@@ -71,7 +71,7 @@ namespace Backend
 
         public string BuildParamCode(IEnumerable<IConnection> paramsList)
         {
-            var codeParams = paramsList.Select(x => ((InOut)x.Connected).ParentNode.ToCodeParam(this));
+            var codeParams = paramsList.Select(x => ((BaseIO)x.Connected).ParentNode.ToCodeParam(this));
             return string.Join(", ", codeParams);
         }
     }

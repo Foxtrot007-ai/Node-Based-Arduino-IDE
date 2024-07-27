@@ -38,12 +38,12 @@ namespace Tests.EditMode.ut.Backend.Node.BuildIn
         [Test]
         public void DeleteVariableNodeTest()
         {
-            SetInputsList(_any1);
+            SetInputsList(_type1);
 
             _sut.Delete();
 
             _variableMock.Received().DeleteRef(_sut);
-            _any1.Received().Delete();
+            _type1.Received().Delete();
             Assert.True(_sut.IsDeleted);
         }
     }

@@ -1,10 +1,7 @@
-using System.Collections.Generic;
 using Backend;
-using Backend.API;
 using Backend.Node.BuildIn;
 using NSubstitute;
 using NUnit.Framework;
-using Tests.EditMode.ut.Backend.mocks;
 
 namespace Tests.EditMode.ut.Backend.Node.BuildIn
 {
@@ -26,8 +23,8 @@ namespace Tests.EditMode.ut.Backend.Node.BuildIn
 
             PrepareBaseSetup(_sut);
 
-            SetInOutMock<VariableNode>("_value", _any1);
-            SetInputsList(_prevMock, _any1);
+            SetInOutMock<VariableNode>("_value", _type1);
+            SetInputsList(_prevMock, _type1);
             SetOutputsList(_nextMock);
         }
 
@@ -37,7 +34,7 @@ namespace Tests.EditMode.ut.Backend.Node.BuildIn
             _codeManagerMock.GetVariableStatus(_variableMock).Returns(CodeManager.VariableStatus.Unknown);
             _variableMock.Type.ToCode().Returns("type");
             _variableMock.Name.Returns("test");
-            _any1.ToCodeParamReturn(_codeManagerMock, "value");
+            _type1.ToCodeParamReturn(_codeManagerMock, "value");
 
             _sut.ToCode(_codeManagerMock);
 
@@ -54,7 +51,7 @@ namespace Tests.EditMode.ut.Backend.Node.BuildIn
             _codeManagerMock.GetVariableStatus(_variableMock).Returns(CodeManager.VariableStatus.Set);
             _variableMock.Type.ToCode().Returns("type");
             _variableMock.Name.Returns("test");
-            _any1.ToCodeParamReturn(_codeManagerMock, "value");
+            _type1.ToCodeParamReturn(_codeManagerMock, "value");
 
             _sut.ToCode(_codeManagerMock);
 

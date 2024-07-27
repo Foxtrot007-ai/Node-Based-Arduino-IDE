@@ -14,13 +14,13 @@ namespace Backend.API
          * Type of InOut
          * Multiple implementation of IConnection might have same InOutType
          */
-        public InOutType InOutType { get; }
+        public IOType IOType { get; }
 
         /*
          * InOutType as string
          * For FlowInOut name of connection
          */
-        public string InOutName { get; }
+        public string IOName { get; }
 
         /*
          * Make validation:

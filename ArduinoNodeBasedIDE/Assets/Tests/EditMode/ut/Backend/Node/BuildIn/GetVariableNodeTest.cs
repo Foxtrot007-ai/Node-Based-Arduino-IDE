@@ -27,9 +27,9 @@ namespace Tests.EditMode.ut.Backend.Node.BuildIn
 
             PrepareBaseSetup(_sut);
 
-            SetInOutMock<VariableNode>("_value", _any1);
+            SetInOutMock<VariableNode>("_value", _type1);
             SetInputsList();
-            SetOutputsList(_any1);
+            SetOutputsList(_type1);
         }
 
         [Test]

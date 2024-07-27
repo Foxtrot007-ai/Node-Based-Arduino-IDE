@@ -31,7 +31,7 @@ namespace Tests.EditMode.ut.Backend.Node.BuildIn
             Assert.AreEqual(0, sut.InputsList.Count);
 
             Assert.AreEqual(1, sut.OutputsList.Count);
-            Assert.IsInstanceOf<FlowInOut>(sut.OutputsList[0]);
+            Assert.IsInstanceOf<FlowIO>(sut.OutputsList[0]);
         }
 
         [Test]
