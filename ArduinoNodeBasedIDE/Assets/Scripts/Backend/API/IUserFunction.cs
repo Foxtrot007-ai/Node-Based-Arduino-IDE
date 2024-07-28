@@ -1,4 +1,6 @@
-namespace Backend.API.DTO
+using Backend.API.DTO;
+
+namespace Backend.API
 {
     public interface IUserFunction : IFunction
     {
