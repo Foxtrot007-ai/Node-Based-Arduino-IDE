@@ -110,6 +110,8 @@ namespace Backend
         private void LoadBuildIn()
         {
             _templates.Add(1, new BuildInTemplate(1, "If", typeof(IfNode)));
+            _templates.Add(2, new BuildInTemplate(2, "While", typeof(WhileNode)));
+            _templates.Add(3, new BuildInTemplate(3, "Return", typeof(ReturnNode)));
         }
 
         public void AddFunctionTemplate(FunctionTemplateDto functionTemplateDto)

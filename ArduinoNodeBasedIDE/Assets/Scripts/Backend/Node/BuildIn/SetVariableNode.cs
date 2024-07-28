@@ -8,6 +8,7 @@ namespace Backend.Node.BuildIn
 
         public SetVariableNode(Variable variable) : base(variable, IOSide.Input)
         {
+            AddFlowInputs();
             AddInputs(_value);
         }
 
