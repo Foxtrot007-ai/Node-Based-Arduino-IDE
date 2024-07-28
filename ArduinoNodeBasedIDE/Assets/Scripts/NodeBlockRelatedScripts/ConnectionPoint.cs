@@ -33,6 +33,7 @@ public class ConnectionPoint : MonoBehaviour
 
     void Update()
     {
+       
         UpdateType();
 
         if (transform.position != points[0])
@@ -62,6 +63,7 @@ public class ConnectionPoint : MonoBehaviour
     public void InstantiateConnection(IConnection con)
     {
         this.connection = con;
+        con.UIPoint = this;
         typeText.GetComponent<TMP_Text>().text = con.IOName;
     }
 
@@ -118,12 +120,17 @@ public class ConnectionPoint : MonoBehaviour
             holding = false;
             return;
         }
-
+        Debug.Log("mouseup");
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-
+        Debug.Log(hit.collider.tag);
         if (hit.collider != null
             && CompareTag(hit.collider.tag))
         {
+            Debug.Log(((Backend.Connection.BaseIO)connection).Side.ToString());
+            Debug.Log(((Backend.Connection.BaseIO)connection).IOName.ToString());
+            Debug.Log(((Backend.Connection.BaseIO)hit.collider.gameObject.GetComponent<ConnectionPoint>().connection).Side.ToString());
+            Debug.Log(((Backend.Connection.BaseIO)hit.collider.gameObject.GetComponent<ConnectionPoint>().connection).IOName.ToString());
+
             connection.Connect(hit.collider.gameObject.GetComponent<ConnectionPoint>().connection);
         }
         else

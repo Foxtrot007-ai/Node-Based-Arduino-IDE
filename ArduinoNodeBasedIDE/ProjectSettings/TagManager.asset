@@ -8,8 +8,6 @@ TagManager:
   - Background
   - NodeBlocksManager
   - SearchBar
-  - OutPoint
-  - InPoint
   - NextBlockPoint
   - PreviousBlockPoint
   - VariableList
@@ -21,6 +19,7 @@ TagManager:
   - InputButton
   - InfoMessage
   - InfoMessageManager
+  - Point
   layers:
   - Default
   - TransparentFX

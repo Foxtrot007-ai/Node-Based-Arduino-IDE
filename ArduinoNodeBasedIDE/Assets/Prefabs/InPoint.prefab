@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -8306216558351975490}
   m_Layer: 0
   m_Name: InPoint
-  m_TagString: InPoint
+  m_TagString: Point
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -163,20 +163,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d996ada1dcf99884f91aade4873cc15f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodeBlockName: 
-  type: 
-  connectionType: InPoint
-  interactiveDefinition: 0
+  nodeBlockController: {fileID: 0}
+  nodeBlockManager: {fileID: 0}
   typeText: {fileID: 8140084695616888349}
-  connectionIndex: 0
-  availableConnections:
-  - InPoint|OutPoint
-  - OutPoint|InPoint
-  - PreviousBlockPoint|NextBlockPoint
-  - NextBlockPoint|PreviousBlockPoint
-  connectedPoint: {fileID: 0}
-  holding: 0
   line: {fileID: 4105617885017918507}
+  holding: 0
   showLine: 0
 --- !u!1 &8140084695616888349
 GameObject:

@@ -32,9 +32,13 @@ public class NodeBlockEditor : MonoBehaviour
     }
     private void Update()
     {
-        CheckForNewName();
-        CheckForNewOutputType();
+        if(currentNodeBlock != null)
+        {
+            CheckForNewName();
+            CheckForNewOutputType();
+        }
     }
+       
 
     public void SetNodeBlockToEdit(IUserFunction nodeBlock)
     {

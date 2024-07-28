@@ -44,8 +44,19 @@ public class NodeBlockManager : MonoBehaviour
     
     public void instantiateBasicFunctions()
     {
-        AddNodeBlock("setup", 0, 0);
-        AddNodeBlock("loop", 0, 0);
+        viewsManager.AddNewView(backendManager.Start);
+        viewsManager.ChangeView(backendManager.Start);
+        NodeBlockController startNodeBlockObject = SpawnNodeBlockWithoutValidation().GetComponent<NodeBlockController>();
+        startNodeBlockObject.isStartNodeBlock = true;
+        startNodeBlockObject.InstantiateNodeBlockController(backendManager.Start.StartNode);
+
+        viewsManager.AddNewView(backendManager.Loop);
+        viewsManager.ChangeView(backendManager.Loop);
+        startNodeBlockObject = SpawnNodeBlockWithoutValidation().GetComponent<NodeBlockController>();
+        startNodeBlockObject.isStartNodeBlock = true;
+        startNodeBlockObject.InstantiateNodeBlockController(backendManager.Loop.StartNode);
+
+        
     }
 
     //SearchNodeBlock Section
@@ -58,6 +69,7 @@ public class NodeBlockManager : MonoBehaviour
                 temp.Add(node);
             }
         }
+      
         return temp;
     }
 
@@ -263,6 +275,18 @@ public class NodeBlockManager : MonoBehaviour
     public void ChangeView(FunctionButtonScript button)
     {
         viewsManager.ChangeView(button.function);
+        localVariableList.GetComponent<LocalVariableListManager>().ReloadVariables();
+    }
+
+    public void ChangeViewToStart()
+    {
+        viewsManager.ChangeView(backendManager.Start);
+        localVariableList.GetComponent<LocalVariableListManager>().ReloadVariables();
+    }
+
+    public void ChangeViewToLoop()
+    {
+        viewsManager.ChangeView(backendManager.Loop);
         localVariableList.GetComponent<LocalVariableListManager>().ReloadVariables();
     }
 }

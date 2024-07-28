@@ -36,6 +36,7 @@ public class NodeBlockController : MonoBehaviour
     {
         if (!isStartNodeBlock)
         {
+            nodeBlock.Delete();
             Destroy(gameObject);
         }
     }
@@ -48,6 +49,10 @@ public class NodeBlockController : MonoBehaviour
         if (instantiated)
         {
             CheckForNameChange();
+            if (nodeBlock.IsDeleted)
+            {
+                Destroy(gameObject);
+            }
             //todo resizeConnections()
         }
     }
