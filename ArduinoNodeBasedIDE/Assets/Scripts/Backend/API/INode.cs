@@ -6,6 +6,11 @@ namespace Backend.API
     public interface INode
     {
         /*
+         * Return creator id
+         */
+        public string CreatorId { get; }
+
+        /*
          * Return all inputs in list !!!READ ONLY!!!
          * If input is new will have UIPoint == null
          * If input is deleted will not be on list

@@ -225,8 +225,10 @@ namespace Backend
             WriteJsonToFile(MakePath(ClassesDir, json.Library), json);
         }
 
-        public void RemoveTemplate(long id)
+        public void RemoveTemplate(string id1)
         {
+            throw new NotImplementedException();
+            long id = 1;
             if (!_templates.TryGetValue(id, out var template))
                 return;
 

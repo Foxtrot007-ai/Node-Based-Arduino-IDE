@@ -4,6 +4,7 @@ using System.Linq;
 using Backend.API;
 using Backend.Connection;
 using Backend.Exceptions;
+using Backend.IO;
 
 namespace Backend.Node
 {
@@ -12,6 +13,7 @@ namespace Backend.Node
         public virtual string NodeName { get; protected set; }
         public bool IsDeleted { get; private set; }
         public virtual NodeType NodeType { get; protected set; }
+        public string CreatorId { get; } = "0";
         public virtual List<IConnection> InputsList { get; private set; } = new();
         public virtual List<IConnection> OutputsList { get; private set; } = new();
 

@@ -1,5 +1,6 @@
 using Backend.Connection;
 using Backend.Exceptions;
+using Backend.IO;
 using Backend.Node;
 using NSubstitute;
 using NUnit.Framework;

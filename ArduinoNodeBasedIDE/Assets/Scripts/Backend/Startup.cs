@@ -13,6 +13,7 @@ namespace Backend
         public IVariablesManager GlobalVariables { get; } = new VariablesManager();
         public IUserFunctionsManager Functions { get; } = new UserFunctionManager();
         public ITemplatesManager Templates { get; } = new TemplateManager();
+        public IInstanceCreator InstanceCreator { get; }
         public List<IMyType> Types { get; } = new();
 
         public Startup()
@@ -34,6 +35,14 @@ namespace Backend
              * start
              * loop
              */
+        }
+        public void Save(string path)
+        {
+            throw new System.NotImplementedException();
+        }
+        public void Load(string path)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -8,12 +8,12 @@ namespace Backend.Template
         protected System.Type _instanceType;
         public virtual string Name { get; }
         public virtual string Category { get; protected set; }
-        public virtual long Id { get; }
+        public virtual string Id { get; }
 
         protected BaseTemplate(){}
         protected BaseTemplate(long id, string name)
         {
-            Id = id;
+            Id = id.ToString();
             Name = name;
         }
 

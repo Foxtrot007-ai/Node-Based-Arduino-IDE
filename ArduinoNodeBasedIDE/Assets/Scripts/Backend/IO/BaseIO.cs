@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using Backend.API;
+using Backend.Connection;
 using Backend.Exceptions.InOut;
 using Backend.Node;
 using Castle.Core.Internal;
 
-namespace Backend.Connection
+namespace Backend.IO
 {
     public abstract class BaseIO : IConnection
     {
         public virtual ConnectionPoint UIPoint { get; set; }
         public BaseNode ParentNode { get; }
+        INode IConnection.ParentNode => ParentNode;
         private BaseIO _connected;
         public IOSide Side { get; }
         public abstract IOType IOType { get; }

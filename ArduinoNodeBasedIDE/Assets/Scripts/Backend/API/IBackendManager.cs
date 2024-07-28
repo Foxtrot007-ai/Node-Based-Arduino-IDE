@@ -30,6 +30,11 @@ namespace Backend.API
         public ITemplatesManager Templates { get; }
 
         /*
+         * Instance creator
+         */
+        public IInstanceCreator InstanceCreator { get; }
+        
+        /*
          * Available types
          */
         public List<IMyType> Types { get; }
@@ -38,5 +43,17 @@ namespace Backend.API
          * Build code
          */
         public void BuildCode();
+        
+        /*
+         * Save code
+         * Will save globalVariable, function in file
+         */
+        public void Save(string path);
+        
+        /*
+         * Load code
+         * Will reset to default value and then load globalVariable, functions from file
+         */
+        public void Load(string path);
     }
 }

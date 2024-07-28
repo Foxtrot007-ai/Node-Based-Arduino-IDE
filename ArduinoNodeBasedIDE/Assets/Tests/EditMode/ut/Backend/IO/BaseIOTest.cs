@@ -1,6 +1,7 @@
 using System;
 using Backend.Connection;
 using Backend.Exceptions.InOut;
+using Backend.IO;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;

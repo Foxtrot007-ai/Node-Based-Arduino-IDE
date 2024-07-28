@@ -33,6 +33,6 @@ namespace Backend.API
         /*
          * Remove template by id, cannot remove buildIn templates
          */
-        public void RemoveTemplate(long id);
+        public void RemoveTemplate(string id);
     }
 }

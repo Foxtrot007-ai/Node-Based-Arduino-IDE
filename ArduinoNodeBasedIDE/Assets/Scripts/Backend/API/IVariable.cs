@@ -44,7 +44,10 @@ namespace Backend.API
          * (backend will set logic delete to true)
          */
         public void Delete();
-        
+
+        /*
+         * If true IConnection is logicalDelete, need physical delete
+         */
         public bool IsDelete { get; }
     }
 }

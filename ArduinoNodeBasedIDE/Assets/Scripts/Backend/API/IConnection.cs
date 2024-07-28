@@ -21,7 +21,12 @@ namespace Backend.API
          * For FlowInOut name of connection
          */
         public string IOName { get; }
-
+        
+        /*
+         * Return parent
+         */
+        public INode ParentNode { get; }
+        
         /*
          * Make validation:
          *  Standard check:

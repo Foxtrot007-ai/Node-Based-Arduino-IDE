@@ -15,7 +15,7 @@ namespace Backend.API
         /*
          * Return unique id of template
          */
-        public long Id { get; }
+        public string Id { get; }
 
         /*
          * Create new INode instance

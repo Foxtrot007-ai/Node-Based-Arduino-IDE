@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Backend.Connection;
 using Backend.Exceptions;
 using Backend.Exceptions.InOut;
+using Backend.IO;
 using Backend.Type;
 using NSubstitute;
 using NUnit.Framework;

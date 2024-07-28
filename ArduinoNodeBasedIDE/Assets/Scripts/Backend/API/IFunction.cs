@@ -17,6 +17,9 @@ namespace Backend.API
          */
         public IVariablesManager Variables { get; }
         
+        /*
+         * If true IConnection is logicalDelete, need physical delete
+         */
         public bool IsDelete { get; }
     }
 }
