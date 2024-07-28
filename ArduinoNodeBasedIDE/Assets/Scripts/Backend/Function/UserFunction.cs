@@ -13,6 +13,7 @@ namespace Backend.Function
         private UserFunctionManager _manager;
         private List<UserFunctionNode> _refs = new();
         private ParamsManager _paramsManager;
+        public IVariablesManager Variables { get; } = new VariablesManager();
 
         protected UserFunction()
         {

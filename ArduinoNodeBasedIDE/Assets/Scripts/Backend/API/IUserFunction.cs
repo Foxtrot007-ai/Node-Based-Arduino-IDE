@@ -18,6 +18,11 @@ namespace Backend.API
         public IVariablesManager InputList { get; }
 
         /*
+         * Local variables
+         */
+        public IVariablesManager VariablesManager { get; }
+        
+        /*
          * Change Name or Type of function
          * null if not change/or same value
          *
@@ -29,6 +34,7 @@ namespace Backend.API
          *   else
          *     do nothing (connection still exists)
          */
+
         public void Change(FunctionManageDto functionManageDto);
 
         /*
