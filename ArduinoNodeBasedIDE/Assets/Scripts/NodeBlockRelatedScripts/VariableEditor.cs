@@ -9,7 +9,7 @@ using Backend.Type;
 
 public class VariableEditor : MonoBehaviour
 {
-    public IVariableManage variable;
+    public IVariable variable;
 
     public GameObject variableNameField;
 
@@ -21,7 +21,7 @@ public class VariableEditor : MonoBehaviour
         dropdownType = typeField.GetComponentInChildren<DropdownTypesScript>();
     }
 
-    public void InstantiateEditor(IVariableManage variable)
+    public void InstantiateEditor(IVariable variable)
     {
         this.variable = variable;
         variableNameField.GetComponentInChildren<TMP_InputField>().text = variable.Name;
@@ -30,20 +30,13 @@ public class VariableEditor : MonoBehaviour
 
     private VariableManageDto MakeVariableDto(string name, string type)
     {
-        EType etype = EType.Class;
+       
+        IType etype = Backend.Type.TypeConverter.ToIType(type);
 
-        try
-        {
-            etype = (EType)Enum.Parse(typeof(EType), type);
-        }
-        catch
-        {
-            Debug.Log("Parse problem, probably class");
-        }
 
-        VariableManageDto dto = new VariableManageDto
+        VariableManageDto dto = new ()
         {
-            Type = new MyTypeFake { EType = etype, TypeName = type },
+            Type = etype,
             VariableName = name
         };
 

@@ -25,9 +25,9 @@ public class ConnectionPoint : MonoBehaviour
 
     private void UpdateType()
     {
-        if (typeText.GetComponent<TMP_Text>().text != connection.InOutName)
+        if (typeText.GetComponent<TMP_Text>().text != connection.IOName)
         {
-            typeText.GetComponent<TMP_Text>().text = connection.InOutName;
+            typeText.GetComponent<TMP_Text>().text = connection.IOName;
         }
     }
 
@@ -62,7 +62,7 @@ public class ConnectionPoint : MonoBehaviour
     public void InstantiateConnection(IConnection con)
     {
         this.connection = con;
-        typeText.GetComponent<TMP_Text>().text = con.InOutName;
+        typeText.GetComponent<TMP_Text>().text = con.IOName;
     }
 
     private void ClearLine()
@@ -109,11 +109,7 @@ public class ConnectionPoint : MonoBehaviour
             DrawLine();
         }
     }
-    private bool checkColliderTag(string tag)
-    {
-        return tag.Contains(tag);
-    }
-  
+
 
     private void OnMouseUp()
     {
@@ -126,8 +122,7 @@ public class ConnectionPoint : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 
         if (hit.collider != null
-            && CompareTag(hit.collider.tag)
-            && hit.collider.gameObject.GetComponent<ConnectionPoint>().connection.Connected == null)
+            && CompareTag(hit.collider.tag))
         {
             connection.Connect(hit.collider.gameObject.GetComponent<ConnectionPoint>().connection);
         }

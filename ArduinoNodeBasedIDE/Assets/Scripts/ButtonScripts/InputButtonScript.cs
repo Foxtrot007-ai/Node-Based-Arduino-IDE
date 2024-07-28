@@ -5,7 +5,7 @@ using UnityEngine;
 public class InputButtonScript : ButtonScript
 {
     public GameObject typeField;
-    public override void SetNodeBlock(IVariableManage variable)
+    public override void SetNodeBlock(IVariable variable)
     {
         base.SetNodeBlock(variable);
         typeField.GetComponent<TMP_Text>().text = variable.Type.TypeName;

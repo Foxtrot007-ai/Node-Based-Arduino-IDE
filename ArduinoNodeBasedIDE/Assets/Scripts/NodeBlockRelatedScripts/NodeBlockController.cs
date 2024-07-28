@@ -48,6 +48,7 @@ public class NodeBlockController : MonoBehaviour
         if (instantiated)
         {
             CheckForNameChange();
+            //todo resizeConnections()
         }
     }
 

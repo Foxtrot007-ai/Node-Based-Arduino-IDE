@@ -5,8 +5,8 @@ using UnityEngine;
 public class ButtonScript : MonoBehaviour
 {
     public GameObject text;
-    public IFunctionManage function;
-    public IVariableManage variable;
+    public IUserFunction function;
+    public IVariable variable;
     public NodeBlockManager nodeBlockManager;
 
     public void Start()
@@ -14,12 +14,12 @@ public class ButtonScript : MonoBehaviour
         nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
     }
 
-    public virtual void SetNodeBlock(IFunctionManage function)
+    public virtual void SetNodeBlock(IUserFunction function)
     {
         this.function = function;
         text.GetComponent<TMP_Text>().text = function.Name;
     }
-    public virtual void SetNodeBlock(IVariableManage variable)
+    public virtual void SetNodeBlock(IUserFunction variable)
     {
         this.variable = variable;
         text.GetComponent<TMP_Text>().text = variable.Name;
