@@ -21,7 +21,7 @@ public class SpawnAction : IAction
     public void UndoAction()
     {
         Debug.Log("Undo SpawnAction");
-        nodeBlockObject.GetComponent<NodeBlockController>().UnconnectAll();
+        //nodeBlockObject.GetComponent<NodeBlockController>().UnconnectAll();
         nodeBlockObject.SetActive(false);
     }
 }

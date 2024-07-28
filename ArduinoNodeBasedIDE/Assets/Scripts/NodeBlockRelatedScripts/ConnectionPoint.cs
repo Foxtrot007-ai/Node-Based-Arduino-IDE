@@ -1,7 +1,5 @@
-using System;
-using System.Linq;
+using Backend.API;
 using TMPro;
-using UnityEditor.MemoryProfiler;
 using UnityEngine;
 
 public class ConnectionPoint : MonoBehaviour
@@ -9,15 +7,8 @@ public class ConnectionPoint : MonoBehaviour
     public NodeBlockController nodeBlockController;
     public NodeBlockManager nodeBlockManager;
 
-    public string type;
-    public string connectionType;
-    
-    public int connectionIndex;
-  
-    public string[] availableConnections = {"InPoint|OutPoint","OutPoint|InPoint","PreviousBlockPoint|NextBlockPoint","NextBlockPoint|PreviousBlockPoint"};
-    string[] tags = { "InPoint", "OutPoint", "PreviousBlockPoint", "NextBlockPoint" };
+    public IConnection connection;
 
-    public GameObject connectedPoint;
     public GameObject typeText;
     public GameObject line;
 
@@ -32,28 +23,11 @@ public class ConnectionPoint : MonoBehaviour
         showLine = false;
     }
 
-    private string GetTypeFromController()
-    {
-        if(connectionType == "InPoint")
-        {
-            return nodeBlockController.nodeBlock.GetInputType(connectionIndex);
-        }
-        else if (connectionType == "OutPoint")
-        {
-            return nodeBlockController.nodeBlock.GetOutputType();
-        }
-        else
-        {
-            return "";
-        }
-    }
     private void UpdateType()
     {
-        string currentType = GetTypeFromController();
-        if (currentType != type)
+        if (typeText.GetComponent<TMP_Text>().text != connection.InOutName)
         {
-            SetType(currentType);
-
+            typeText.GetComponent<TMP_Text>().text = connection.InOutName;
         }
     }
 
@@ -67,11 +41,11 @@ public class ConnectionPoint : MonoBehaviour
             DrawLine();
         }
 
-        if(connectedPoint != null)
+        if(connection.Connected != null)
         {
-            if (connectedPoint.transform.position != points[1])
+            if (connection.Connected.UIPoint.transform.position != points[1])
             {
-                points[1] = connectedPoint.transform.position;
+                points[1] = connection.Connected.UIPoint.transform.position;
                 DrawLine();
             }
         }
@@ -85,26 +59,10 @@ public class ConnectionPoint : MonoBehaviour
         }
 
     }
-    public void InstantiateConnection(NodeBlockController nodeBlockController, string type, int connectionIndex)
+    public void InstantiateConnection(IConnection con)
     {
-        this.nodeBlockController = nodeBlockController;
-        SetType(type);
-        this.connectionIndex = connectionIndex;
-    }
-
-
-    public void SetType(string type)
-    {
-        this.type = type;
-        if(connectionType == "InPoint" || connectionType == "OutPoint")
-        {
-            typeText.GetComponent<TMP_Text>().text = type;
-            if (connectedPoint != null && connectedPoint.GetComponent<ConnectionPoint>().type != type)
-            {
-                Unconnect();
-            }
-        }
-        
+        this.connection = con;
+        typeText.GetComponent<TMP_Text>().text = con.InOutName;
     }
 
     private void ClearLine()
@@ -122,7 +80,7 @@ public class ConnectionPoint : MonoBehaviour
     }
     private void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(0) && connectedPoint == null)
+        if (Input.GetMouseButtonDown(0) && connection.Connected == null)
         {
             points[0] = transform.position;
             directionPoint = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;
@@ -132,20 +90,15 @@ public class ConnectionPoint : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.LeftControl))
         {
-            Unconnect();
+            Disconnect();
         }
     }
 
-    public void Unconnect()
+    public void Disconnect()
     {
-        if (connectedPoint != null)
-        {
-            connectedPoint.GetComponent<ConnectionPoint>().connectedPoint = null;
-        }
-        connectedPoint = null;
+        connection.Connected.Disconnect();
         showLine = false;
         ClearLine();
-        
     }
 
     private void OnMouseDrag()
@@ -155,35 +108,28 @@ public class ConnectionPoint : MonoBehaviour
             points[1] = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - directionPoint;
             DrawLine();
         }
-
     }
     private bool checkColliderTag(string tag)
     {
-        return tags.Contains(tag);
+        return tag.Contains(tag);
     }
-    private bool checkConnectable(string otherConnectionType, string otherType)
-    {
-        string myConnection = connectionType + "|" + otherConnectionType;
-        return availableConnections.Contains(myConnection) && type == otherType;
-    }
+  
 
     private void OnMouseUp()
     {
-        if(connectedPoint != null)
+        if(connection.Connected != null)
         {
             holding = false;
             return;
         }
+
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 
-        if (hit.collider != null 
-            && checkColliderTag(hit.transform.tag)
-            && checkConnectable(hit.collider.gameObject.GetComponent<ConnectionPoint>().connectionType,
-                                hit.collider.gameObject.GetComponent<ConnectionPoint>().type)
-            && hit.collider.gameObject.GetComponent<ConnectionPoint>().connectedPoint == null)
+        if (hit.collider != null
+            && CompareTag(hit.collider.tag)
+            && hit.collider.gameObject.GetComponent<ConnectionPoint>().connection.Connected == null)
         {
-            connectedPoint = hit.collider.gameObject;
-            hit.collider.gameObject.GetComponent<ConnectionPoint>().connectedPoint = gameObject;
+            connection.Connect(hit.collider.gameObject.GetComponent<ConnectionPoint>().connection);
         }
         else
         {

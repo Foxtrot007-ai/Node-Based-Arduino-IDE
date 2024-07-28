@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
-using UnityEngine.UIElements;
+using Backend.API;
 
 public class NodeBlockManager : MonoBehaviour
 {
     // language Reference objects
     public LanguageReferenceParser languageReferenceParser = new LanguageReferenceParser();
-    public List<NodeBlock> languageReferenceList = new List<NodeBlock>();
-    
+
     // NodeBlock List objects
     public Vector3 nodeBlockSpawnPoint = Vector3.zero;
     public GameObject nodeBlockPrefab;
@@ -18,22 +16,23 @@ public class NodeBlockManager : MonoBehaviour
     public ViewsManager viewsManager = new ViewsManager();
 
     //Variable List objects
-    public List<NodeBlock> variableList = new List<NodeBlock>();
+    public List<IVariableManage> variableList = new List<IVariableManage>();
+
+    public GameObject localVariableList;
 
     //my FunctionsList objects
-    public List<NodeBlock> myFunctionList = new List<NodeBlock>();
+    public List<IFunctionManage> myFunctionList = new List<IFunctionManage>();
 
     //NodeBlock Editor
     public GameObject nodeBlockEditor;
 
     //Variable Editor
-    public GameObject variableEditorPrefab;
     public GameObject currentVariableEditor;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        languageReferenceList = languageReferenceParser.loadReferenceList();
+        languageReferenceParser.loadReferences();
         instantiateBasicFunctions();
     }
 
@@ -46,98 +45,132 @@ public class NodeBlockManager : MonoBehaviour
     }
 
     //SearchNodeBlock Section
-    public List<NodeBlock> SearchNodeBlocks(List<NodeBlock> list, String nodeBlockName)
+    public List<IFunctionManage> SearchNodeBlocks(List<IFunctionManage> list, String nodeBlockName)
     {
-        List<NodeBlock> temp = new List<NodeBlock>();
-        foreach (NodeBlock node in list)
+        List<IFunctionManage> temp = new List<IFunctionManage>();
+        foreach (IFunctionManage node in list)
         {
-            if (node.GetName().Contains(nodeBlockName)) {
+            if (node.Name.Contains(nodeBlockName)) {
                 temp.Add(node);
             }
         }
         return temp;
     }
 
-    public List<NodeBlock> SearchNodeBlocks(ListManager manager, String nodeBlockName)
+    public List<IVariableManage> SearchNodeBlocks(List<IVariableManage> list, String nodeBlockName)
+    {
+        List<IVariableManage> temp = new List<IVariableManage>();
+        foreach (IVariableManage node in list)
+        {
+            if (node.Name.Contains(nodeBlockName))
+            {
+                temp.Add(node);
+            }
+        }
+        return temp;
+    }
+
+    public List<IFunctionManage> SearchNodeBlocks(ListManager manager, String nodeBlockName)
     {
         //throw exception
         return null;
     }
-    public List<NodeBlock> SearchNodeBlocks(GlobalVariableListManager manager, String nodeBlockName)
+   
+    public List<IVariableManage> SearchNodeBlocks(GlobalVariableListManager manager, String nodeBlockName)
     {
         return SearchNodeBlocks(variableList, nodeBlockName);
     }
 
-    public List<NodeBlock> SearchNodeBlocks(LocalVariableListManager manager, String nodeBlockName)
+    public List<IVariableManage> SearchNodeBlocks(LocalVariableListManager manager, String nodeBlockName)
     {
         return SearchNodeBlocks(viewsManager.GetLocalVariables(), nodeBlockName);
     }
 
-    public List<NodeBlock> SearchNodeBlocks(FunctionListManager manager, String nodeBlockName)
+    public List<IFunctionManage> SearchNodeBlocks(FunctionListManager manager, String nodeBlockName)
     {
         return SearchNodeBlocks(myFunctionList, nodeBlockName);
     }
 
-    public List<NodeBlock> SearchNodeBlocks(ReferenceListManager manager, String nodeBlockName)
+    public List<IFunctionManage> SearchNodeBlocks(ReferenceListManager manager, String nodeBlockName)
     {
-        return SearchNodeBlocks(languageReferenceList, nodeBlockName);
+        return SearchNodeBlocks(languageReferenceParser.functions, nodeBlockName);
     }
 
     //SpawnNodeBlock section
-    public GameObject SpawnNodeBlockWithoutValidation(NodeBlock node)
+ 
+    public GameObject SpawnNodeBlockWithoutValidation()
     {
         nodeBlockSpawnPoint.z = 0;
         GameObject nodeBlockObject = Instantiate(nodeBlockPrefab, nodeBlockSpawnPoint, Quaternion.identity);
-        nodeBlockObject.GetComponent<NodeBlockController>().InstantiateNodeBlockController(node);
-
         viewsManager.AddToView(nodeBlockObject);
         return nodeBlockObject;
     }
-    public GameObject SpawnNodeBlock(List<NodeBlock> list, NodeBlock node)
+    public GameObject SpawnNodeBlock(IFunctionManage function)
     {
-        if (!list.Contains(node))
-        {
-            return null;
-        }
-
-        return SpawnNodeBlockWithoutValidation(node);
+        GameObject nodeBlockObject = SpawnNodeBlockWithoutValidation();
+        nodeBlockObject.GetComponent<NodeBlockController>().InstantiateNodeBlockController(function.CreateFunction());
+        return nodeBlockObject;
     }
-    public void SpawnNodeBlock(ButtonScript button, NodeBlock node)
+
+    public GameObject SpawnNodeBlock(IVariableManage variable)
+    {
+        GameObject nodeBlockObject = SpawnNodeBlockWithoutValidation();
+        nodeBlockObject.GetComponent<NodeBlockController>().InstantiateNodeBlockController(variable.CreateVariable());
+        return nodeBlockObject;
+    }
+    public void SpawnNodeBlock(ButtonScript button)
     {
         //throw exception
         Debug.Log("what?");
     }
-    public void SpawnNodeBlock(ReferenceButtonScript button, NodeBlock node)
+    public void SpawnNodeBlock(ReferenceButtonScript button)
     {
-        SpawnNodeBlock(languageReferenceList, node);
+        SpawnNodeBlock(button.function);
     }
-    public void SpawnNodeBlock(VariableButtonScript button, NodeBlock node)
+    public void SpawnNodeBlock(VariableButtonScript button)
     {
-        SpawnNodeBlock(variableList, node);
+        SpawnNodeBlock(button.variable);
     }
-    public void SpawnNodeBlock(FunctionButtonScript button, NodeBlock node)
+    public void SpawnSetNodeBlock(VariableButtonScript button)
     {
-        SpawnNodeBlock(myFunctionList, node);
+        //setter
+        SpawnNodeBlock(button.variable);
+    }
+    public void SpawnNodeBlock(FunctionButtonScript button)
+    {
+        SpawnNodeBlock(button.function);
+    }
+    public void SpawnNodeBlock(InputButtonScript button)
+    {
+        //throw exception
+        Debug.Log("what?");
     }
 
     //DeleteNodeBlock Section
-    public void DeleteNodeBlock(ButtonScript button, NodeBlock node)
+    public void DeleteNodeBlock(ButtonScript button)
     {
         //throw exception
         Debug.Log("what?");
     }
-    public void DeleteNodeBlock(VariableButtonScript button, NodeBlock node)
+    public void DeleteNodeBlock(VariableButtonScript button)
     {
-        variableList.Remove(node);
-        viewsManager.DeleteNodeBlock(node);
+        button.variable.DeleteVariable();
+        variableList.Remove(button.variable);
+        viewsManager.views[viewsManager.actualView].Item2.Remove(button.variable);
+    }
+    public void DeleteNodeBlock(InputButtonScript button)
+    {
+        //throw exception
+        Debug.Log("what?");
     }
 
-    public void DeleteNodeBlock(FunctionButtonScript button, NodeBlock node)
+    public void DeleteNodeBlock(FunctionButtonScript button)
     {
-        viewsManager.DeleteView(node, languageReferenceList, myFunctionList);
+        button.function.DeleteFunction();
+        viewsManager.DeleteView(button.function, myFunctionList);
     }
 
-    public void DeleteNodeBlock(ReferenceButtonScript button, NodeBlock node)
+    public void DeleteNodeBlock(ReferenceButtonScript button)
     {
         //throw exception
         Debug.Log("what?");
@@ -147,94 +180,115 @@ public class NodeBlockManager : MonoBehaviour
 
     public void AddNodeBlock(string name, int numberOfInput, int numberOfOutput)
     {
-        NodeBlock newNodeBlock = new NodeBlock(name, NodeBlockTypes.Function, numberOfInput, numberOfOutput);
+        IFunctionManage function = new FunctionFake
+        {
+            Name = name,
+            OutputType = new MyTypeFake
+            {
+                EType = Backend.Type.EType.Void,
+                TypeName = "Void"
+            },
+            InputList = new VariableListFake
+            { 
+                VariableManages = new List<IVariableManage>()
+            }
+        };
 
-        if (myFunctionList.Contains(newNodeBlock))
+        if (myFunctionList.Contains(function))
         {
             return;
         }
 
-        myFunctionList.Add(newNodeBlock);
-        languageReferenceList.Add(newNodeBlock);
-        viewsManager.AddNewView(newNodeBlock);
-        viewsManager.ChangeView(newNodeBlock);
+        myFunctionList.Add(function);
+        viewsManager.AddNewView(function);
+        viewsManager.ChangeView(function);
 
         //making start node
-        NodeBlock startNodeBlock = new NodeBlock(name + "(Start)", NodeBlockTypes.Function, 0, 0);
-        startNodeBlock.hasPreviousBlock = false;
 
-        SpawnNodeBlockWithoutValidation(startNodeBlock).GetComponent<NodeBlockController>().isStartNodeBlock = true;
+        NodeBlockController startNodeBlockObject = SpawnNodeBlockWithoutValidation().GetComponent<NodeBlockController>();
+        startNodeBlockObject.isStartNodeBlock = true;
+        startNodeBlockObject.InstantiateNodeBlockController(function.CreateFunction());
     }
     public void AddNodeBlock(GlobalVariableListManager list, string name)
     {
-        NodeBlock newNodeBlock = new NodeBlock(name, NodeBlockTypes.Variable, 0, 1);
+        IVariableManage variable = new VariableFake 
+        { 
+            Name = name, 
+            Type = new MyTypeFake 
+            { 
+                EType = Backend.Type.EType.Int, 
+                TypeName = "Int"
+            }
+        };
 
-        if (variableList.Contains(newNodeBlock))
+        if (variableList.Contains(variable))
         {
             return;
         }
 
-        variableList.Add(newNodeBlock);
+        variableList.Add(variable);
     }
 
     public void AddNodeBlock(LocalVariableListManager list, string name)
     {
-        NodeBlock newNodeBlock = new NodeBlock(name, NodeBlockTypes.Variable, 0, 1);
+        IVariableManage variable = new VariableFake 
+        {   
+            Name = name,
+            Type = new MyTypeFake
+            {
+                EType = Backend.Type.EType.Int,
+                TypeName = "Int"
+            }
+        };
 
-        if (viewsManager.GetLocalVariables().Contains(newNodeBlock))
+        if (viewsManager.GetLocalVariables().Contains(variable))
         {
             return;
         }
 
-        viewsManager.AddVariableToView(newNodeBlock);
-    }
-    //Update types
-
-    public void updateInputType(int index, string newType, NodeBlock node)
-    {
-        node.SetInputType(newType, index);
-    }
-
-    public void updateOutputType(string newType, NodeBlock node)
-    {
-        node.SetOutputType(newType);
+        viewsManager.AddVariableToView(variable);
     }
 
 
     //Set NodeBlock to Edit section
-    public void SetNodeBlockToEdit(ButtonScript button, NodeBlock nodeBlock)
+    public void SetNodeBlockToEdit(ButtonScript button)
     {
         //throw exception
         Debug.Log("what?");
     }
 
-    public void SetNodeBlockToEdit(ReferenceButtonScript button, NodeBlock nodeBlock)
+    public void SetNodeBlockToEdit(ReferenceButtonScript button)
     {
         //throw exception
         Debug.Log("what?");
     }
-
-    public void SetNodeBlockToEdit(List<NodeBlock> list, NodeBlock nodeBlock)
+    public void SetNodeBlockToEdit(InputButtonScript button)
     {
-        nodeBlockEditor.GetComponent<NodeBlockEditor>().SetNodeBlockToEdit(list.Find(x => x.Equals(nodeBlock)));
-        nodeBlockEditor.SetActive(true);
-    }
-    public void SetNodeBlockToEdit(VariableButtonScript button, NodeBlock nodeBlock)
-    {
-        if(currentVariableEditor == null)
+        if (!currentVariableEditor.activeSelf)
         {
-            currentVariableEditor = Instantiate(variableEditorPrefab, Vector3.zero, Quaternion.identity, GameObject.FindGameObjectWithTag("Canvas").transform);
-            currentVariableEditor.GetComponent<VariableEditor>().InstantiateEditor(nodeBlock);
+            currentVariableEditor.SetActive(true);
+            currentVariableEditor.GetComponent<VariableEditor>().InstantiateEditor(button.variable);    
         }
     }
 
-    public void SetNodeBlockToEdit(FunctionButtonScript button, NodeBlock nodeBlock)
+    public void SetNodeBlockToEdit(VariableButtonScript button)
     {
-        SetNodeBlockToEdit(myFunctionList, nodeBlock);
+        if (!currentVariableEditor.activeSelf)
+        {
+            currentVariableEditor.SetActive(true);
+            currentVariableEditor.GetComponent<VariableEditor>().InstantiateEditor(button.variable);
+        }
     }
 
-    public void ChangeView(FunctionButtonScript button, NodeBlock nodeBlock)
+    public void SetNodeBlockToEdit(FunctionButtonScript button)
     {
-        viewsManager.ChangeView(nodeBlock);
+        nodeBlockEditor.GetComponent<NodeBlockEditor>().SetNodeBlockToEdit(myFunctionList.Find(x => x.Equals(button.function)));
+        nodeBlockEditor.SetActive(true);
+    }
+
+    public void ChangeView(FunctionButtonScript button)
+    {
+        viewsManager.ChangeView(button.function);
+        localVariableList.GetComponent<LocalVariableListManager>().ReloadVariables();
     }
 }

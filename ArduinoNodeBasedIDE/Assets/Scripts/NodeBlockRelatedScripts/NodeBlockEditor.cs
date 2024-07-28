@@ -1,128 +1,156 @@
-using Codice.CM.Client.Differences;
-using PlasticGui;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using Backend.API;
+using Backend.API.DTO;
+
 
 public class NodeBlockEditor : MonoBehaviour
 {
-    public NodeBlock currentNodeBlock;
+    public IFunctionManage currentNodeBlock;
 
     public GameObject nodeBlockName;
 
     public GameObject inputButtonPrefab;
 
     public GameObject outputTypeField;
-
+    private DropdownTypesScript dropdownType;
 
     public bool instantiated = false;
     public GameObject listContainer;
     public List<GameObject> inputObjects;
-    public GameObject outputObject;
+
+    private int newVariableNameIndex = 0;
 
     public NodeBlockManager nodeBlockManager;
-    public DateTime lastTimeStamp;
-    public void Start()
+
+    void Awake()
     {
+        dropdownType = outputTypeField.GetComponentInChildren<DropdownTypesScript>();
         nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
         instantiated = false;
     }
-
-    public void Update()
+    public void UpdateFunction()
     {
         if (instantiated)
         {
             CheckForNewName();
             CheckForNewOutputType();
-            CheckForInputChanges();
+            CheckForNewInputs();
+            SetNodeBlockToEdit(currentNodeBlock);
         }
     }
-    public void SetNodeBlockToEdit(NodeBlock nodeBlock)
+    public void SetNodeBlockToEdit(IFunctionManage nodeBlock)
     {
         instantiated = true;
         currentNodeBlock = nodeBlock;
-        nodeBlockName.GetComponentInChildren<TMP_InputField>().text = currentNodeBlock.GetName();
-        outputTypeField.GetComponentInChildren<TMP_InputField>().text = currentNodeBlock.GetOutputType();
-        UpdateContent();
+        nodeBlockName.GetComponentInChildren<TMP_InputField>().text = currentNodeBlock.Name;
+        dropdownType.option = currentNodeBlock.OutputType.TypeName;
+        InstantiateInputs();
     }
-
 
     public void CheckForNewName()
     {
         String inputName = nodeBlockName.GetComponentInChildren<TMP_InputField>().text;
-        if (inputName != currentNodeBlock.GetName())
+        if (inputName != currentNodeBlock.Name)
         {
-            currentNodeBlock.SetName(inputName);
+            FunctionManageDto dto = new FunctionManageDto
+            {
+                FunctionName = inputName,
+                OutputType = currentNodeBlock.OutputType
+            };
+            currentNodeBlock.Change(dto);
         }
     }
 
     public void CheckForNewOutputType()
     {
-        String outputType = outputTypeField.GetComponentInChildren<TMP_InputField>().text;
-        if (outputType != currentNodeBlock.GetOutputType())
+        String outputType = dropdownType.option;
+        if (outputType != currentNodeBlock.OutputType.TypeName)
         {
-            if (!currentNodeBlock.returnOutputBlock && outputType != "void")
-            {
-                currentNodeBlock.AddOutput();
-                currentNodeBlock.SetOutputType(outputType);
-            }
-            else if(currentNodeBlock.returnOutputBlock && outputType == "void")
-            {
-                currentNodeBlock.DeleteOutput();
-                currentNodeBlock.SetOutputType(outputType);
-            }    
+            FunctionManageDto dto = new FunctionManageDto 
+            { 
+                FunctionName = currentNodeBlock.Name, 
+                OutputType = new MyTypeFake 
+                {
+                    TypeName = outputType, 
+                    EType = (Backend.Type.EType)Enum.Parse(typeof(Backend.Type.EType), outputType)
+                }
+            };
+            currentNodeBlock.Change(dto);
         }
     }
-
-    public void CheckForInputChanges()
+    
+    private List<IVariableManage> GetAllInputVariables()
     {
-        if (lastTimeStamp != currentNodeBlock.lastChange)
+        List<IVariableManage> inputs = new List<IVariableManage>();
+        foreach(GameObject input in inputObjects)
         {
-            UpdateContent();
+            inputs.Add(input.GetComponent<ButtonScript>().variable);
+        }
+        return inputs;
+    }
+
+    private void CheckForNewInputs()
+    {
+        List<IVariableManage> inputsVariablesFromListContainer = GetAllInputVariables();
+        List<IVariableManage> inputsToAdd = inputsVariablesFromListContainer.FindAll(input => !currentNodeBlock.InputList.VariableManages.Contains(input));
+        List<IVariableManage> inputsOldInputsToAdd = inputsVariablesFromListContainer.FindAll(input => currentNodeBlock.InputList.VariableManages.Contains(input));
+        List<IVariableManage> inputsToDelete = currentNodeBlock.InputList.VariableManages.FindAll(input => !inputsOldInputsToAdd.Contains(input));
+
+        foreach (IVariableManage input in inputsToDelete)
+        {
+            currentNodeBlock.InputList.DeleteVariable(input);
+        }
+
+        foreach (IVariableManage input in inputsToAdd)
+        {
+            currentNodeBlock.InputList.AddVariable(input);
         }
     }
 
     public void InstantiateInputs() 
     {
-        int numberOfInputs = currentNodeBlock.GetNumberOfInputs();
-
-        for(int i = 0; i < numberOfInputs; i++)
+        foreach(GameObject input in inputObjects)
         {
-            inputObjects.Add(CreateButton(i));
+            Destroy(input);
         }
-    }
 
-
-    public void CleanInputs()
-    {
-        foreach(var node in inputObjects)
-        {
-            GameObject.Destroy(node);
-        }
         inputObjects.Clear();
+
+        foreach(IVariableManage variable in currentNodeBlock.InputList.VariableManages)
+        {
+            inputObjects.Add(CreateButton(variable));
+        }
     }
-    protected GameObject CreateButton(int index)
+    
+    public void AddInput()
+    {
+        IVariableManage variable = new VariableFake 
+        { 
+            Name = "var" + ++newVariableNameIndex, 
+            Type = new MyTypeFake 
+            { 
+                TypeName = "Int", 
+                EType = Backend.Type.EType.Int 
+            } 
+        };
+        inputObjects.Add(CreateButton(variable));
+    }
+    
+    public void DeleteInput(GameObject input)
+    {
+        inputObjects.Remove(input);
+        Destroy(input);
+    }
+
+    protected GameObject CreateButton(IVariableManage variable)
     {
         GameObject newContent = Instantiate(inputButtonPrefab);
         newContent.transform.SetParent(listContainer.transform);
-        newContent.GetComponentInChildren<TMP_InputField>().text = currentNodeBlock.GetInputType(index);
         newContent.transform.localScale = Vector3.one;
+        newContent.GetComponent<InputButtonScript>().SetNodeBlock(variable);
         return newContent;
-    }
-
-    protected void UpdateContent()
-    {
-        lastTimeStamp = currentNodeBlock.lastChange;
-        CleanInputs();
-        InstantiateInputs();
-    }
-
-    public void AddInput()
-    {
-        currentNodeBlock.AddInput();
     }
 }

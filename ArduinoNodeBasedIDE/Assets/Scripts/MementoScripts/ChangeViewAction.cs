@@ -18,12 +18,12 @@ public class ChangeViewAction : IAction
     public void RedoAction()
     {
         Debug.Log("Redo ChangeViewAction");
-        manager.viewsManager.ChangeView(newView);
+       // manager.viewsManager.ChangeView(newView);
     }
 
     public void UndoAction()
     {
         Debug.Log("Undo ChangeViewAction");
-        manager.viewsManager.ChangeView(oldView);
+      //  manager.viewsManager.ChangeView(oldView);
     }
 }

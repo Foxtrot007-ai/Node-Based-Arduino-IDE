@@ -1,11 +1,1 @@
-pinMode;Function;2/int/int;0
-digitalWrite;Function;2/int/int;0
-delay;Function;1/int;0
-HIGH;Constant;0;1/int
-LOW;Constant;0;1/int
-LED_BUILTIN;Constant;0;1/int
-OUTPUT;Constant;0;1/int
-declareVariable;Function;1/int;0
-variable;Variable;0;1/int
-for;Structure;3/int/int/int;1/int
-if;Structure;1/int;0
+//We need new way to present documentation

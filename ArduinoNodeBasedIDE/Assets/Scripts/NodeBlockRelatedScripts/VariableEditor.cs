@@ -1,47 +1,70 @@
 using System;
+using Backend.API;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Backend.API.DTO;
+using Backend.Type;
 
 public class VariableEditor : MonoBehaviour
 {
-    public NodeBlock currentNodeBlock;
+    public IVariableManage variable;
 
-    public GameObject nodeBlockName;
+    public GameObject variableNameField;
+
     public GameObject typeField;
+    private DropdownTypesScript dropdownType;
 
-    public void InstantiateEditor(NodeBlock variable)
+    void Awake()
     {
-        currentNodeBlock = variable;
-        nodeBlockName.GetComponentInChildren<TMP_InputField>().text = variable.GetName();
-        typeField.GetComponentInChildren<TMP_InputField>().text = variable.GetOutputType();
+        dropdownType = typeField.GetComponentInChildren<DropdownTypesScript>();
     }
 
-    public void CheckForNewName()
+    public void InstantiateEditor(IVariableManage variable)
     {
-        String inputName = nodeBlockName.GetComponentInChildren<TMP_InputField>().text;
-        if (inputName != currentNodeBlock.GetName())
+        this.variable = variable;
+        variableNameField.GetComponentInChildren<TMP_InputField>().text = variable.Name;
+        dropdownType.option = variable.Type.TypeName;
+    }
+
+    private VariableManageDto MakeVariableDto(string name, string type)
+    {
+        EType etype = EType.Class;
+
+        try
         {
-            currentNodeBlock.SetName(inputName);
+            etype = (EType)Enum.Parse(typeof(EType), type);
         }
-    }
-    public void CheckForNewType()
-    {
-        String inputType = typeField.GetComponentInChildren<TMP_InputField>().text;
-        if (inputType != currentNodeBlock.GetOutputType())
+        catch
         {
-            currentNodeBlock.SetName(inputType);
+            Debug.Log("Parse problem, probably class");
+        }
+
+        VariableManageDto dto = new VariableManageDto
+        {
+            Type = new MyTypeFake { EType = etype, TypeName = type },
+            VariableName = name
+        };
+
+        return dto;
+    }
+    public void UpdateVariable()
+    {
+        string inputName = variableNameField.GetComponentInChildren<TMP_InputField>().text;
+        string inputType = dropdownType.option;
+        if (inputName != variable.Name || inputType != variable.Type.TypeName)
+        {
+            variable.Change(MakeVariableDto(inputName, inputType));
         }
     }
     public void DestroyMe()
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
     public void SaveChanges()
     {
-        CheckForNewName();
-        CheckForNewType();
+        UpdateVariable();
         DestroyMe();
     }
 }

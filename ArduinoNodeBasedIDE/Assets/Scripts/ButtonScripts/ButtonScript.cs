@@ -1,10 +1,12 @@
+using Backend.API;
 using TMPro;
 using UnityEngine;
 
 public class ButtonScript : MonoBehaviour
 {
     public GameObject text;
-    public NodeBlock node;
+    public IFunctionManage function;
+    public IVariableManage variable;
     public NodeBlockManager nodeBlockManager;
 
     public void Start()
@@ -12,23 +14,28 @@ public class ButtonScript : MonoBehaviour
         nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
     }
 
-    public virtual void SetNodeBlock(NodeBlock node)
+    public virtual void SetNodeBlock(IFunctionManage function)
     {
-        this.node = node;
-        text.GetComponent<TMP_Text>().text = node.GetName();
+        this.function = function;
+        text.GetComponent<TMP_Text>().text = function.Name;
+    }
+    public virtual void SetNodeBlock(IVariableManage variable)
+    {
+        this.variable = variable;
+        text.GetComponent<TMP_Text>().text = variable.Name;
     }
     public virtual void SpawnNodeBlock()
     {
-        nodeBlockManager.SpawnNodeBlock(this, node);
+        nodeBlockManager.SpawnNodeBlock(this);
     }
     public virtual void DeleteNodeBlock()
     {
-        nodeBlockManager.DeleteNodeBlock(this, node);
+        nodeBlockManager.DeleteNodeBlock(this);
     }
 
     public virtual void EditMyNodeBlock()
     {
-        nodeBlockManager.SetNodeBlockToEdit(this, node);
+        nodeBlockManager.SetNodeBlockToEdit(this);
     }
 
 }

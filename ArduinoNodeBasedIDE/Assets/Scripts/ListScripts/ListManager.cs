@@ -1,8 +1,7 @@
-using System.Collections;
+using Backend.API;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 public class ListManager : MonoBehaviour
 {
 
@@ -18,7 +17,7 @@ public class ListManager : MonoBehaviour
     {
         nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
         lastInput = "";
-        AddContent();
+        UpdateContent();
     }
     public void Update()
     {
@@ -30,26 +29,52 @@ public class ListManager : MonoBehaviour
             UpdateContent();
         }
     }
-    protected virtual List<NodeBlock> GetNodeBlocks()
+    protected virtual List<IFunctionManage> GetFunctions()
     {
         return nodeBlockManager.SearchNodeBlocks(this, lastInput);
     }
 
-    protected GameObject CreateButton(NodeBlock node)
+    protected virtual List<IVariableManage> GetVariables()
+    {
+        return null;
+    }
+    protected GameObject CreateButton()
     {
         GameObject newContent = Instantiate(buttonContent);
         newContent.transform.SetParent(listContainer.transform);
-        newContent.GetComponent<ButtonScript>().SetNodeBlock(node);
         newContent.transform.localScale = Vector3.one;
         return newContent;
     }
-    protected void AddContent()
+    protected GameObject CreateButton(IFunctionManage node)
     {
-        List<NodeBlock> containsList = GetNodeBlocks();
+        GameObject newContent = CreateButton();
+        newContent.GetComponent<ButtonScript>().SetNodeBlock(node);
+        return newContent;
+    }
+    protected GameObject CreateButton(IVariableManage node)
+    {
+        GameObject newContent = CreateButton();
+        newContent.GetComponent<ButtonScript>().SetNodeBlock(node);
+        return newContent;
+    }
+    protected void AddContentFunctions()
+    {
+        List<IFunctionManage> containsList = GetFunctions();
 
-        foreach(NodeBlock node in containsList)
+        foreach(IFunctionManage function in containsList)
         {
-            contentObjects.Add(CreateButton(node));
+            contentObjects.Add(CreateButton(function));
+        }
+
+    }
+
+    protected void AddContentVariables()
+    {
+        List<IVariableManage> containsList = GetVariables();
+
+        foreach (IVariableManage function in containsList)
+        {
+            contentObjects.Add(CreateButton(function));
         }
 
     }
@@ -64,9 +89,7 @@ public class ListManager : MonoBehaviour
         contentObjects.Clear();
     }
 
-    protected void UpdateContent()
+    protected virtual void UpdateContent()
     {
-        DestroyContent();
-        AddContent();
     }
 }

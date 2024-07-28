@@ -1,49 +1,38 @@
+using Backend.API;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ViewsManager
 {
-    public NodeBlock actualView = null;
-    public Dictionary<NodeBlock, Tuple<List<GameObject>, List<NodeBlock>>> views = new Dictionary<NodeBlock, Tuple<List<GameObject>, List<NodeBlock>>>();
+    public IFunctionManage actualView = null;
+    public Dictionary<IFunctionManage, Tuple<List<GameObject>, List<IVariableManage>>> views = new Dictionary<IFunctionManage, Tuple<List<GameObject>, List<IVariableManage>>>();
 
-    public void DeleteNodeBlock(NodeBlock node)
+    public void AddNewView(IFunctionManage node)
     {
-        foreach (var view in views)
-        {
-            List<GameObject> toDelete = view.Value.Item1.FindAll(x => x.GetComponent<NodeBlockController>().nodeBlock.Equals(node));
-
-            view.Value.Item1.RemoveAll(x => x.GetComponent<NodeBlockController>().nodeBlock.Equals(node));
-
-            foreach (var obj in toDelete)
-            {
-                GameObject.Destroy(obj);
-            }
-        }
-    }
-    public void AddNewView(NodeBlock node)
-    {
-        views.Add(node, new Tuple<List<GameObject>, List<NodeBlock>>(new List<GameObject>(), new List<NodeBlock>()));
+        views.Add(node, new Tuple<List<GameObject>, List<IVariableManage>>(new List<GameObject>(), new List<IVariableManage>()));
     }
     public void AddToView(GameObject ToAdd)
     {
         views[actualView].Item1.Add(ToAdd);
     }
-    public void AddVariableToView(NodeBlock variable)
+    public void AddVariableToView(IVariableManage variable)
     {
         views[actualView].Item2.Add(variable);
     }
-    public List<NodeBlock> GetLocalVariables()
+    public List<IVariableManage> GetLocalVariables()
     {
-        return views[actualView].Item2;
-    }
-    public void DeleteView(NodeBlock node, List<NodeBlock> languageReferenceList, List<NodeBlock> functionList)
-    {
-        languageReferenceList.RemoveAll(x => x.Equals(node));
-        
-        DeleteNodeBlock(node);
+        List<IVariableManage> empty = new List<IVariableManage>();
 
+        if (views.ContainsKey(actualView))
+        {
+            return views[actualView].Item2 ?? empty;
+        }
+
+        return empty;
+    }
+    public void DeleteView(IFunctionManage node, List<IFunctionManage> functionList)
+    {
         foreach (var obj in views[node].Item1)
         {
             GameObject.Destroy(obj);
@@ -51,7 +40,7 @@ public class ViewsManager
 
         functionList.RemoveAll(x => x.Equals(node));
     }
-    public void ChangeView(NodeBlock node)
+    public void ChangeView(IFunctionManage node)
     {
         if (actualView != null)
         {

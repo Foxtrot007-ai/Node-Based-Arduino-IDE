@@ -15,6 +15,12 @@ TagManager:
   - VariableList
   - FunctionList
   - UndoRedo
+  - DropdownType
+  - Canvas
+  - NodeBlockEditor
+  - InputButton
+  - InfoMessage
+  - InfoMessageManager
   layers:
   - Default
   - TransparentFX
