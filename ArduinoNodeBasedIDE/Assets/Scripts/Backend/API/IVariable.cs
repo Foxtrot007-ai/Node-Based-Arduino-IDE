@@ -44,5 +44,7 @@ namespace Backend.API
          * (backend will set logic delete to true)
          */
         public void Delete();
+        
+        public bool IsDelete { get; }
     }
 }

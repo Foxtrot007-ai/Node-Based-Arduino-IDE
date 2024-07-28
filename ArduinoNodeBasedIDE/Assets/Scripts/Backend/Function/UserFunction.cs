@@ -44,8 +44,11 @@ namespace Backend.Function
 
         public void Delete()
         {
-            _refs.ForEach(node => node.Delete());
-            _manager.DeleteRef(this);
+            IsDelete = true;
+            foreach (var node in _refs.ToList())
+            {
+                node.Delete();
+            }
         }
 
         public void AddRef(UserFunctionNode node)

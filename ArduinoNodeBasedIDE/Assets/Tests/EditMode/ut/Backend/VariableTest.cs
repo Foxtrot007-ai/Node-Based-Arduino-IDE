@@ -108,7 +108,7 @@ namespace Tests.EditMode.ut.Backend
         {
             _sut.Delete();
             _nodeMock.Received().Delete();
-            _variablesManagerMock.Received().DeleteRef(_sut);
+            Assert.True(_sut.IsDelete);
         }
     }
 }

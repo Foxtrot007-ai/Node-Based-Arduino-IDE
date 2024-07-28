@@ -16,5 +16,7 @@ namespace Backend.API
          * Local variables
          */
         public IVariablesManager Variables { get; }
+        
+        public bool IsDelete { get; }
     }
 }

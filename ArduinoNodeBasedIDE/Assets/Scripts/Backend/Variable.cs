@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Backend.API;
 using Backend.API.DTO;
 using Backend.Exceptions;
@@ -11,6 +12,7 @@ namespace Backend
     {
         public virtual string Name { get; private set; }
         public virtual IType Type { get; private set; }
+        public bool IsDelete { get; protected set; }
         IMyType IVariable.Type => Type;
         private List<VariableNode> _refs = new();
         private readonly VariablesManager _variablesManager;
@@ -57,8 +59,11 @@ namespace Backend
 
         public virtual void Delete()
         {
-            _refs.ForEach(x => x.Delete());
-            _variablesManager.DeleteRef(this);
+            IsDelete = true;
+            foreach (var node in _refs.ToList())
+            {
+                node.Delete();
+            }
         }
 
         public virtual void AddRef(VariableNode node)

@@ -10,6 +10,7 @@ namespace Backend.Function
         public INode StartNode => _startNode;
         public virtual string Name { get; protected set; }
         public virtual IVariablesManager Variables { get; } = new VariablesManager();
+        public bool IsDelete { get; protected set; } = false;
         private StartNode _startNode = new(new BuildInTemplate(0, "Start", typeof(StartNode)));
         public virtual IMyType OutputType { get; protected set; } = new VoidType();
         
