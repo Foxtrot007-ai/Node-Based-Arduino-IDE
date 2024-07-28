@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class LocalVariableListManager : ListManager
 {
     public GameObject nameField;
-    protected override List<IVariableManage> GetVariables()
+    protected override List<IVariable> GetVariables()
     {
         return nodeBlockManager.SearchNodeBlocks(this, lastInput);
     }

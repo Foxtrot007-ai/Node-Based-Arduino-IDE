@@ -12,7 +12,7 @@ public class FunctionButtonScript : ButtonScript
     public GameObject editButton;
     public GameObject changeButton;
 
-    public override void SetNodeBlock(IFunctionManage function)
+    public override void SetNodeBlock(IUserFunction function)
     {
         this.function = function;
         text.GetComponent<TMP_Text>().text = function.Name;

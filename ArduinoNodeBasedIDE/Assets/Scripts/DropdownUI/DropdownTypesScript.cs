@@ -19,7 +19,7 @@ public class DropdownTypesScript : MonoBehaviour
     public List<string> TypeList()
     {
         List<string> types = new List<string>();
-        types.AddRange(ClassTypeValidator.GetAllClassTypes());
+        types.AddRange(ClassTypeValidator.Instance.GetAllClassTypes());
         types.AddRange(Enum.GetNames(typeof(EType)));
         return types;
     }

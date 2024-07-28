@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ReferenceListManager : ListManager
 {
-    protected override List<IFunctionManage> GetFunctions()
+    protected override List<ITemplate> GetTemplates()
     {
         return nodeBlockManager.SearchNodeBlocks(this, lastInput);
     }
@@ -14,6 +14,6 @@ public class ReferenceListManager : ListManager
     protected override void UpdateContent()
     {
         DestroyContent();
-        AddContentFunctions();
+        AddContentTemplates();
     }
 }

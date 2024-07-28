@@ -10,7 +10,7 @@ public class FunctionListManager : ListManager
 {
     public GameObject nameField;
 
-    protected override List<IFunctionManage> GetFunctions()
+    protected override List<IUserFunction> GetFunctions()
     {
         return nodeBlockManager.SearchNodeBlocks(this, lastInput);
     }

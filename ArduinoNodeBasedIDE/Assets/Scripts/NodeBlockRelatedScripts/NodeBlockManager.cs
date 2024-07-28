@@ -138,7 +138,7 @@ public class NodeBlockManager : MonoBehaviour
     }
     public void SpawnNodeBlock(ReferenceButtonScript button)
     {
-        SpawnNodeBlock(button.function.CreateNode());
+        SpawnNodeBlock(button.template.CreateNodeInstance());
     }
     public void SpawnNodeBlock(VariableButtonScript button)
     {

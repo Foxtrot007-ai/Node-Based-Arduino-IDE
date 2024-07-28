@@ -29,15 +29,21 @@ public class ListManager : MonoBehaviour
             UpdateContent();
         }
     }
-    protected virtual List<IFunctionManage> GetFunctions()
+    protected virtual List<IUserFunction> GetFunctions()
     {
         return nodeBlockManager.SearchNodeBlocks(this, lastInput);
     }
 
-    protected virtual List<IVariableManage> GetVariables()
+    protected virtual List<IVariable> GetVariables()
     {
         return null;
     }
+
+    protected virtual List<ITemplate> GetTemplates()
+    {
+        return null;
+    }
+
     protected GameObject CreateButton()
     {
         GameObject newContent = Instantiate(buttonContent);
@@ -45,13 +51,19 @@ public class ListManager : MonoBehaviour
         newContent.transform.localScale = Vector3.one;
         return newContent;
     }
-    protected GameObject CreateButton(IFunctionManage node)
+    protected GameObject CreateButton(IUserFunction node)
     {
         GameObject newContent = CreateButton();
         newContent.GetComponent<ButtonScript>().SetNodeBlock(node);
         return newContent;
     }
-    protected GameObject CreateButton(IVariableManage node)
+    protected GameObject CreateButton(IVariable node)
+    {
+        GameObject newContent = CreateButton();
+        newContent.GetComponent<ButtonScript>().SetNodeBlock(node);
+        return newContent;
+    }
+    protected GameObject CreateButton(ITemplate node)
     {
         GameObject newContent = CreateButton();
         newContent.GetComponent<ButtonScript>().SetNodeBlock(node);
@@ -59,9 +71,9 @@ public class ListManager : MonoBehaviour
     }
     protected void AddContentFunctions()
     {
-        List<IFunctionManage> containsList = GetFunctions();
+        List<IUserFunction> containsList = GetFunctions();
 
-        foreach(IFunctionManage function in containsList)
+        foreach(IUserFunction function in containsList)
         {
             contentObjects.Add(CreateButton(function));
         }
@@ -70,9 +82,20 @@ public class ListManager : MonoBehaviour
 
     protected void AddContentVariables()
     {
-        List<IVariableManage> containsList = GetVariables();
+        List<IVariable> containsList = GetVariables();
 
-        foreach (IVariableManage function in containsList)
+        foreach (IVariable function in containsList)
+        {
+            contentObjects.Add(CreateButton(function));
+        }
+
+    }
+
+    protected void AddContentTemplates()
+    {
+        List<ITemplate> containsList = GetTemplates();
+
+        foreach (ITemplate function in containsList)
         {
             contentObjects.Add(CreateButton(function));
         }

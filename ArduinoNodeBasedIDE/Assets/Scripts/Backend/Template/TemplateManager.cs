@@ -36,7 +36,7 @@ namespace Backend
             LoadMethodsFromFile(); // Methods must be first, will create available class names
             LoadFunctionsFromFile();
         }
-        public TemplateManager() : this(new FileSystem(), Environment.CurrentDirectory + "/templates")
+        public TemplateManager() : this(new FileSystem(), Environment.CurrentDirectory + "/Assets/Templates")
         {
         }
 
