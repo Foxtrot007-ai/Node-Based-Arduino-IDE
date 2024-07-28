@@ -16,11 +16,6 @@ namespace Backend.API
          * Param manage same as Variable
          */
         public IVariablesManager InputList { get; }
-
-        /*
-         * Local variables
-         */
-        public IVariablesManager VariablesManager { get; }
         
         /*
          * Change Name or Type of function
