@@ -33,8 +33,8 @@ namespace Backend.Function
         public virtual void Validate(FunctionManageDto functionManageDto)
         {
             var function = GetWithSameName(functionManageDto.FunctionName);
-            if (function.Count != 0
-                && !function.Exists(x => x.InputList.Variables.Count == 0))
+            if (function.Count == 0
+                || !function.Exists(x => x.InputList.Variables.Count == 0))
                 return;
 
             throw new InvalidFunctionManageDto();

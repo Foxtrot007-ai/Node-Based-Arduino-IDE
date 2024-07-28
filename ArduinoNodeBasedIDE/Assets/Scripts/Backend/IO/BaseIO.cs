@@ -80,8 +80,10 @@ namespace Backend.Connection
 
         public virtual void Disconnect()
         {
+            if (_connected is null)
+                return;
+            
             var inOut = _connected;
-
             try
             {
                 BeforeDisconnectHandler(inOut);

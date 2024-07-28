@@ -193,6 +193,13 @@ namespace Tests.EditMode.ut.Backend.IO
         }
 
         [Test]
+        public void DisconnectNotConnected()
+        {
+            var baseInOut1 = IOHelper.CreateBaseMock(IOSide.Input);
+            baseInOut1.Disconnect();
+        }
+        
+        [Test]
         public void DisconnectOkNotify()
         {
             //given
