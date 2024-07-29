@@ -20,11 +20,16 @@ public class NodeBlockManager : MonoBehaviour
     //views
     public ViewsManager viewsManager = new ViewsManager();
 
+    //loader
+
+    public SaveStateModule saveManager = new SaveStateModule();
+
     //Variable List objects
     //public List<IVariablesManager> variableList = new List<IVariablesManager>();
 
     public GameObject localVariableList;
 
+    public InfoMessageManager messageInfo;
     //my FunctionsList objects
     //public List<IFunction> myFunctionList = new List<IFunction>();
 
@@ -37,6 +42,7 @@ public class NodeBlockManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        messageInfo = GameObject.FindGameObjectWithTag("InfoMessageManager").GetComponent<InfoMessageManager>();
         instantiateBasicFunctions();
     }
 
@@ -288,5 +294,22 @@ public class NodeBlockManager : MonoBehaviour
     {
         viewsManager.ChangeView(backendManager.Loop);
         localVariableList.GetComponent<LocalVariableListManager>().ReloadVariables();
+    }
+
+    public void SaveState()
+    {
+        
+        backendManager.Save("path");
+        messageInfo.addMessage("Code saved succesfully", 0.3f);
+    }
+
+    public void LoadState()
+    {
+
+    }
+
+    public void GenerateCode()
+    {
+        messageInfo.addMessage("Code generate succesfully", 0.3f);
     }
 }

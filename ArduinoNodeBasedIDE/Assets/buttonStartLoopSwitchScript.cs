@@ -23,5 +23,13 @@ public class buttonStartLoopSwitchScript : MonoBehaviour
         {
             nodeBlockManager.ChangeViewToLoop();
         }
+        else if (type == "save")
+        {
+            nodeBlockManager.SaveState();
+        }
+        else if (type == "generate")
+        {
+            nodeBlockManager.GenerateCode();
+        }
     }
 }
