@@ -133,11 +133,38 @@ public class SaveStateModule
         string json = ReadFromFile();
         sSaveFile save = JsonUtility.FromJson<sSaveFile>(json);
 
+        Dictionary<string, INode> controllerIDs = new Dictionary<string, INode>();
+
         //create gameobjects with controllers
+        foreach(sView view in save.sViews)
+        {
+            IFunction function = backendManager.Functions.Functions.Find(v => v.Name == view.viewName);
+            viewManager.ChangeView(function);
+
+            int i = 0;
+            foreach (sController controller in view.sControllers)
+            {
+                GameObject nodeBlockObject = nodeBlockManager.SpawnNodeBlockWithoutValidation();
+                nodeBlockObject.transform.position = controller.positionOnScene;
+                INode node = backendManager.InstanceCreator.CreateNodeInstance(controller.creatorId);
+
+                if (i == 0) { //startnode 
+                    nodeBlockObject.GetComponent<NodeBlockController>().isStartNodeBlock = true; 
+                }
+
+                nodeBlockObject.GetComponent<NodeBlockController>().InstantiateNodeBlockController(node);
+                controllerIDs.Add(controller.controllerId, node);
+                i++;
+            }
+        }
 
         //connect them;
-
-        //set view as start
+        foreach(sConnection con in save.sConnections)
+        {
+            INode controllerFirst = controllerIDs[con.controllerIdFirst];
+            INode controllerSecond = controllerIDs[con.controllerIdSecond];
+            controllerFirst.OutputsList[con.outputIndex].Connect(controllerSecond.InputsList[con.inputIndex]);
+        }
     }
 
     
