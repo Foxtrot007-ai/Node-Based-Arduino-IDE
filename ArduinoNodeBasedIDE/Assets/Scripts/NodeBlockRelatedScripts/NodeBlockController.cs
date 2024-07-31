@@ -48,12 +48,22 @@ public class NodeBlockController : MonoBehaviour
     {
         if (instantiated)
         {
-            CheckForNameChange();
-            if (nodeBlock.IsDeleted)
-            {
-                Destroy(gameObject);
-            }
-            //todo resizeConnections()
+            Validation();
+        }
+    }
+
+    virtual public void Validation()
+    {
+        CheckForNameChange();
+
+        if (nodeBlock.IsDeleted)
+        {
+            Destroy(gameObject);
+        }
+
+        if (inPointsList.Count != nodeBlock.InputsList.Count || outPointsList.Count != nodeBlock.OutputsList.Count)
+        {
+            ResizeConnections();
         }
     }
 
@@ -64,7 +74,7 @@ public class NodeBlockController : MonoBehaviour
         field.transform.localScale = new Vector3(60, Math.Max(inPointsList.Count, outPointsList.Count), 0);
     }
 
-    private void CheckForNameChange()
+    public void CheckForNameChange()
     {
         if(textField.GetComponent<TMP_Text>().text != nodeBlock.NodeName)
         {
@@ -80,7 +90,7 @@ public class NodeBlockController : MonoBehaviour
         instantiated = true;
     }
 
-    private GameObject CreatePoint(GameObject prefab, Vector3 spawnPoint, IConnection con, Transform parent)
+    public GameObject CreatePoint(GameObject prefab, Vector3 spawnPoint, IConnection con, Transform parent)
     {
         GameObject newPoint = Instantiate(prefab, spawnPoint, Quaternion.identity);
         newPoint.transform.SetParent(parent);
@@ -88,7 +98,7 @@ public class NodeBlockController : MonoBehaviour
         connection.InstantiateConnection(con);
         return newPoint;
     }
-    private void AddInPoints()
+    public void AddInPoints()
     {
         List<GameObject> newInPointsList = new List<GameObject>();
         Vector3 startPoint = inPointStartPoint.transform.position;
@@ -105,11 +115,18 @@ public class NodeBlockController : MonoBehaviour
             }
 
             newInPointsList.Add(newInPoint);
+            inPointsList.Remove(newInPoint);
             startPoint += inPointStartPointIncrease;
+        }
+        //clean up
+        foreach(GameObject oldCon in inPointsList)
+        {
+            oldCon.GetComponent<ConnectionPoint>().connection.Disconnect();
+            Destroy(oldCon);
         }
         inPointsList = newInPointsList;
     }
-    private void AddOutPoint()
+    public void AddOutPoint()
     {
         List<GameObject> newOutPointsList = new List<GameObject>();
         Vector3 startPoint = outPointStartPoint.transform.position;
@@ -126,12 +143,19 @@ public class NodeBlockController : MonoBehaviour
             }
 
             newOutPointsList.Add(newOutPoint);
+            outPointsList.Remove(newOutPoint);
             startPoint += outPointStartPointIncrease;
+        }
+        //clean up
+        foreach (GameObject oldCon in outPointsList)
+        {
+            oldCon.GetComponent<ConnectionPoint>().connection.Disconnect();
+            Destroy(oldCon);
         }
         outPointsList = newOutPointsList;
     }
 
-    private void SetNodeBlock(INode nodeBlock)
+    public void SetNodeBlock(INode nodeBlock)
     {
         this.nodeBlock = nodeBlock;
         textField.GetComponent<TMP_Text>().text = nodeBlock.NodeName;

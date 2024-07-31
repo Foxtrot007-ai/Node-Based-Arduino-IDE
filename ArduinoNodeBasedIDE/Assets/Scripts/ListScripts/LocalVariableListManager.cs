@@ -12,7 +12,7 @@ public class LocalVariableListManager : ListManager
     {
         return nodeBlockManager.SearchNodeBlocks(this, lastInput);
     }
-    protected override void UpdateContent()
+    public override void UpdateContent()
     {
         DestroyContent();
         AddContentVariables();

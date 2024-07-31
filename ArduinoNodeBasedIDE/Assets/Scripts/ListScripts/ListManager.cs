@@ -112,7 +112,7 @@ public class ListManager : MonoBehaviour
         contentObjects.Clear();
     }
 
-    protected virtual void UpdateContent()
+    public virtual void UpdateContent()
     {
     }
 }

@@ -11,7 +11,7 @@ public class ReferenceListManager : ListManager
         return nodeBlockManager.SearchNodeBlocks(this, lastInput);
     }
 
-    protected override void UpdateContent()
+    public override void UpdateContent()
     {
         DestroyContent();
         AddContentTemplates();

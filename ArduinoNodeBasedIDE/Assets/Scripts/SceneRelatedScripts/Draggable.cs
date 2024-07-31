@@ -22,6 +22,15 @@ public class Dragable : MonoBehaviour
         {
             gameObject.GetComponent<NodeBlockController>().DestroyMe();
         }
+
+        if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.LeftShift))
+        {
+            if(gameObject.GetComponent<NodeBlockControllerInput>() != null)
+            {
+                gameObject.GetComponent<NodeBlockControllerInput>().EditMe();
+            }
+            
+        }
     }
     private void OnMouseDrag()
     {

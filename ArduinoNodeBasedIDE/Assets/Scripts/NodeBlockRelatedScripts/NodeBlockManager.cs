@@ -39,6 +39,9 @@ public class NodeBlockManager : MonoBehaviour
     //Variable Editor
     public GameObject currentVariableEditor;
 
+    //Constant Editor
+    public GameObject currentConstantEditor;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -186,6 +189,7 @@ public class NodeBlockManager : MonoBehaviour
     public void DeleteNodeBlock(VariableButtonScript button)
     {
         button.variable.Delete();
+        button.GetComponentInParent<FunctionListManager>().UpdateContent();
     }
     public void DeleteNodeBlock(InputButtonScript button)
     {
@@ -196,6 +200,8 @@ public class NodeBlockManager : MonoBehaviour
     public void DeleteNodeBlock(FunctionButtonScript button)
     {
         button.function.Delete();
+        Debug.Log(button.function.IsDelete);
+        button.GetComponentInParent<FunctionListManager>().UpdateContent();
     }
 
     public void DeleteNodeBlock(ReferenceButtonScript button)
@@ -269,6 +275,15 @@ public class NodeBlockManager : MonoBehaviour
         {
             currentVariableEditor.SetActive(true);
             currentVariableEditor.GetComponent<VariableEditor>().InstantiateEditor(button.variable);
+        }
+    }
+
+    public void SetConstantToEdit(INode node)
+    {
+        if (!currentConstantEditor.activeSelf)
+        {
+            currentConstantEditor.SetActive(true);
+            currentConstantEditor.GetComponent<ConstantEditor>().InstantiateEditor(node);
         }
     }
 
