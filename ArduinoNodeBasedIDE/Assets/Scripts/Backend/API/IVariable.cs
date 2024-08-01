@@ -17,7 +17,6 @@ namespace Backend.API
 
         /*
          * Change Name or Type of variable
-         * null if not change/or same value
          *
          * Validation for name change
          * For Type change when variable is connected:
