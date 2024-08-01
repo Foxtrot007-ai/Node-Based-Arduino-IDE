@@ -13,7 +13,7 @@ public class SaveStateModule
     private NodeBlockManager nodeBlockManager;
     private IBackendManager backendManager;
     private ViewsManager viewManager;
-    private string currentPath = "Assets/Resources/save.json";
+    private string currentPath = "Assets/Resources/nodesOnScene.json";
 
     [Serializable]
     public class sSaveFile

@@ -47,6 +47,7 @@ public class NodeBlockManager : MonoBehaviour
     {
         messageInfo = GameObject.FindGameObjectWithTag("InfoMessageManager").GetComponent<InfoMessageManager>();
         instantiateBasicFunctions();
+        saveManager.Instantiate(this, backendManager, viewsManager);
     }
 
     //Starting functions
@@ -313,18 +314,25 @@ public class NodeBlockManager : MonoBehaviour
 
     public void SaveState()
     {
-        
-        backendManager.Save("path");
+       // backendManager.Save("Assets/Resources/enviroment.json");
+       // saveManager.Save();
         messageInfo.addMessage("Code saved succesfully", 0.3f);
     }
 
     public void LoadState()
     {
-
+       // backendManager.Load("Assets/Resources/enviroment.json");
+       // saveManager.Load();
+        messageInfo.addMessage("Code saved succesfully", 0.3f);
     }
 
     public void GenerateCode()
     {
         messageInfo.addMessage("Code generate succesfully", 0.3f);
+    }
+
+    public void SpawnNodeBlockConstant()
+    {
+        //SpawnNodeBlock(backendManager.GetConstantINode());   
     }
 }

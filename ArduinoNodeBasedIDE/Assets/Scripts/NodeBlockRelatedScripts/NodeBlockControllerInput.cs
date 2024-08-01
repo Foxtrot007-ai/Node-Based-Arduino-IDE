@@ -8,16 +8,16 @@ public class NodeBlockControllerInput : NodeBlockController
     public GameObject inputField;
     public override void Validation()
     {
-        base.Validation();
+        CheckForNameChange();
         ValidateInputChange();
     }
 
     public void ValidateInputChange()
     {
         /* 
-         if(inputField.GetComponent<TMP_Text>().text != ((i_inputNode) nodeBlock).Value)
+         if(inputField.GetComponent<TMP_Text>().text != nodeBlock.GetValue())
          {
-            (i_inputNode)  nodeBlock).Value = inputField.GetComponent<TMP_Text>().text;
+            inputField.GetComponent<TMP_Text>().text = nodeBlock.GetValue();
          }
          */
     }

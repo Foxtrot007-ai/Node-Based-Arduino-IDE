@@ -13,43 +13,19 @@ public class ConstantEditor : MonoBehaviour
 
     public GameObject valueField;
 
-    public GameObject typeField;
-    private DropdownTypesScript dropdownType;
-
-    void Awake()
-    {
-        dropdownType = typeField.GetComponentInChildren<DropdownTypesScript>();
-    }
-
     public void InstantiateEditor(INode node)
     {
         this.node = node;
-        valueField.GetComponentInChildren<TMP_InputField>().text = node.NodeName;
-        dropdownType.option = node.OutputsList[0].IOType.ToString();
+        //valueField.GetComponentInChildren<TMP_InputField>().text = node.GetValue();
     }
 
-    private VariableManageDto MakeVariableDto(string name, string type)
-    {
-       
-        IType etype = Backend.Type.TypeConverter.ToIType(type);
-
-
-        VariableManageDto dto = new ()
-        {
-            Type = etype,
-            VariableName = name
-        };
-
-        return dto;
-    }
     public void UpdateVariable()
     {
-        string inputName = valueField.GetComponentInChildren<TMP_InputField>().text;
-        string inputType = dropdownType.option;
-        if (inputName != node.NodeName || inputType != node.OutputsList[0].IOType.ToString())
+        string value = valueField.GetComponentInChildren<TMP_InputField>().text;
+        /*if (value != node.GetValue())
         {
-            //node.Change(MakeVariableDto(inputName, inputType));
-        }
+            //node.ChangeValue(value);
+        }*/
     }
     public void DestroyMe()
     {

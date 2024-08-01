@@ -15,21 +15,23 @@ public class buttonStartLoopSwitchScript : MonoBehaviour
     }
     public void OnClick()
     {
-        if(type == "start")
+        switch (type)
         {
-            nodeBlockManager.ChangeViewToStart();
-        }
-        else if(type == "loop")
-        {
-            nodeBlockManager.ChangeViewToLoop();
-        }
-        else if (type == "save")
-        {
-            nodeBlockManager.SaveState();
-        }
-        else if (type == "generate")
-        {
-            nodeBlockManager.GenerateCode();
+            case "start":
+                nodeBlockManager.ChangeViewToStart();
+                break;
+            case "loop":
+                nodeBlockManager.ChangeViewToLoop();
+                break;
+            case "save":
+                nodeBlockManager.SaveState();
+                break;
+            case "generate":
+                nodeBlockManager.GenerateCode();
+                break;
+            case "constant":
+                nodeBlockManager.SpawnNodeBlockConstant();
+                break;
         }
     }
 }
