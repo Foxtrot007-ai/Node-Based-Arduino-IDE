@@ -1,0 +1,21 @@
+{
+  "Library": "test",
+  "Functions": {
+    "200": {
+      "Name": "test1",
+      "InputsType": [
+        "int",
+        "short"
+      ],
+      "OutputType": "string"
+    },
+    "201": {
+      "Name": "test1",
+      "InputsType": [
+        "int",
+        "short"
+      ],
+      "OutputType": "void"
+    }
+  }
+}

@@ -7,6 +7,7 @@ using Backend.Function;
 using Backend.Node;
 using Backend.Node.BuildIn;
 using Backend.Type;
+using Backend.Variables;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
@@ -25,7 +26,7 @@ namespace Tests.EditMode.ut.Backend.Function
         private UserFunctionNode _userNode1;
         private UserFunctionNode _userNode2;
         private CodeManager _codeManagerMock;
-        
+        private IBackendManager _backendManager;
         private UserFunction _sut;
 
         [SetUp]
@@ -37,9 +38,10 @@ namespace Tests.EditMode.ut.Backend.Function
             _userNode1 = Substitute.For<UserFunctionNode>();
             _userNode2 = Substitute.For<UserFunctionNode>();
             _codeManagerMock = Substitute.For<CodeManager>();
+            _backendManager = Substitute.For<IBackendManager>();
             _dto = DtoHelper.CreateFunctionManage();
             
-            _sut = new UserFunction(_userFunctionManagerMock, _dto);
+            _sut = new UserFunction(_userFunctionManagerMock, _backendManager, _dto);
             MockHelper.SetField<global::Backend.Function.Function, StartNode>(_sut, "_startNode", _startNodeMock);
             MockHelper.SetField<UserFunction, ParamsManager>(_sut, "_paramsManager", _paramsManagerMock);
             _sut.AddRef(_userNode1);
@@ -49,7 +51,7 @@ namespace Tests.EditMode.ut.Backend.Function
         [Test]
         public void ConstructorTest()
         {
-            var sut = new UserFunction(_userFunctionManagerMock, DtoHelper.CreateFunctionManage());
+            var sut = new UserFunction(_userFunctionManagerMock, _backendManager, DtoHelper.CreateFunctionManage());
             
             _userFunctionManagerMock.Received().AddRef(sut);
         }

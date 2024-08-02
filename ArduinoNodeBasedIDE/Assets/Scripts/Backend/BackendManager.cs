@@ -3,25 +3,30 @@ using Backend.API;
 using Backend.Function;
 using Backend.Type;
 using Backend.Validator;
+using Backend.Variables;
 
 namespace Backend
 {
-    public class Startup : IBackendManager
+    public class BackendManager : IBackendManager
     {
-        public IFunction Start { get; } = new Function.Function("start");
-        public IFunction Loop { get; } = new Function.Function("loop");
-        public IVariablesManager GlobalVariables { get; } = new VariablesManager();
-        public IUserFunctionsManager Functions { get; } = new UserFunctionManager();
+        public IFunction Start { get; }
+        public IFunction Loop { get; }
+        public IVariablesManager GlobalVariables { get; }
+        public IUserFunctionsManager Functions { get; }
         public ITemplatesManager Templates { get; } = new TemplateManager();
         public IInstanceCreator InstanceCreator { get; }
         public List<IMyType> Types { get; } = new();
-
-        public Startup()
+        
+        public BackendManager()
         {
             foreach (var classType in ClassTypeValidator.Instance.GetAllClassTypes())
             {
                 Types.Add(new ClassType(classType));
             }
+            Start = new Function.Function(this, "start");
+            Loop = new Function.Function(this, "loop");
+            GlobalVariables = new GlobalVariablesManager(this);
+            Functions = new UserFunctionManager(this);
         }
 
         public void BuildCode()

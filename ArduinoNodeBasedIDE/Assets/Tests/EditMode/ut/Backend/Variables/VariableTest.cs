@@ -1,14 +1,14 @@
-using Backend;
 using Backend.API.DTO;
 using Backend.Exceptions;
 using Backend.Node.BuildIn;
 using Backend.Type;
+using Backend.Variables;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
 using Tests.EditMode.ut.Backend.mocks;
 
-namespace Tests.EditMode.ut.Backend
+namespace Tests.EditMode.ut.Backend.Variables
 {
     [TestFixture]
     [TestOf(nameof(Variable))]
@@ -25,7 +25,6 @@ namespace Tests.EditMode.ut.Backend
         {
             _baseDto = DtoHelper.CreateVariableManage();
             _variablesManagerMock = Substitute.For<VariablesManager>();
-            _variablesManagerMock.IsDtoValid(_baseDto).Returns(true);
             _sut = new Variable(_variablesManagerMock, _baseDto);
             _nodeMock = Substitute.For<VariableNodeMock>(_sut);
             _sut.AddRef(_nodeMock);
@@ -50,29 +49,39 @@ namespace Tests.EditMode.ut.Backend
         public void ChangeVariableNullName()
         {
             var newDto = DtoHelper.CreateVariableManage(null);
-            _variablesManagerMock.IsDtoValid(newDto).Returns(true);
+            Assert.Throws<InvalidVariableManageDto>(() => _sut.Change(newDto));
+
+            ExpectEqualDto(_baseDto);
+            _nodeMock.DidNotReceiveWithAnyArgs().ChangeType(default);
+        }
+
+        [Test]
+        public void ChangeVariableVoidType()
+        {
+            var newDto = DtoHelper.CreateVariableManage(EType.Void, "test");
+            Assert.Throws<InvalidVariableManageDto>(() => _sut.Change(newDto));
+
+            ExpectEqualDto(_baseDto);
+            _nodeMock.DidNotReceiveWithAnyArgs().ChangeType(default);
+        }
+
+        [Test]
+        public void ChangeVariableSameNameAndType()
+        {
+            _variablesManagerMock.IsDuplicateName(_baseDto.VariableName).Returns(true);
+            var newDto = DtoHelper.CreateVariableManage();
+            
             _sut.Change(newDto);
-
             ExpectEqualDto(_baseDto);
             _nodeMock.DidNotReceiveWithAnyArgs().ChangeType(default);
         }
-
+        
         [Test]
-        public void ChangeVariableSameName()
+        public void ChangeVariableDuplicateName()
         {
-            _sut.Change(_baseDto);
-
-            ExpectEqualDto(_baseDto);
-            _nodeMock.DidNotReceiveWithAnyArgs().ChangeType(default);
-        }
-
-        [Test]
-        public void ChangeVariableNotValidName()
-        {
-            var newDto = DtoHelper.CreateVariableManage("test2");
-            _variablesManagerMock.IsDtoValid(newDto).Returns(false);
-
-            var exception = Assert.Throws<InvalidVariableManageDto>(() => _sut.Change(newDto));
+            _variablesManagerMock.IsDuplicateName("abc").Returns(true);
+            var newDto = DtoHelper.CreateVariableManage(EType.Void, "abc");
+            Assert.Throws<InvalidVariableManageDto>(() => _sut.Change(newDto));
 
             ExpectEqualDto(_baseDto);
             _nodeMock.DidNotReceiveWithAnyArgs().ChangeType(default);
@@ -82,7 +91,7 @@ namespace Tests.EditMode.ut.Backend
         public void ChangeVariableNameSameType()
         {
             var newDto = DtoHelper.CreateVariableManage("test2");
-            _variablesManagerMock.IsDtoValid(newDto).Returns(true);
+            _variablesManagerMock.IsDuplicateName("test2").Returns(false);
 
             _sut.Change(newDto);
 
@@ -95,7 +104,7 @@ namespace Tests.EditMode.ut.Backend
         public void ChangeVariableNameAndType()
         {
             var newDto = DtoHelper.CreateVariableManage(EType.String, "test2");
-            _variablesManagerMock.IsDtoValid(newDto).Returns(true);
+            _variablesManagerMock.IsDuplicateName("test2").Returns(false);
 
             _sut.Change(newDto);
 

@@ -8,11 +8,21 @@ namespace Backend.Function
     public class UserFunctionManager : IUserFunctionsManager
     {
         public List<IUserFunction> Functions { get; } = new();
+        private IBackendManager _backendManager;
+
+        protected UserFunctionManager()
+        {
+        }
+
+        public UserFunctionManager(IBackendManager backendManager)
+        {
+            _backendManager = backendManager;
+        }
 
         public IUserFunction AddFunction(FunctionManageDto functionManageDto)
         {
             Validate(functionManageDto);
-            return new UserFunction(this, functionManageDto);
+            return new UserFunction(this, _backendManager, functionManageDto);
         }
 
         public void DeleteFunction(IUserFunction functionManage)

@@ -8,7 +8,7 @@ using Backend.Type;
 public class NodeBlockManager : MonoBehaviour
 {
     //backend manager
-    public IBackendManager backendManager = new Startup();
+    public IBackendManager backendManager = new BackendManager();
 
     // language Reference objects
     // public LanguageReferenceParser languageReferenceParser = new LanguageReferenceParser();

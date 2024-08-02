@@ -4,6 +4,7 @@ using Backend.API;
 using Backend.API.DTO;
 using Backend.Node;
 using Backend.Type;
+using Backend.Variables;
 
 namespace Backend.Function
 {
@@ -13,15 +14,17 @@ namespace Backend.Function
         private UserFunctionManager _manager;
         private List<UserFunctionNode> _refs = new();
         private ParamsManager _paramsManager;
-        
         protected UserFunction()
         {
         }
-        public UserFunction(UserFunctionManager manager, FunctionManageDto functionManageDto) : base(functionManageDto.FunctionName)
+        public UserFunction(UserFunctionManager manager, IBackendManager backendManager, FunctionManageDto functionManageDto) : base(
+            backendManager,
+            functionManageDto.FunctionName)
         {
             _manager = manager;
             _paramsManager = new ParamsManager(this);
             OutputType = functionManageDto.OutputType;
+            _backendManager = backendManager;
             _manager.AddRef(this);
         }
 
@@ -35,6 +38,11 @@ namespace Backend.Function
 
             OutputType = functionManageDto.OutputType;
             _refs.ForEach(node => node.ChangeOutputType(OutputType));
+        }
+
+        public override bool IsVariableLocalDuplicate(string name)
+        {
+            return base.IsVariableLocalDuplicate(name) || _paramsManager.IsDuplicateName(name);
         }
 
         public INode CreateNode()

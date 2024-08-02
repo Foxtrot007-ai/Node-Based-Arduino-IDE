@@ -2,17 +2,16 @@ using System.Collections.Generic;
 using Backend.API;
 using Backend.API.DTO;
 using Backend.Exceptions;
-using Backend.Type;
 
-namespace Backend
+namespace Backend.Variables
 {
-    public class VariablesManager : IVariablesManager
+    public abstract class VariablesManager : IVariablesManager
     {
         public virtual List<IVariable> Variables { get; } = new();
 
         public virtual IVariable AddVariable(VariableManageDto variableManageDto)
         {
-            if (variableManageDto.VariableName is null || !IsDtoValid(variableManageDto))
+            if (!variableManageDto.IsDtoValid() || IsVariableDuplicate(variableManageDto.VariableName))
             {
                 throw new InvalidVariableManageDto();
             }
@@ -26,15 +25,11 @@ namespace Backend
             Variables.Find(x => x == variable)?.Delete();
         }
 
-        public virtual bool IsDtoValid(VariableManageDto variableManageDto)
+        protected abstract bool IsVariableDuplicate(string name);
+        
+        public virtual bool IsDuplicateName(string name)
         {
-            if (variableManageDto.Type.EType == EType.Void)
-            {
-                return false;
-            }
-
-            var valid = Variables.Exists(x => x.Name == variableManageDto.VariableName);
-            return !valid;
+            return Variables.Exists(x => x.Name == name);
         }
 
         public virtual void AddRef(IVariable variable)

@@ -1,11 +1,12 @@
 using Backend.Connection;
 using Backend.Exceptions;
+using Backend.Variables;
 
 namespace Backend.Node.BuildIn
 {
     public class GetVariableNode : VariableNode
     {
-        public override string NodeName => "Get" + _variable.Name;
+        public override string NodeName => "Get " + _variable.Name;
 
         public GetVariableNode(Variable variable) : base(variable, IOSide.Output)
         {

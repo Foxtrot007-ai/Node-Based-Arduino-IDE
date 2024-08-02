@@ -6,7 +6,7 @@ using Backend.Exceptions;
 using Backend.Node.BuildIn;
 using Backend.Type;
 
-namespace Backend
+namespace Backend.Variables
 {
     public class Variable : IVariable
     {
@@ -30,17 +30,13 @@ namespace Backend
 
         public virtual void Change(VariableManageDto variableManageDto)
         {
-            if (!_variablesManager.IsDtoValid(variableManageDto))
+            var newName = variableManageDto.VariableName;
+            if (!variableManageDto.IsDtoValid() || (newName != Name && _variablesManager.IsDuplicateName(newName)))
             {
                 throw new InvalidVariableManageDto();
             }
 
-            var newName = variableManageDto.VariableName;
-            if (newName is not null && !newName.Equals(Name))
-            {
-                Name = newName;
-            }
-
+            Name = newName;
             var newType = (IType)variableManageDto.Type;
             if (Type == newType) return;
             Type = newType;

@@ -1,9 +1,10 @@
 using Backend;
+using Backend.API;
 using Backend.Node.BuildIn;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
-using MyFunction = global::Backend.Function.Function;
+using MyFunction = Backend.Function.Function;
 
 namespace Tests.EditMode.ut.Backend.Function
 {
@@ -15,14 +16,16 @@ namespace Tests.EditMode.ut.Backend.Function
         private CodeManager _codeManagerMock;
         private MyFunction _sut;
         private StartNode _startNodeMock;
+        private IBackendManager _backendManager;
 
         [SetUp]
         public void Init()
         {
             _startNodeMock = Substitute.For<StartNode>();
             _codeManagerMock = Substitute.For<CodeManager>();
+            _backendManager = Substitute.For<IBackendManager>();
 
-            _sut = new MyFunction("test");
+            _sut = new MyFunction(_backendManager, "test");
             MockHelper.SetField<MyFunction, StartNode>(_sut, "_startNode", _startNodeMock);
         }
 

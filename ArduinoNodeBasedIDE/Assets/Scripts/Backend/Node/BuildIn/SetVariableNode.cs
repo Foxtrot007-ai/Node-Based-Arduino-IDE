@@ -1,10 +1,11 @@
 using Backend.Connection;
+using Backend.Variables;
 
 namespace Backend.Node.BuildIn
 {
     public class SetVariableNode : VariableNode
     {
-        public override string NodeName => "Set" + _variable.Name;
+        public override string NodeName => "Set " + _variable.Name;
 
         public SetVariableNode(Variable variable) : base(variable, IOSide.Input)
         {
