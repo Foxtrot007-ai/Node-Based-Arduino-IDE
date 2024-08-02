@@ -57,6 +57,7 @@ namespace Backend.Function
             {
                 node.Delete();
             }
+            _manager.DeleteRef(this);
         }
 
         public void AddRef(UserFunctionNode node)

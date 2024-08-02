@@ -126,6 +126,7 @@ namespace Tests.EditMode.ut.Backend.Function
             _sut.Delete();
             _userNode1.Received().Delete();
             Assert.True(_sut.IsDelete);
+            _userFunctionManagerMock.Received().DeleteRef(_sut);
         }
 
         [Test]
