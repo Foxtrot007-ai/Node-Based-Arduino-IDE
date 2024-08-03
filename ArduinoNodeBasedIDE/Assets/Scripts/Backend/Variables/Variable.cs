@@ -84,5 +84,10 @@ namespace Backend.Variables
         {
             _refs.Remove(node);
         }
+
+        public virtual string ToCode()
+        {
+            return $"{Type.ToCode()} {Name}";
+        }
     }
 }

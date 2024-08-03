@@ -80,7 +80,7 @@ namespace Backend.Function
             var clonedCodeManager = CreateCodeManager(codeManager);
             _startNode.ToCode(clonedCodeManager);
 
-            codeManager.AddLines(clonedCodeManager.CodeLines);
+            codeManager.AddLines(clonedCodeManager.CodeLines, true);
         }
     }
 }

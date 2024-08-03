@@ -42,7 +42,7 @@ namespace Tests.EditMode.ut.Backend.Function
 
             Assert.AreNotSame(callCodeManager, _codeManagerMock);
             _codeManagerMock.Received().AddLine("void test()");
-            _codeManagerMock.Received().AddLines(callCodeManager.CodeLines);
+            _codeManagerMock.Received().AddLines(callCodeManager.CodeLines, true);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Backend.API;
 using Backend.IO;
 
@@ -18,6 +19,7 @@ namespace Backend
         public List<string> CodeLines { get; }
         public Dictionary<IVariable, VariableStatus> Variables { get; }
         public HashSet<string> Includes { get; }
+        private List<string> _ignoreIncludes = new() { "system", "common" };
 
         public CodeManager()
         {
@@ -54,16 +56,16 @@ namespace Backend
             CodeLines.Add(line);
         }
 
-        public virtual void AddLines(List<string> lines)
+        public virtual void AddLines(List<string> lines, bool needBracket = false)
         {
-            if (lines.Count > 1)
+            if (needBracket || lines.Count > 1)
             {
                 AddLine("{");
             }
 
-            lines.ForEach(AddLine);
+            lines.ForEach(line => AddLine("\t" + line));
 
-            if (lines.Count > 1)
+            if (needBracket || lines.Count > 1)
             {
                 AddLine("}");
             }
@@ -73,6 +75,20 @@ namespace Backend
         {
             var codeParams = paramsList.Select(x => ((BaseIO)x.Connected).ParentNode.ToCodeParam(this));
             return string.Join(", ", codeParams);
+        }
+
+        public string BuildCode()
+        {
+            var builder = new StringBuilder();
+            foreach (string include in Includes.Where(include => !_ignoreIncludes.Contains(include)))
+            {
+                builder.Append($"#include<{include}>\n");
+            }
+            builder.Append("\n");
+
+            CodeLines.ForEach(s => builder.Append(s + "\n"));
+
+            return builder.ToString();
         }
     }
 }

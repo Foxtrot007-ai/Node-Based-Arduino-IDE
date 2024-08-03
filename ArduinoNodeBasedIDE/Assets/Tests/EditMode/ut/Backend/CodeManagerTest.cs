@@ -69,7 +69,7 @@ namespace Tests.EditMode.ut.Backend
 
             _sut.AddLines(line);
 
-            Assert.AreEqual("test", _sut.CodeLines[0]);
+            Assert.AreEqual("\ttest", _sut.CodeLines[0]);
         }
 
         [Test]
@@ -80,8 +80,8 @@ namespace Tests.EditMode.ut.Backend
             _sut.AddLines(lines);
 
             Assert.AreEqual("{", _sut.CodeLines[0]);
-            Assert.AreEqual("test1", _sut.CodeLines[1]);
-            Assert.AreEqual("test2", _sut.CodeLines[2]);
+            Assert.AreEqual("\ttest1", _sut.CodeLines[1]);
+            Assert.AreEqual("\ttest2", _sut.CodeLines[2]);
             Assert.AreEqual("}", _sut.CodeLines[3]);
         }
 
@@ -102,6 +102,19 @@ namespace Tests.EditMode.ut.Backend
 
             Assert.AreEqual("test1, test2, test3",
                             _sut.BuildParamCode(new List<IConnection>() { any1, any2, any3 }));
+        }
+
+        [Test]
+        public void BuildCodeTest()
+        {
+            _sut.AddLibrary("common");
+            _sut.AddLibrary("test");
+
+            var lines = new List<string> { "test1", "test2" };
+            _sut.AddLines(lines);
+            var expectStr = "#include<test>\n" + "\n" + "{\n" + "\ttest1\n" + "\ttest2\n" + "}\n";
+
+            Assert.AreEqual(expectStr, _sut.BuildCode());
         }
     }
 }

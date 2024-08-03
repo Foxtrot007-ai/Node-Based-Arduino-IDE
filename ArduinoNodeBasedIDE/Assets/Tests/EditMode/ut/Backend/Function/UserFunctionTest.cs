@@ -206,7 +206,7 @@ namespace Tests.EditMode.ut.Backend.Function
             Assert.AreEqual(CodeManager.VariableStatus.Param, callCodeManager.Variables[variable2]);
 
             _codeManagerMock.Received().AddLine("int test(int param1, string param2)");
-            _codeManagerMock.Received().AddLines(callCodeManager.CodeLines);
+            _codeManagerMock.Received().AddLines(callCodeManager.CodeLines, true);
         }
     }
 }

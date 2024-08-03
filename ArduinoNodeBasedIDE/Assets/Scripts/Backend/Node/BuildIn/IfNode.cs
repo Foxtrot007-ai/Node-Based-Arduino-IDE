@@ -33,6 +33,7 @@ namespace Backend.Node.BuildIn
 
             if (_false.Connected is not null)
             {
+                codeManager.AddLine("else");
                 var falseCopy = new CodeManager(codeManager);
                 ConnectedToCode(falseCopy, _false);
                 codeManager.AddLines(falseCopy.CodeLines);

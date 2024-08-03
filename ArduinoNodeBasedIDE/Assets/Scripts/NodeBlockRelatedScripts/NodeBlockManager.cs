@@ -328,6 +328,7 @@ public class NodeBlockManager : MonoBehaviour
 
     public void GenerateCode()
     {
+        backendManager.BuildCode("Assets/Resources/code.cpp");
         messageInfo.addMessage("Code generate succesfully", 0.3f);
     }
 

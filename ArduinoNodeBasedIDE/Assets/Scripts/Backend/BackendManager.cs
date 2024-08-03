@@ -38,15 +38,41 @@ namespace Backend
 
         public void BuildCode(string path)
         {
-            /*
-             * Todo after refactor
-             * Create includes
-             * GlobalVariables
-             * function declarations ??
-             * functions with body
-             * start
-             * loop
-             */
+            var codeManager = new CodeManager();
+
+            // GlobalVariables
+            GlobalVariables.Variables
+                .ForEach(variable =>
+                {
+                    codeManager.AddLine(((Variable)variable).ToCode() + ";");
+                    codeManager.SetVariableStatus(variable, CodeManager.VariableStatus.Global);
+                });
+            codeManager.AddLine("");
+
+            // Functions declarations
+            Functions
+                .Functions
+                .ForEach(fun => codeManager.AddLine(((UserFunction)fun).ToCodeDeclaration() + ";"));
+            codeManager.AddLine("");
+
+            // Functions with body
+            Functions
+                .Functions
+                .ForEach(fun =>
+                {
+                    ((UserFunction)fun).ToCode(codeManager);
+                    codeManager.AddLine("");
+                });
+
+            // Start
+            ((Function.Function)Start).ToCode(codeManager);
+            codeManager.AddLine("");
+
+            // Loop
+            ((Function.Function)Loop).ToCode(codeManager);
+            codeManager.AddLine("");
+
+            File.WriteAllText(path, codeManager.BuildCode());
         }
         public void Save(string path)
         {
