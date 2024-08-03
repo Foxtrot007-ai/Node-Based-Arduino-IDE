@@ -8,6 +8,7 @@ namespace Backend.Node
     {
         private readonly ClassMethodTemplate _classMethodTemplate;
         private TypeIO _classIn;
+        public override string CreatorId => _classMethodTemplate.Id;
         public override NodeType NodeType => NodeType.Method;
 
         public ClassMethodNode(ClassMethodTemplate classMethodTemplate) : base(classMethodTemplate)

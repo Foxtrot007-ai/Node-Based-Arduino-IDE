@@ -29,10 +29,5 @@ namespace Backend.API
          * Save in file
          */
         public void AddClassConstructorTemplate(string className, string library, List<string> inputs);
-
-        /*
-         * Remove template by id, cannot remove buildIn templates
-         */
-        public void RemoveTemplate(string id);
     }
 }

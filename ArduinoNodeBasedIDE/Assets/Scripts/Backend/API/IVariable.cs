@@ -4,6 +4,8 @@ namespace Backend.API
 {
     public interface IVariable
     {
+        public string Id { get; }
+
         /*
          * Return name of variable
          */

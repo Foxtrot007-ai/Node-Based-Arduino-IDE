@@ -10,6 +10,7 @@ namespace Backend.Node
         private FunctionTemplate _functionTemplate;
         public override string NodeName => _functionTemplate.Name;
         public override NodeType NodeType => NodeType.Function;
+        public override string CreatorId => _functionTemplate.Id;
 
         public FunctionNode(FunctionTemplate functionTemplate)
         {

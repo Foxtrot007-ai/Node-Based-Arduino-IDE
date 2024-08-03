@@ -2,6 +2,8 @@ namespace Backend.API
 {
     public interface IFunction
     {
+        public string Id { get; }
+
         /*
          * Start node of function flow
          */
@@ -16,7 +18,7 @@ namespace Backend.API
          * Local variables
          */
         public IVariablesManager Variables { get; }
-        
+
         /*
          * If true IConnection is logicalDelete, need physical delete
          */

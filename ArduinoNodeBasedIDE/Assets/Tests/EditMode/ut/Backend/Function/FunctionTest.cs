@@ -25,8 +25,8 @@ namespace Tests.EditMode.ut.Backend.Function
             _codeManagerMock = Substitute.For<CodeManager>();
             _backendManager = Substitute.For<IBackendManager>();
 
-            _sut = new MyFunction(_backendManager, "test");
-            MockHelper.SetField<MyFunction, StartNode>(_sut, "_startNode", _startNodeMock);
+            _sut = new MyFunction(_backendManager, "test", new PathName("TEST-1"));
+            MockHelper.SetFieldValue<MyFunction, StartNode>(_sut, "_startNode", _startNodeMock);
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace Tests.EditMode.ut.Backend.Function
                 .Do(info => callCodeManager = info.ArgAt<CodeManager>(0));
 
             _sut.ToCode(_codeManagerMock);
-            
+
             Assert.AreNotSame(callCodeManager, _codeManagerMock);
             _codeManagerMock.Received().AddLine("void test()");
             _codeManagerMock.Received().AddLines(callCodeManager.CodeLines);

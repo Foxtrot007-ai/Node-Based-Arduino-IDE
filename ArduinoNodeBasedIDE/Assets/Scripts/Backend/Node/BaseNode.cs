@@ -13,13 +13,17 @@ namespace Backend.Node
         public virtual string NodeName { get; protected set; }
         public bool IsDeleted { get; private set; }
         public virtual NodeType NodeType { get; protected set; }
-        public string CreatorId { get; } = "0";
+        public virtual string CreatorId { get; } = "0";
         public virtual List<IConnection> InputsList { get; private set; } = new();
         public virtual List<IConnection> OutputsList { get; private set; } = new();
 
         protected FlowIO _prevNode;
         protected FlowIO _nextNode;
 
+        protected BaseNode(string creatorId) : this()
+        {
+            CreatorId = creatorId;
+        }
         protected BaseNode()
         {
             _prevNode = new FlowIO(this, IOSide.Input, "prev");

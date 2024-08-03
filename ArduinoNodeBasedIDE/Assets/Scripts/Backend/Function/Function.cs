@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Backend.API;
+using Backend.Json;
 using Backend.Node.BuildIn;
 using Backend.Template;
 using Backend.Type;
@@ -11,6 +13,7 @@ namespace Backend.Function
     {
         public INode StartNode => _startNode;
         public virtual string Name { get; protected set; }
+        public string Id => PathName.ToString();
         public virtual IVariablesManager Variables => _localVariablesManager;
         public bool IsDelete { get; protected set; } = false;
         public virtual IMyType OutputType { get; protected set; } = new VoidType();
@@ -18,14 +21,31 @@ namespace Backend.Function
         private StartNode _startNode = new(new BuildInTemplate(0, "Start", typeof(StartNode)));
         private LocalVariablesManager _localVariablesManager;
         protected IBackendManager _backendManager;
+        public PathName PathName { get; protected init; }
         protected Function()
         {
         }
-        public Function(IBackendManager backendManager, string name)
+
+        public Function(IBackendManager backendManager, List<VariableJson> variableJsons)
+        {
+            _backendManager = backendManager;
+            _localVariablesManager = new LocalVariablesManager(this, variableJsons);
+        }
+
+        public Function(IBackendManager backendManager, string name, PathName pathName, List<VariableJson> variableJsons)
         {
             Name = name;
+            PathName = pathName;
             _backendManager = backendManager;
-            _localVariablesManager = new LocalVariablesManager(this);
+            _localVariablesManager = new LocalVariablesManager(this, variableJsons);
+        }
+
+        public Function(IBackendManager backendManager, string name, PathName pathName)
+        {
+            Name = name;
+            PathName = pathName;
+            _backendManager = backendManager;
+            _localVariablesManager = new LocalVariablesManager(this, PathName);
         }
 
         protected virtual string CreateInputs()

@@ -6,7 +6,7 @@ namespace Tests.EditMode.ut.Backend.mocks
 {
     public class VariableNodeMock : VariableNode
     {
-        public VariableNodeMock(Variable manager) : base(manager, IOSide.Input)
+        public VariableNodeMock(Variable manager) : base(manager, IOSide.Input, "test")
         {
         }
     }

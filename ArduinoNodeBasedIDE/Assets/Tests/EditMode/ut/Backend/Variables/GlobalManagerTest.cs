@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Backend;
 using Backend.API;
 using Backend.Exceptions;
 using Backend.Function;
@@ -21,20 +22,20 @@ namespace Tests.EditMode.ut.Backend.Variables
         private global::Backend.Function.Function _startMock;
         private global::Backend.Function.Function _loopMock;
         private UserFunction _userFunctionMock;
-        
+
         [SetUp]
         public void Init()
         {
             _startMock = Substitute.For<global::Backend.Function.Function>();
             _loopMock = Substitute.For<global::Backend.Function.Function>();
             _userFunctionMock = Substitute.For<UserFunction>();
-            
+
             _backendManagerMock = Substitute.For<IBackendManager>();
 
             _backendManagerMock.Start.Returns(_startMock);
             _backendManagerMock.Loop.Returns(_loopMock);
             _backendManagerMock.Functions.Functions.Returns(new List<IUserFunction> { _userFunctionMock });
-            _sut = new GlobalVariablesManager(_backendManagerMock);
+            _sut = new GlobalVariablesManager(_backendManagerMock, new PathName("TEST-1"));
         }
 
         [Test]
@@ -48,7 +49,7 @@ namespace Tests.EditMode.ut.Backend.Variables
 
             _sut.AddVariable(dto);
         }
-        
+
         [Test]
         public void DuplicateVariableNameSelf()
         {
@@ -57,12 +58,12 @@ namespace Tests.EditMode.ut.Backend.Variables
             _startMock.IsVariableLocalDuplicate(name).Returns(false);
             _loopMock.IsVariableLocalDuplicate(name).Returns(false);
             _userFunctionMock.IsVariableLocalDuplicate(name).Returns(false);
-            
+
             _sut.AddVariable(dto);
 
             Assert.Throws<InvalidVariableManageDto>(() => _sut.AddVariable(dto));
         }
-        
+
         [Test]
         public void DuplicateVariableNameStart()
         {
@@ -71,10 +72,10 @@ namespace Tests.EditMode.ut.Backend.Variables
             _startMock.IsVariableLocalDuplicate(name).Returns(true);
             _loopMock.IsVariableLocalDuplicate(name).Returns(false);
             _userFunctionMock.IsVariableLocalDuplicate(name).Returns(false);
-            
+
             Assert.Throws<InvalidVariableManageDto>(() => _sut.AddVariable(dto));
         }
-        
+
         [Test]
         public void DuplicateVariableNameLoop()
         {
@@ -83,10 +84,10 @@ namespace Tests.EditMode.ut.Backend.Variables
             _startMock.IsVariableLocalDuplicate(name).Returns(false);
             _loopMock.IsVariableLocalDuplicate(name).Returns(true);
             _userFunctionMock.IsVariableLocalDuplicate(name).Returns(false);
-            
+
             Assert.Throws<InvalidVariableManageDto>(() => _sut.AddVariable(dto));
         }
-        
+
         [Test]
         public void DuplicateVariableNameUserFunction()
         {
@@ -95,8 +96,22 @@ namespace Tests.EditMode.ut.Backend.Variables
             _startMock.IsVariableLocalDuplicate(name).Returns(false);
             _loopMock.IsVariableLocalDuplicate(name).Returns(false);
             _userFunctionMock.IsVariableLocalDuplicate(name).Returns(true);
-            
+
             Assert.Throws<InvalidVariableManageDto>(() => _sut.AddVariable(dto));
+        }
+
+
+        [Test]
+        public void AddVariableTest()
+        {
+            var variable1 = _sut.AddVariable(DtoHelper.CreateVariableManage("test1"));
+            var variable2 = _sut.AddVariable(DtoHelper.CreateVariableManage("test2"));
+
+            Assert.AreEqual(2, _sut.Variables.Count);
+            Assert.AreSame(variable1, _sut.Variables[0]);
+            Assert.AreSame(variable2, _sut.Variables[1]);
+            Assert.AreEqual("TEST-1/GLOBAL_VAR-1", ((Variable)variable1).PathName.ToString());
+            Assert.AreEqual("TEST-1/GLOBAL_VAR-2", ((Variable)variable2).PathName.ToString());
         }
     }
 }

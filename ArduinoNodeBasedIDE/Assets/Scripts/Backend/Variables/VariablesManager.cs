@@ -2,12 +2,37 @@ using System.Collections.Generic;
 using Backend.API;
 using Backend.API.DTO;
 using Backend.Exceptions;
+using Backend.Json;
 
 namespace Backend.Variables
 {
     public abstract class VariablesManager : IVariablesManager
     {
         public virtual List<IVariable> Variables { get; } = new();
+        private PathName _parentPn;
+        protected string _myPnStr;
+        private long _highestId = 0;
+
+        protected VariablesManager()
+        {
+        }
+
+        protected VariablesManager(List<VariableJson> variableJsons)
+        {
+            foreach (var variableJson in variableJsons)
+            {
+                var variable = new Variable(this, variableJson);
+                var id = variable.PathName.GetId();
+                if (id > _highestId)
+                {
+                    _highestId = id;
+                }
+            }
+        }
+        protected VariablesManager(PathName parentPn)
+        {
+            _parentPn = parentPn;
+        }
 
         public virtual IVariable AddVariable(VariableManageDto variableManageDto)
         {
@@ -16,7 +41,8 @@ namespace Backend.Variables
                 throw new InvalidVariableManageDto();
             }
 
-            return new Variable(this, variableManageDto);
+            _highestId++;
+            return new Variable(this, variableManageDto, new PathName(_parentPn, _myPnStr, _highestId));
         }
 
         public virtual void DeleteVariable(IVariable variableManage)
@@ -25,8 +51,8 @@ namespace Backend.Variables
             Variables.Find(x => x == variable)?.Delete();
         }
 
-        protected abstract bool IsVariableDuplicate(string name);
-        
+        public abstract bool IsVariableDuplicate(string name);
+
         public virtual bool IsDuplicateName(string name)
         {
             return Variables.Exists(x => x.Name == name);
@@ -40,6 +66,11 @@ namespace Backend.Variables
         public virtual void DeleteRef(IVariable variable)
         {
             Variables.Remove(variable);
+        }
+
+        public virtual IVariable GetVariableByPn(PathName pathName)
+        {
+            return Variables.Find(variable => ((Variable)variable).PathName.GetId() == pathName.GetId());
         }
     }
 }

@@ -12,11 +12,22 @@ namespace Tests.EditMode.ut.Backend.Helpers
     {
         public static readonly IType DefaultType = CreateType();
 
-        public static void SetField<T, U>(T owner, string fieldName, U value)
+        public static FieldInfo GetField<T>(T owner, string fieldName)
         {
-            typeof(T)
-                .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance)
+            return typeof(T)
+                .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+        }
+        
+        public static void SetFieldValue<T, U>(T owner, string fieldName, U value)
+        {
+            GetField<T>(owner, fieldName)
                 .SetValue(owner, value);
+        }
+
+        public static U GetFieldValue<T, U>(T owner, string fieldName)
+        {
+            return (U)GetField<T>(owner, fieldName)
+                .GetValue(owner);
         }
 
         public static TypeIOMock CreateTypeIO()

@@ -1,4 +1,3 @@
-using System.Linq;
 using Backend.Connection;
 using Backend.Template;
 
@@ -8,6 +7,7 @@ namespace Backend.Node
     {
 
         private readonly ClassConstructorTemplate _classConstructorTemplate;
+        public override string CreatorId => _classConstructorTemplate.Id;
 
         public ClassConstructorNode(ClassConstructorTemplate classConstructorTemplate)
         {

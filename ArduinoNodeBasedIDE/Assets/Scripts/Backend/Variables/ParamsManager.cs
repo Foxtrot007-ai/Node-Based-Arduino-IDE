@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using Backend.API;
 using Backend.API.DTO;
 using Backend.Function;
+using Backend.Json;
 
 namespace Backend.Variables
 {
@@ -11,23 +13,31 @@ namespace Backend.Variables
         protected ParamsManager()
         {
         }
-        public ParamsManager(UserFunction userFunction)
+
+        public ParamsManager(UserFunction userFunction, List<VariableJson> variableJsons) : base(variableJsons)
         {
+            _myPnStr = "PARAM_VAR";
             _userFunction = userFunction;
         }
-        
+
+        public ParamsManager(UserFunction userFunction, PathName parentPn) : base(parentPn)
+        {
+            _myPnStr = "PARAM_VAR";
+            _userFunction = userFunction;
+        }
+
         public override IVariable AddVariable(VariableManageDto variableManageDto)
         {
             var variable = (Variable)base.AddVariable(variableManageDto);
             _userFunction.AddInOut(variable);
             return variable;
         }
-        
-        protected override bool IsVariableDuplicate(string name)
+
+        public override bool IsVariableDuplicate(string name)
         {
             return _userFunction.IsVariableDuplicate(name);
         }
-        
+
         public override void DeleteRef(IVariable variable)
         {
             var index = Variables.IndexOf(variable);

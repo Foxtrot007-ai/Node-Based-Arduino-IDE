@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Backend.API;
 using Backend.API.DTO;
+using Backend.Json;
 using Backend.Node;
 using Backend.Type;
 using Backend.Variables;
@@ -14,15 +15,30 @@ namespace Backend.Function
         private UserFunctionManager _manager;
         private List<UserFunctionNode> _refs = new();
         private ParamsManager _paramsManager;
+
         protected UserFunction()
         {
         }
-        public UserFunction(UserFunctionManager manager, IBackendManager backendManager, FunctionManageDto functionManageDto) : base(
+
+        public UserFunction(UserFunctionManager manager, IBackendManager backendManager, UserFunctionJson userFunctionJson) : base(
             backendManager,
-            functionManageDto.FunctionName)
+            userFunctionJson.Name,
+            new PathName(userFunctionJson.PathName),
+            userFunctionJson.LocalVariables)
         {
             _manager = manager;
-            _paramsManager = new ParamsManager(this);
+            OutputType = TypeConverter.ToIType(userFunctionJson.OutputType);
+            _paramsManager = new ParamsManager(this, userFunctionJson.ParamVariables);
+            _manager.AddRef(this);
+        }
+
+        public UserFunction(UserFunctionManager manager, IBackendManager backendManager, PathName pathName, FunctionManageDto functionManageDto) : base(
+            backendManager,
+            functionManageDto.FunctionName,
+            pathName)
+        {
+            _manager = manager;
+            _paramsManager = new ParamsManager(this, PathName);
             OutputType = functionManageDto.OutputType;
             _backendManager = backendManager;
             _manager.AddRef(this);
@@ -47,7 +63,7 @@ namespace Backend.Function
 
         public INode CreateNode()
         {
-            return new UserFunctionNode(this);
+            return new UserFunctionNode(this, PathName.ToString());
         }
 
         public void Delete()

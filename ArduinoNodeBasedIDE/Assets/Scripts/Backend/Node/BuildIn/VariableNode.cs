@@ -9,7 +9,7 @@ namespace Backend.Node.BuildIn
         protected Variable _variable;
         protected TypeIO _value;
 
-        protected VariableNode(Variable variable, IOSide side)
+        protected VariableNode(Variable variable, IOSide side, string id) : base(id)
         {
             _variable = variable;
             _value = new TypeIO(this, side, variable.Type);

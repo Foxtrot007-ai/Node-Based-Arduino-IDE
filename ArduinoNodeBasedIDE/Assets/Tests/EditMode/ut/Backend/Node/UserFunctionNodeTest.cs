@@ -18,7 +18,7 @@ namespace Tests.EditMode.ut.Backend.Node
     public class UserFunctionNodeTest : BaseNodeTestSetup
     {
         private UserFunction _userFunctionMock;
-        
+
         private UserFunctionNode _sut;
 
         [SetUp]
@@ -29,12 +29,12 @@ namespace Tests.EditMode.ut.Backend.Node
             var type = MockHelper.CreateType();
             _userFunctionMock.OutputType.Returns(type);
 
-            _sut = new UserFunctionNode(_userFunctionMock);
-            
+            _sut = new UserFunctionNode(_userFunctionMock, "test");
+
             PrepareBaseSetup(_sut);
-            
+
         }
-        
+
         private void PrepareVoidSetup()
         {
             SetInputsList(_prevMock, _type1, _type2);
@@ -62,8 +62,8 @@ namespace Tests.EditMode.ut.Backend.Node
             };
             _userFunctionMock.InputList.Variables.Returns(list);
 
-            var sut = new UserFunctionNode(_userFunctionMock);
-            
+            var sut = new UserFunctionNode(_userFunctionMock, "test");
+
             Assert.AreEqual(3, sut.InputsList.Count);
             Assert.IsInstanceOf<FlowIO>(sut.InputsList[0]);
             ExpectHelper.TypeEqual(type1, sut.InputsList[1]);
@@ -73,7 +73,7 @@ namespace Tests.EditMode.ut.Backend.Node
             Assert.IsInstanceOf<FlowIO>(sut.OutputsList[0]);
             _userFunctionMock.Received().AddRef(sut);
         }
-        
+
         [Test]
         public void NonVoidConstructorTest()
         {
@@ -89,15 +89,15 @@ namespace Tests.EditMode.ut.Backend.Node
             };
             _userFunctionMock.InputList.Variables.Returns(list);
 
-            var sut = new UserFunctionNode(_userFunctionMock);
-            
+            var sut = new UserFunctionNode(_userFunctionMock, "test");
+
             Assert.AreEqual(2, sut.InputsList.Count);
             ExpectHelper.TypeEqual(type1, sut.InputsList[0]);
             ExpectHelper.TypeEqual(type2, sut.InputsList[1]);
 
             Assert.AreEqual(1, sut.OutputsList.Count);
             ExpectHelper.TypeEqual(outType, sut.OutputsList[0]);
-            
+
             _userFunctionMock.Received().AddRef(sut);
         }
 
@@ -105,10 +105,10 @@ namespace Tests.EditMode.ut.Backend.Node
         public void AddParamTest()
         {
             PrepareVoidSetup();
-            
+
             var type = MockHelper.CreateType(EType.String);
             var newParam = MockHelper.CreateVariable(type);
-            
+
             _sut.AddParam(newParam);
 
             EqualSizeInput(4);
@@ -116,7 +116,7 @@ namespace Tests.EditMode.ut.Backend.Node
             EqualInput(_type1, 1);
             EqualInput(_type2, 2);
             EqualTypeInput(type, 3);
-            
+
             EqualSizeOutput(1);
             EqualOutput(_nextMock, 0);
         }
@@ -125,9 +125,9 @@ namespace Tests.EditMode.ut.Backend.Node
         public void VoidRemoveParamTest()
         {
             PrepareVoidSetup();
-            
+
             _sut.RemoveParam(0);
-            
+
             _prevMock.DidNotReceive().Delete();
             _type1.Received().Delete();
             _type2.DidNotReceive().Delete();
@@ -138,9 +138,9 @@ namespace Tests.EditMode.ut.Backend.Node
         public void NonVoidRemoveParamTest()
         {
             PrepareNonVoidSetup();
-            
+
             _sut.RemoveParam(0);
-            
+
             _prevMock.DidNotReceive().Delete();
             _type1.Received().Delete();
             _type2.DidNotReceive().Delete();
@@ -153,7 +153,7 @@ namespace Tests.EditMode.ut.Backend.Node
             PrepareNonVoidSetup();
 
             var type = MockHelper.CreateType(EType.Void);
-            
+
             _sut.ChangeOutputType(type);
 
             EqualSizeInput(3);
@@ -172,16 +172,16 @@ namespace Tests.EditMode.ut.Backend.Node
             PrepareVoidSetup();
 
             var type = MockHelper.CreateType(EType.String);
-            
+
             _sut.ChangeOutputType(type);
-            
+
             _prevMock.Received().Disconnect();
             _nextMock.Received().Disconnect();
-            
+
             EqualSizeInput(2);
             EqualInput(_type1, 0);
             EqualInput(_type2, 1);
-            
+
             EqualSizeOutput(1);
             EqualTypeOutput(type, 0);
         }
@@ -190,23 +190,23 @@ namespace Tests.EditMode.ut.Backend.Node
         public void ChangeTypeToTypeTest()
         {
             PrepareNonVoidSetup();
-            
+
             var type = MockHelper.CreateType(EType.String);
-            
+
             _sut.ChangeOutputType(type);
-            
+
             _prevMock.DidNotReceive().Disconnect();
             _nextMock.DidNotReceive().Disconnect();
-            
+
             EqualSizeInput(2);
             EqualInput(_type1, 0);
             EqualInput(_type2, 1);
-            
+
             EqualSizeOutput(1);
             EqualOutput(_type3, 0);
             _type3.Received().ChangeType(type);
         }
-        
+
         [Test]
         public void VoidToCodeParamThrowsTest()
         {
@@ -256,9 +256,9 @@ namespace Tests.EditMode.ut.Backend.Node
         public void DeleteTest()
         {
             PrepareVoidSetup();
-            
+
             _sut.Delete();
-            
+
             _userFunctionMock.Received().DeleteRef(_sut);
         }
     }

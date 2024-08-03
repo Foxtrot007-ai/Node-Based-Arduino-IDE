@@ -14,7 +14,7 @@ namespace Backend.Node
         protected UserFunctionNode()
         {
         }
-        public UserFunctionNode(UserFunction userFunction)
+        public UserFunctionNode(UserFunction userFunction, string id) : base(id)
         {
             _userFunction = userFunction;
             _userFunction.AddRef(this);

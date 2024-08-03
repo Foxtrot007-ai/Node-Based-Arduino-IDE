@@ -204,48 +204,9 @@ namespace Backend
             _fileSystem.File.WriteAllText(filePath + ".json", JsonConvert.SerializeObject(json));
         }
 
-        private void RemoveJson(long id, ClassConstructorTemplate ClassConstructorTemplate)
+        public virtual ITemplate GetTemplateById(long id)
         {
-            var json = _classes[ClassConstructorTemplate.Class.TypeName];
-            json.Constructors.Remove(id);
-            WriteJsonToFile(MakePath(ClassesDir, json.ClassName), json);
-        }
-
-        private void RemoveJson(long id, ClassMethodTemplate ClassMethodTemplate)
-        {
-            var json = _classes[ClassMethodTemplate.Class.TypeName];
-            json.Methods.Remove(id);
-            WriteJsonToFile(MakePath(ClassesDir, json.ClassName), json);
-        }
-
-        private void RemoveJson(long id, FunctionTemplate functionTemplate)
-        {
-            var json = _functions[functionTemplate.Library];
-            json.Functions.Remove(id);
-            WriteJsonToFile(MakePath(ClassesDir, json.Library), json);
-        }
-
-        public void RemoveTemplate(string id1)
-        {
-            throw new NotImplementedException();
-            long id = 1;
-            if (!_templates.TryGetValue(id, out var template))
-                return;
-
-            switch (template)
-            {
-                case ClassMethodTemplate ClassMethodTemplate:
-                    RemoveJson(id, ClassMethodTemplate);
-                    break;
-                case ClassConstructorTemplate ClassConstructorTemplate:
-                    RemoveJson(id, ClassConstructorTemplate);
-                    break;
-                case FunctionTemplate functionTemplate:
-                    RemoveJson(id, functionTemplate);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(template));
-            }
+            return _templates[id];
         }
     }
 }

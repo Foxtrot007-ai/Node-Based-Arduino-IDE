@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
 using Backend.API;
 using Backend.Function;
+using Backend.Json;
 
 namespace Backend.Variables
 {
@@ -8,12 +10,19 @@ namespace Backend.Variables
     {
         private IBackendManager _backendManager;
 
-        public GlobalVariablesManager(IBackendManager backendManager)
+        public GlobalVariablesManager(IBackendManager backendManager, List<VariableJson> variableJsons) : base(variableJsons)
         {
+            _myPnStr = "GLOBAL_VAR";
             _backendManager = backendManager;
         }
 
-        protected override bool IsVariableDuplicate(string name)
+        public GlobalVariablesManager(IBackendManager backendManager, PathName parentPn) : base(parentPn)
+        {
+            _myPnStr = "GLOBAL_VAR";
+            _backendManager = backendManager;
+        }
+
+        public override bool IsVariableDuplicate(string name)
         {
             return IsDuplicateName(name)
                    || ((Function.Function)_backendManager.Start).IsVariableLocalDuplicate(name)

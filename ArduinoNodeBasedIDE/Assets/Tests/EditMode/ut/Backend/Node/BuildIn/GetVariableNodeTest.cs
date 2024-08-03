@@ -21,7 +21,7 @@ namespace Tests.EditMode.ut.Backend.Node.BuildIn
         public void Init()
         {
             _variableMock = Substitute.For<Variable>();
-            _sut = Substitute.ForPartsOf<GetVariableNode>(_variableMock);
+            _sut = Substitute.ForPartsOf<GetVariableNode>(_variableMock, "test");
 
             PrepareBaseSetup(_sut);
 

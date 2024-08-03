@@ -1,5 +1,7 @@
+using Backend;
 using Backend.API.DTO;
 using Backend.Exceptions;
+using Backend.Json;
 using Backend.Node.BuildIn;
 using Backend.Type;
 using Backend.Variables;
@@ -25,7 +27,7 @@ namespace Tests.EditMode.ut.Backend.Variables
         {
             _baseDto = DtoHelper.CreateVariableManage();
             _variablesManagerMock = Substitute.For<VariablesManager>();
-            _sut = new Variable(_variablesManagerMock, _baseDto);
+            _sut = new Variable(_variablesManagerMock, _baseDto, new PathName("TEST-1"));
             _nodeMock = Substitute.For<VariableNodeMock>(_sut);
             _sut.AddRef(_nodeMock);
         }
@@ -40,9 +42,26 @@ namespace Tests.EditMode.ut.Backend.Variables
         public void ConstructorTest()
         {
             var dto = DtoHelper.CreateVariableManage();
-            var newSut = new Variable(_variablesManagerMock, dto);
+            var newSut = new Variable(_variablesManagerMock, dto, new PathName("TEST-1"));
             _variablesManagerMock.Received().AddRef(newSut);
             ExpectEqualDto(dto);
+        }
+
+        [Test]
+        public void ConstructorJsonTest()
+        {
+            var json = new VariableJson
+            {
+                Name = "test",
+                PathName = "TEST-1",
+                Type = "string",
+            };
+
+            var newSut = new Variable(_variablesManagerMock, json);
+            Assert.AreEqual("test", newSut.Name);
+            Assert.AreEqual("TEST-1", newSut.Id);
+            Assert.AreEqual(EType.String, newSut.Type.EType);
+            _variablesManagerMock.Received().AddRef(newSut);
         }
 
         [Test]
@@ -70,12 +89,12 @@ namespace Tests.EditMode.ut.Backend.Variables
         {
             _variablesManagerMock.IsDuplicateName(_baseDto.VariableName).Returns(true);
             var newDto = DtoHelper.CreateVariableManage();
-            
+
             _sut.Change(newDto);
             ExpectEqualDto(_baseDto);
             _nodeMock.DidNotReceiveWithAnyArgs().ChangeType(default);
         }
-        
+
         [Test]
         public void ChangeVariableDuplicateName()
         {

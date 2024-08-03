@@ -1,3 +1,4 @@
+using Backend;
 using Backend.Exceptions;
 using Backend.Function;
 using Backend.Variables;
@@ -21,7 +22,7 @@ namespace Tests.EditMode.ut.Backend.Variables
         public void Init()
         {
             _userFunctionMock = Substitute.For<UserFunction>();
-            _sut = new ParamsManager(_userFunctionMock);
+            _sut = new ParamsManager(_userFunctionMock, new PathName("TEST-1"));
         }
 
         [Test]
@@ -51,6 +52,8 @@ namespace Tests.EditMode.ut.Backend.Variables
             Assert.AreEqual(2, _sut.Variables.Count);
             Assert.AreSame(variable1, _sut.Variables[0]);
             Assert.AreSame(variable2, _sut.Variables[1]);
+            Assert.AreEqual("TEST-1/PARAM_VAR-1", ((Variable)variable1).PathName.ToString());
+            Assert.AreEqual("TEST-1/PARAM_VAR-2", ((Variable)variable2).PathName.ToString());
 
             _userFunctionMock.Received().AddInOut(variable1);
             _userFunctionMock.Received().AddInOut(variable2);

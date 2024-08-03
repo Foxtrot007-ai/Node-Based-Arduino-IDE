@@ -8,12 +8,15 @@ namespace Backend.Template
         protected System.Type _instanceType;
         public virtual string Name { get; }
         public virtual string Category { get; protected set; }
-        public virtual string Id { get; }
+        public string Id => PathName.ToString();
+        public virtual PathName PathName { get; }
 
-        protected BaseTemplate(){}
+        protected BaseTemplate()
+        {
+        }
         protected BaseTemplate(long id, string name)
         {
-            Id = id.ToString();
+            PathName = new PathName(new PathName("ROOT-1"), "TEMPLATE", id);
             Name = name;
         }
 
