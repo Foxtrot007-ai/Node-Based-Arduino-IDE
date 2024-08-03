@@ -36,7 +36,7 @@ namespace Backend
             InstanceCreator = new InstanceCreator(this);
         }
 
-        public void BuildCode()
+        public void BuildCode(string path)
         {
             /*
              * Todo after refactor
