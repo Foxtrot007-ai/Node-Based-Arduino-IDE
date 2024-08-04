@@ -13,7 +13,7 @@ namespace Backend.Node.BuildIn
             AddInputs(_prevNode);
         }
 
-        protected override void MakeCode(CodeManager codeManager)
+        public override void ToCode(CodeManager codeManager)
         {
             codeManager.AddLine("break;");
         }
