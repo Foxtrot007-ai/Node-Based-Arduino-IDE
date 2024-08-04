@@ -30,6 +30,24 @@ namespace Tests.EditMode.ut.Backend.Helpers
                 .GetValue(owner);
         }
 
+        public static PropertyInfo GetProperty<T>(T owner, string fieldName)
+        {
+            return typeof(T)
+                .GetProperty(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        }
+        
+        public static void SetPropertyValue<T, U>(T owner, string fieldName, U value)
+        {
+            GetProperty<T>(owner, fieldName)
+                .SetValue(owner, value, null);
+        }
+
+        public static U GetPropertyValue<T, U>(T owner, string fieldName)
+        {
+            return (U)GetProperty<T>(owner, fieldName)
+                .GetValue(owner, null);
+        }
+        
         public static TypeIOMock CreateTypeIO()
         {
             var inOut = Substitute.For<TypeIOMock>();

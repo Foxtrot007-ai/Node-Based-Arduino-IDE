@@ -34,9 +34,12 @@ namespace Backend.Connection
         {
             base.Check(input);
             var typeInput = (TypeIO)input;
-            if (typeInput is AutoIO { MyType: null })
+            if (typeInput is AutoIO autoIO)
             {
-                return;
+                if (!autoIO.CanBeType(MyType))
+                    throw new WrongConnectionTypeException();
+                if (autoIO.MyType == null)
+                    return;
             }
             CheckCast(typeInput);
             CheckAdapter(typeInput);

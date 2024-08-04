@@ -1,4 +1,7 @@
+using Backend.API;
 using Backend.Connection;
+using Backend.Exceptions;
+using Backend.Exceptions.InOut;
 using Backend.Node;
 using Backend.Type;
 
@@ -10,13 +13,25 @@ namespace Backend.IO
         public override IType MyType => GetMyType();
         public override string IOName => MyType is null ? "Auto" : base.IOName;
         public override IOType IOType => MyType is null ? IOType.Auto : base.IOType;
+        private bool _canBeClass; 
 
-        public AutoIO(BaseNode parentNode, IOSide side, bool isOptional = false) : base(parentNode, side, null, isOptional)
+        public AutoIO(BaseNode parentNode, IOSide side, bool canBeClass = true, bool isOptional = false) : base(parentNode, side, null, isOptional)
         {
+            _canBeClass = canBeClass;
         }
 
+        public bool CanBeType(IMyType type)
+        {
+            return _canBeClass || type.EType != EType.Class;
+        }
+        
         protected override void Check(BaseIO input)
         {
+            if (!CanBeType(((TypeIO)input).MyType))
+            {
+                throw new WrongConnectionTypeException();
+            }
+            
             if (!_wasMyTypeSet)
             {
                 return;
@@ -46,6 +61,11 @@ namespace Backend.IO
 
         public override void ChangeType(IType iMyType)
         {
+            if (!CanBeType(iMyType))
+            {
+                throw new WrongTypeException("This IO cannot be class.");
+            }
+            
             base.ChangeType(iMyType);
             _wasMyTypeSet = true;
         }

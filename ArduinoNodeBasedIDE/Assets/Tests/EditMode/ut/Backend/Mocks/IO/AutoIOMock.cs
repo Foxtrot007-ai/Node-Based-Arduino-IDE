@@ -8,11 +8,11 @@ namespace Tests.EditMode.ut.Backend.Mocks.IO
 {
     public class AutoIOMock : AutoIO
     {
-        public BaseIOMock _connectedMock;
+        public TypeIOMock _connectedMock;
 
         public AutoIOMock() : base(Substitute.For<BaseNode>(), IOSide.Input)
         {
-            _connectedMock = Substitute.For<BaseIOMock>();
+            _connectedMock = Substitute.For<TypeIOMock>();
         }
 
         public void MakeConnect()

@@ -1,5 +1,9 @@
+using Backend.API;
 using Backend.Connection;
+using Backend.Exceptions;
+using Backend.Exceptions.InOut;
 using Backend.IO;
+using Backend.Node;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
@@ -113,6 +117,24 @@ namespace Tests.EditMode.ut.Backend.IO
             IOHelper.ExpectAreConnected(autoOutput, _autoInput);
             Assert.IsNull(autoOutput.MyType);
             Assert.IsNull(_autoInput.MyType);
+        }
+
+        [Test]
+        public void AutoCannotBeClassChangeTypeTest()
+        {
+            var autoI = new AutoIO(Substitute.ForPartsOf<BaseNode>(), IOSide.Input, false);
+
+            Assert.Throws<WrongTypeException>(() => autoI.ChangeType(MockHelper.CreateClassType("test")));
+        }
+        
+        [Test]
+        public void AutoCannotBeClassConnectTest()
+        {
+            var autoI = new AutoIO(Substitute.ForPartsOf<BaseNode>(), IOSide.Input, false);
+            var classO = IOHelper.CreateTypeIO(myType: MockHelper.CreateClassType("test"));
+            
+            
+            Assert.Throws<WrongConnectionTypeException>(() => autoI.Connect(classO));
         }
     }
 }
