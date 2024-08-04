@@ -26,6 +26,9 @@ public class buttonStartLoopSwitchScript : MonoBehaviour
             case "save":
                 nodeBlockManager.SaveState();
                 break;
+            case "load":
+                nodeBlockManager.LoadState();
+                break;
             case "generate":
                 nodeBlockManager.GenerateCode();
                 break;
