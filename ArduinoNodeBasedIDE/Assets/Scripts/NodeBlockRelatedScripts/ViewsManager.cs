@@ -33,6 +33,18 @@ public class ViewsManager
 
         functionList.DeleteFunction((IUserFunction) node);
     }
+
+    public void DeleteAllView()
+    {
+        foreach (var pair in views)
+        {
+            foreach (var obj in pair.Value)
+            {
+                GameObject.Destroy(obj);
+            }
+        }
+    }
+
     public void ChangeView(IFunction node)
     {
         if (actualView != null)

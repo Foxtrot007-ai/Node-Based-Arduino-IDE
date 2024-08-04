@@ -2,6 +2,8 @@ using Backend.API;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using Backend.Node;
 
 public class NodeBlockControllerInput : NodeBlockController
 {
@@ -14,12 +16,10 @@ public class NodeBlockControllerInput : NodeBlockController
 
     public void ValidateInputChange()
     {
-        /* 
-         if(inputField.GetComponent<TMP_Text>().text != nodeBlock.GetValue())
-         {
-            inputField.GetComponent<TMP_Text>().text = nodeBlock.GetValue();
-         }
-         */
+        if(inputField.GetComponent<TMP_Text>().text != ((IInputNode)nodeBlock).Value)
+        {
+            inputField.GetComponent<TMP_Text>().text = ((IInputNode)nodeBlock).Value;
+        }
     }
 
     public void EditMe()

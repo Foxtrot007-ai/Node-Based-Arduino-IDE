@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using Backend.API;
 using Backend;
@@ -18,31 +19,31 @@ public class SaveStateModule
     [Serializable]
     public class sSaveFile
     {
-        public List<sView> sViews { get; set; }
-        public List<sConnection> sConnections { get; set; }
+        public List<sView> sViews;
+        public List<sConnection> sConnections;
     }
 
     [Serializable]
     public class sView
     {
-        public string viewName { get; set; }
-        public List<sController> sControllers { get; set; }
+        public string viewName;
+        public List<sController> sControllers;
 }
     [Serializable]
     public class sController
-    { 
-        public string controllerId { get; set; }
-
-        public string creatorId { get; set; }
-        public Vector3 positionOnScene { get; set; }
+    {
+        public string controllerId;
+        public bool isStartNode;
+        public string creatorId;
+        public Vector3 positionOnScene;
     }
     [Serializable]
     public class sConnection
     {
-        public string controllerIdFirst { get; set; }
-        public int outputIndex { get; set; }
-        public string controllerIdSecond { get; set; }
-        public int inputIndex { get; set; }
+        public string controllerIdFirst;
+        public int outputIndex;
+        public string controllerIdSecond;
+        public int inputIndex;
     }
 
     public void Instantiate(NodeBlockManager manager, IBackendManager bManager, ViewsManager vManager)
@@ -87,6 +88,7 @@ public class SaveStateModule
                 currentControllerIndex++;
                 controller.positionOnScene = obj.GetComponent<NodeBlockController>().transform.position;
                 controller.creatorId = obj.GetComponent<NodeBlockController>().nodeBlock.CreatorId;
+                controller.isStartNode = obj.GetComponent<NodeBlockController>().isStartNodeBlock;
                 view.sControllers.Add(controller);
             }
             save.sViews.Add(view);
@@ -125,30 +127,76 @@ public class SaveStateModule
 
         //parse to json
         string json = JsonUtility.ToJson(save);
+        //Debug.Log(json);
         WriteToFile(json);
     }
 
     public void Load()
     {
         string json = ReadFromFile();
+        Debug.Log(json);
         sSaveFile save = JsonUtility.FromJson<sSaveFile>(json);
+
+        if(save == null)
+        {
+            throw new Exception("Load file fail.");
+        }
 
         Dictionary<string, INode> controllerIDs = new Dictionary<string, INode>();
 
         //create gameobjects with controllers
         foreach(sView view in save.sViews)
         {
+            Debug.Log("viewName: " + view.viewName);
             IFunction function = backendManager.Functions.Functions.Find(v => v.Name == view.viewName);
+
+            if (view.viewName == "start")
+            {
+                function = backendManager.Start;
+            }
+            else if (view.viewName == "loop")
+            {
+                function = backendManager.Loop;
+            }
+            else if(function == null)
+            {
+                throw new Exception("view Name fail");
+            }
+
+            Debug.Log("function name: " + function.Name);
+            viewManager.AddNewView(function);
             viewManager.ChangeView(function);
 
             int i = 0;
             foreach (sController controller in view.sControllers)
             {
-                GameObject nodeBlockObject = nodeBlockManager.SpawnNodeBlockWithoutValidation();
-                nodeBlockObject.transform.position = controller.positionOnScene;
-                INode node = backendManager.InstanceCreator.CreateNodeInstance(controller.creatorId);
+                Debug.Log("controllerId: " + controller.controllerId);
 
-                if (i == 0) { //startnode 
+                Debug.Log("creatorId: " + controller.creatorId);
+
+                Debug.Log(controller.isStartNode);
+
+                GameObject nodeBlockObject = nodeBlockManager.SpawnNodeBlockWithoutValidation(nodeBlockManager.nodeBlockPrefab);
+                nodeBlockObject.transform.position = controller.positionOnScene;
+                INode node;
+                if (view.viewName == "start" && controller.isStartNode)
+                {
+                    node = backendManager.Start.StartNode;
+                }
+                else if (view.viewName == "loop" && controller.isStartNode)
+                {
+                    node = backendManager.Loop.StartNode;
+                }
+                else if(controller.isStartNode)
+                {
+                    node = function.StartNode;
+                }
+                else
+                {
+                    node = backendManager.InstanceCreator.CreateNodeInstance(controller.creatorId);
+                }
+
+                if (controller.isStartNode) { //startnode 
                     nodeBlockObject.GetComponent<NodeBlockController>().isStartNodeBlock = true; 
                 }
 

@@ -16,6 +16,7 @@ public class NodeBlockManager : MonoBehaviour
     // NodeBlock List objects
     public Vector3 nodeBlockSpawnPoint = Vector3.zero;
     public GameObject nodeBlockPrefab;
+    public GameObject nodeBlockInputPrefab;
 
     //views
     public ViewsManager viewsManager = new ViewsManager();
@@ -56,13 +57,13 @@ public class NodeBlockManager : MonoBehaviour
     {
         viewsManager.AddNewView(backendManager.Start);
         viewsManager.ChangeView(backendManager.Start);
-        NodeBlockController startNodeBlockObject = SpawnNodeBlockWithoutValidation().GetComponent<NodeBlockController>();
+        NodeBlockController startNodeBlockObject = SpawnNodeBlockWithoutValidation(nodeBlockPrefab).GetComponent<NodeBlockController>();
         startNodeBlockObject.isStartNodeBlock = true;
         startNodeBlockObject.InstantiateNodeBlockController(backendManager.Start.StartNode);
 
         viewsManager.AddNewView(backendManager.Loop);
         viewsManager.ChangeView(backendManager.Loop);
-        startNodeBlockObject = SpawnNodeBlockWithoutValidation().GetComponent<NodeBlockController>();
+        startNodeBlockObject = SpawnNodeBlockWithoutValidation(nodeBlockPrefab).GetComponent<NodeBlockController>();
         startNodeBlockObject.isStartNodeBlock = true;
         startNodeBlockObject.InstantiateNodeBlockController(backendManager.Loop.StartNode);
 
@@ -137,21 +138,28 @@ public class NodeBlockManager : MonoBehaviour
 
     //SpawnNodeBlock section
  
-    public GameObject SpawnNodeBlockWithoutValidation()
+    public GameObject SpawnNodeBlockWithoutValidation(GameObject prefab)
     {
         nodeBlockSpawnPoint.z = 0;
-        GameObject nodeBlockObject = Instantiate(nodeBlockPrefab, nodeBlockSpawnPoint, Quaternion.identity);
+        GameObject nodeBlockObject = Instantiate(prefab, nodeBlockSpawnPoint, Quaternion.identity);
         viewsManager.AddToView(nodeBlockObject);
         return nodeBlockObject;
     }
 
-
     public GameObject SpawnNodeBlock(INode node)
     {
-        GameObject nodeBlockObject = SpawnNodeBlockWithoutValidation();
+        GameObject nodeBlockObject = SpawnNodeBlockWithoutValidation(nodeBlockPrefab);
         nodeBlockObject.GetComponent<NodeBlockController>().InstantiateNodeBlockController(node);
         return nodeBlockObject;
     }
+    public GameObject SpawnNodeBlockInput(INode node)
+    {
+        GameObject nodeBlockObject = SpawnNodeBlockWithoutValidation(nodeBlockInputPrefab);
+        nodeBlockObject.GetComponent<NodeBlockControllerInput>().InstantiateNodeBlockController(node);
+        return nodeBlockObject;
+    }
+
+
 
     public void SpawnNodeBlock(ButtonScript button)
     {
@@ -160,7 +168,15 @@ public class NodeBlockManager : MonoBehaviour
     }
     public void SpawnNodeBlock(ReferenceButtonScript button)
     {
-        SpawnNodeBlock(button.template.CreateNodeInstance());
+        INode node = button.template.CreateNodeInstance();
+        if(node.NodeType == Backend.Node.NodeType.Input)
+        {
+            SpawnNodeBlockInput(node);
+        }
+        else
+        {
+            SpawnNodeBlock(node);
+        }
     }
     public void SpawnNodeBlock(VariableButtonScript button)
     {
@@ -233,7 +249,7 @@ public class NodeBlockManager : MonoBehaviour
 
         //making start node
 
-        NodeBlockController startNodeBlockObject = SpawnNodeBlockWithoutValidation().GetComponent<NodeBlockController>();
+        NodeBlockController startNodeBlockObject = SpawnNodeBlockWithoutValidation(nodeBlockPrefab).GetComponent<NodeBlockController>();
         startNodeBlockObject.isStartNodeBlock = true;
         startNodeBlockObject.InstantiateNodeBlockController(newFuntion.StartNode);
     }
@@ -321,15 +337,22 @@ public class NodeBlockManager : MonoBehaviour
 
     public void SaveState()
     {
-       // backendManager.Save("Assets/Resources/enviroment.json");
-       // saveManager.Save();
+        backendManager.Save("Assets/Resources/enviroment.json");
+        saveManager.Save();
         messageInfo.addMessage("Code saved succesfully", 0.3f);
     }
 
+    public void ResetScene()
+    {
+        viewsManager.DeleteAllView();
+    }
+
+
     public void LoadState()
     {
-       // backendManager.Load("Assets/Resources/enviroment.json");
-       // saveManager.Load();
+        ResetScene();
+        backendManager.Load("Assets/Resources/enviroment.json");
+        saveManager.Load();
         messageInfo.addMessage("Code saved succesfully", 0.3f);
     }
 
@@ -337,10 +360,5 @@ public class NodeBlockManager : MonoBehaviour
     {
         backendManager.BuildCode("Assets/Resources/code.cpp");
         messageInfo.addMessage("Code generate succesfully", 0.3f);
-    }
-
-    public void SpawnNodeBlockConstant()
-    {
-        //SpawnNodeBlock(backendManager.GetConstantINode());   
     }
 }

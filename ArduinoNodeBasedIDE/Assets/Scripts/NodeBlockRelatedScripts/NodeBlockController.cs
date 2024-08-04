@@ -71,7 +71,8 @@ public class NodeBlockController : MonoBehaviour
     {
         AddInPoints();
         AddOutPoint();
-        field.transform.localScale = new Vector3(60, Math.Max(inPointsList.Count, outPointsList.Count), 0);
+        field.transform.localScale = new Vector3(60, Math.Max(inPointsList.Count, outPointsList.Count) * 10, 0);
+        field.transform.position -= new Vector3(0, Math.Max(inPointsList.Count, outPointsList.Count) * 5, 0);
     }
 
     public void CheckForNameChange()
