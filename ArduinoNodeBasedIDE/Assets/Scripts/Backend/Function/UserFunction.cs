@@ -46,11 +46,14 @@ namespace Backend.Function
 
         public void Change(FunctionManageDto functionManageDto)
         {
-            _manager.Validate(functionManageDto);
+            if (Name != functionManageDto.FunctionName) 
+            {
+                _manager.Validate(functionManageDto);
+            }
 
             Name = functionManageDto.FunctionName;
 
-            if (OutputType == functionManageDto.OutputType) return;
+            if (OutputType.Equals(functionManageDto.OutputType)) return;
 
             OutputType = functionManageDto.OutputType;
             _refs.ForEach(node => node.ChangeOutputType(OutputType));

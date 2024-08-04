@@ -51,7 +51,7 @@ namespace Backend.Variables
 
             Name = newName;
             var newType = (IType)variableManageDto.Type;
-            if (Type == newType) return;
+            if (Type.Equals(newType)) return;
             Type = newType;
             _refs.ForEach(x => x.ChangeType(newType));
         }
@@ -73,6 +73,7 @@ namespace Backend.Variables
             {
                 node.Delete();
             }
+            _variablesManager.DeleteRef(this);
         }
 
         public virtual void AddRef(VariableNode node)

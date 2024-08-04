@@ -190,7 +190,14 @@ public class NodeBlockManager : MonoBehaviour
     public void DeleteNodeBlock(VariableButtonScript button)
     {
         button.variable.Delete();
-        button.GetComponentInParent<FunctionListManager>().UpdateContent();
+        if (button.GetComponentInParent<GlobalVariableListManager>() is not null)
+        {
+            button.GetComponentInParent<GlobalVariableListManager>().UpdateContent();
+        }
+        else
+        {
+            button.GetComponentInParent<LocalVariableListManager>().UpdateContent();
+        }
     }
     public void DeleteNodeBlock(InputButtonScript button)
     {
