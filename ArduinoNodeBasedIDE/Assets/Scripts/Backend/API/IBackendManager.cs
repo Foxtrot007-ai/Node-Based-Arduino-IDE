@@ -41,6 +41,11 @@ namespace Backend.API
 
         /*
          * Build code
+         *
+         * Might throw:
+         *
+         * IOMustBeConnected
+         * VariableNotSet
          */
         public void BuildCode(string path);
         

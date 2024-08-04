@@ -13,6 +13,9 @@ namespace Backend.API
         /*
          * Add new variable to list
          * Will make validation like if name is valid
+         *
+         * Might throw:
+         *  InvalidVariableManageDto
          */
         public IVariable AddVariable(VariableManageDto variableManageDto);
 

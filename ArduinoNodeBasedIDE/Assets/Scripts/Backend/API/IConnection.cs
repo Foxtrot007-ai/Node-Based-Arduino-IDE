@@ -28,18 +28,15 @@ namespace Backend.API
         public INode ParentNode { get; }
         
         /*
-         * Make validation:
-         *  Standard check:
-         *    ConnectionType (e.g. FlowInOut cannot be connected to MyInOut)
-         *    Connected == null
-         *    different side
-         *    self connection
-         *    cycle
-         *  MyTypeInOut check:
-         *    cast (e.g. ClassType cannot be cast to StringType)
-         *    adapter
-         *
-         * If validation fail throw specific exception about fail (look Exceptions/InOut)
+         * Make validation and might throw specific exception:
+         * AlreadyConnected
+         * SelfConnected
+         * SameSide
+         * Cycle when cycle is detected
+         * WrongConnectionType (e.g. FlowIO connected to TypeIO
+         * CannotBeCast
+         * AdapterNeed ? - might be remove
+         * 
          * After success validation make connection between IConnection
          * Don't call on other side (will throw AlreadyConnectedException)
          */

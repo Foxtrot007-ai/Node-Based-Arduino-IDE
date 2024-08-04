@@ -28,6 +28,11 @@ namespace Backend.API
          *      throw exception
          *   else
          *     do nothing (connection still exists)
+         *
+         * Might throw:
+         *  InvalidFunctionManageDto
+         *  CannotBeCast
+         *
          */
 
         public void Change(FunctionManageDto functionManageDto);

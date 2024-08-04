@@ -15,6 +15,9 @@ namespace Backend.API
          * Will make validation like if name is valid
          *
          * Will create startNode
+         *
+         * Might throw:
+         *  InvalidFunctionManageDto
          */
         public IUserFunction AddFunction(FunctionManageDto functionManageDto);
 

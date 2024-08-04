@@ -32,6 +32,10 @@ namespace Backend.API
 
         /*
          * Create new instance of variable getter
+         *
+         * Might throw:
+         *  InvalidVariableManageDto
+         *  CannotBeCast
          */
         public INode CreateGetNode();
 
