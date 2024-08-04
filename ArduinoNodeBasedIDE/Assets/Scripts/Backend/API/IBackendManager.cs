@@ -55,5 +55,7 @@ namespace Backend.API
          * Will reset to default value and then load globalVariable, functions from file
          */
         public void Load(string path);
+
+        public void Clear();
     }
 }

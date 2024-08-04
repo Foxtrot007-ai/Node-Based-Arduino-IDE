@@ -2,11 +2,7 @@
 {
     public enum NodeType
     {
-        Function,
-        Method,
-        Opp,
-        If,
-        Loop,
-        Set
+        Classic,
+        Input,
     }
 }

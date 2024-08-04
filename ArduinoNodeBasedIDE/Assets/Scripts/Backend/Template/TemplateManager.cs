@@ -114,6 +114,15 @@ namespace Backend
             _templates.Add(2, new BuildInTemplate(2, "If", typeof(IfNode)));
             _templates.Add(3, new BuildInTemplate(3, "While", typeof(WhileNode)));
             _templates.Add(4, new BuildInTemplate(4, "Return", typeof(ReturnNode)));
+            _templates.Add(5, new BuildInTemplate(5, "Break", typeof(BreakNode)));
+            _templates.Add(6, new BuildInTemplate(6, "Continue", typeof(ContinueNode)));
+
+            var id = 7;
+            foreach (CompareOpTemplate.ECompareOp op in Enum.GetValues(typeof(CompareOpTemplate.ECompareOp)))
+            {
+                _templates.Add(id, new CompareOpTemplate(id, op));
+                id++;
+            }
         }
 
         public void AddFunctionTemplate(FunctionTemplateDto functionTemplateDto)

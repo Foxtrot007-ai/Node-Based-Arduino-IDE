@@ -28,12 +28,17 @@ namespace Backend
                 Types.Add(new ClassType(classType));
             }
 
+            Clear();
+            InstanceCreator = new InstanceCreator(this);
+        }
+
+        public void Clear()
+        {
             var rootPn = new PathName("ROOT-1");
             Start = new Function.Function(this, "start", new PathName(rootPn, "START"));
             Loop = new Function.Function(this, "loop", new PathName(rootPn, "LOOP"));
             GlobalVariables = new GlobalVariablesManager(this, rootPn);
             Functions = new UserFunctionManager(this);
-            InstanceCreator = new InstanceCreator(this);
         }
 
         public void BuildCode(string path)

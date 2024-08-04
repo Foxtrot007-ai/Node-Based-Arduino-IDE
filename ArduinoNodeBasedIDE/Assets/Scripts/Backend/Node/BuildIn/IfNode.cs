@@ -9,7 +9,6 @@ namespace Backend.Node.BuildIn
         private FlowIO _true;
         private FlowIO _false;
         private TypeIO _predicate;
-        public override NodeType NodeType => NodeType.If;
 
         public IfNode(BuildInTemplate buildInTemplate) : base(buildInTemplate)
         {

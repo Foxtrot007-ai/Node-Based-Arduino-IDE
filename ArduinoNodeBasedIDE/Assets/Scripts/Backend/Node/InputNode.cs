@@ -14,6 +14,7 @@ namespace Backend.Node
     {
         public string Value { get; private set; }
         private AutoIO _output;
+        public override NodeType NodeType => NodeType.Input;
 
         protected InputNode()
         {
