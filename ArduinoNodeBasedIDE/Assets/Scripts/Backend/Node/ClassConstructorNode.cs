@@ -24,7 +24,7 @@ namespace Backend.Node
             codeManager.AddLibrary(_classConstructorTemplate.Library);
 
             var codeParam = codeManager.BuildParamCode(InputsList);
-            return $"new {_classConstructorTemplate.Class.ToCode()}({codeParam})";
+            return $"{_classConstructorTemplate.Class.ToCode()}({codeParam})";
         }
     }
 }

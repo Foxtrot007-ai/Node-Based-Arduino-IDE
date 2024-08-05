@@ -94,9 +94,9 @@ namespace Tests.EditMode.ut.Backend
         }
 
         [Test]
-        public void StartVariableGetTest()
+        public void SetupVariableGetTest()
         {
-            var path = "ROOT-1/START-1/LOCAL_VAR-1/GET-1";
+            var path = "ROOT-1/SETUP-1/LOCAL_VAR-1/GET-1";
             MockGetVariableByPn("LOCAL_VAR-1/GET-1");
             _backendManagerMock.Setup.Variables.Returns(_variablesManagerMock);
             
@@ -104,9 +104,9 @@ namespace Tests.EditMode.ut.Backend
         }
         
         [Test]
-        public void StartVariableSetTest()
+        public void SetupVariableSetTest()
         {
-            var path = "ROOT-1/START-1/LOCAL_VAR-1/SET-1";
+            var path = "ROOT-1/SETUP-1/LOCAL_VAR-1/SET-1";
             MockGetVariableByPn("LOCAL_VAR-1/SET-1");
             _backendManagerMock.Setup.Variables.Returns(_variablesManagerMock);
 

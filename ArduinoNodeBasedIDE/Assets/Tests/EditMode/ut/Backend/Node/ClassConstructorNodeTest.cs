@@ -77,7 +77,7 @@ namespace Tests.EditMode.ut.Backend.Node
 
             var code = _sut.ToCodeParam(_codeManagerMock);
 
-            Assert.AreEqual("new Class(test1, test2)", code);
+            Assert.AreEqual("Class(test1, test2)", code);
             _codeManagerMock.Received().AddLibrary("library");
         }
     }
