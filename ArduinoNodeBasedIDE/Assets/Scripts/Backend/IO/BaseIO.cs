@@ -22,7 +22,6 @@ namespace Backend.IO
         public virtual bool IsOptional { get; }
 
         public virtual IConnection Connected => _connected;
-        private List<ISubscribeIO> _subscribe;
         protected BaseIO(BaseNode parentNode, IOSide side, bool isOptional = false)
         {
             ParentNode = parentNode;
@@ -30,7 +29,6 @@ namespace Backend.IO
             IsDeleted = false;
             IsOptional = isOptional;
             _connected = null;
-            _subscribe = new List<ISubscribeIO>();
         }
 
         public virtual void Connect(IConnection iConnection)
@@ -62,7 +60,6 @@ namespace Backend.IO
 
         protected virtual void BeforeConnectHandler(BaseIO baseIO)
         {
-            ;
         }
 
         private void ConnectHandler(BaseIO baseIO)
@@ -72,12 +69,10 @@ namespace Backend.IO
 
         protected virtual void AfterConnectHandler(BaseIO baseIO)
         {
-            _subscribe.ForEach(x => x.ConnectNotify(this));
         }
 
         protected virtual void ErrorConnectHandler(BaseIO baseIO, Exception exception)
         {
-            ;
         }
 
         public virtual void Disconnect()
@@ -107,7 +102,6 @@ namespace Backend.IO
 
         protected virtual void BeforeDisconnectHandler(BaseIO baseIO)
         {
-            ;
         }
 
         private void DisconnectHandler(BaseIO baseIO)
@@ -117,12 +111,10 @@ namespace Backend.IO
 
         protected virtual void AfterDisconnectHandler(BaseIO baseIO)
         {
-            _subscribe.ForEach(x => x.DisconnectNotify(this));
         }
 
         protected virtual void ErrorDisconnectHandler(BaseIO baseIO, Exception exception)
         {
-            ;
         }
 
         protected virtual void PreCheck(IConnection iConnection)
@@ -140,7 +132,6 @@ namespace Backend.IO
 
         protected virtual void Check(BaseIO input)
         {
-            ;
         }
 
         protected void ReCheck()
@@ -208,16 +199,6 @@ namespace Backend.IO
                     }
                 }
             }
-        }
-
-        public virtual void Subscribe(ISubscribeIO subscribeIO)
-        {
-            _subscribe.Add(subscribeIO);
-        }
-
-        public virtual void Unsubscribe(ISubscribeIO subscribeIO)
-        {
-            _subscribe.Remove(subscribeIO);
         }
 
         public virtual void Delete()

@@ -1,12 +1,13 @@
 using System;
+using System.Collections.Generic;
 using Backend.API;
+using Backend.Connection;
 using Backend.Exceptions;
 using Backend.Exceptions.InOut;
-using Backend.IO;
 using Backend.Node;
 using Backend.Type;
 
-namespace Backend.Connection
+namespace Backend.IO
 {
     public class TypeIO : BaseIO
     {
@@ -14,6 +15,7 @@ namespace Backend.Connection
         public virtual IType MyType => _myType;
         public override IOType IOType => HelperIO.ETypeToInOut(MyType.EType);
         public override string IOName => MyType.TypeName;
+        private List<ISubscribeIO> _subscribe = new();
 
         public TypeIO(BaseNode parentNode, IOSide side, IType myType, bool isOptional = false) :
             base(parentNode, side, isOptional)
@@ -62,6 +64,26 @@ namespace Backend.Connection
             }
         }
 
+        protected override void AfterConnectHandler(BaseIO baseIO)
+        {
+            _subscribe.ForEach(x => x.ConnectNotify(this));
+        }
+
+        protected override void AfterDisconnectHandler(BaseIO baseIO)
+        {
+            _subscribe.ForEach(x => x.DisconnectNotify(this));
+        }
+
+        public virtual void Subscribe(ISubscribeIO subscribeIO)
+        {
+            _subscribe.Add(subscribeIO);
+        }
+
+        public virtual void Unsubscribe(ISubscribeIO subscribeIO)
+        {
+            _subscribe.Remove(subscribeIO);
+        }
+
         public virtual void ChangeType(IType iType)
         {
             if (iType is null)
@@ -74,6 +96,7 @@ namespace Backend.Connection
                 throw new WrongTypeException("Cannot change type to void for input side.");
             }
             _myType = iType;
+            _subscribe.ForEach(x => x.TypeChangeNotify(this));
             ReCheck();
         }
     }

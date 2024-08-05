@@ -24,20 +24,24 @@ namespace Backend.Node.BuildIn
             AddInputs(_in1, _in2);
             AddOutputs(new TypeIO(this, IOSide.Output, new PrimitiveType(EType.Bool)));
         }
-        public void ConnectNotify(BaseIO baseIO)
+        public void ConnectNotify(TypeIO typeIO)
         {
             _connectionCounter++;
             if (_connectionCounter != 1) return;
 
-            _in1.ChangeType(((TypeIO)baseIO).MyType);
-            _in2.ChangeType(((TypeIO)baseIO).MyType);
+            _in1.ChangeType(typeIO.MyType);
+            _in2.ChangeType(typeIO.MyType);
         }
-        public void DisconnectNotify(BaseIO baseIO)
+        public void DisconnectNotify(TypeIO typeIO)
         {
             _connectionCounter--;
             if (_connectionCounter != 0) return;
             _in1.ResetMyType();
             _in2.ResetMyType();
+        }
+
+        public void TypeChangeNotify(TypeIO typeIO)
+        {
         }
 
         protected override string MakeCodeParam(CodeManager codeManager)

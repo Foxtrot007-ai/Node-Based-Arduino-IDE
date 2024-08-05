@@ -1,10 +1,11 @@
-using Backend.IO;
+using Backend.Connection;
 
-namespace Backend.Connection
+namespace Backend.IO
 {
     public interface ISubscribeIO
     {
-        public void ConnectNotify(BaseIO baseIO);
-        public void DisconnectNotify(BaseIO baseIO);
+        public void ConnectNotify(TypeIO typeIO);
+        public void DisconnectNotify(TypeIO typeIO);
+        public void TypeChangeNotify(TypeIO typeIO);
     }
 }

@@ -35,7 +35,7 @@ namespace Backend.Node
             Value = value;
         }
         
-        public void ConnectNotify(BaseIO baseIO)
+        public void ConnectNotify(TypeIO typeIO)
         {
             if (!IsValueValid(Value))
             {
@@ -73,7 +73,7 @@ namespace Backend.Node
             }
         }
         
-        public void DisconnectNotify(BaseIO baseIO)
+        public void DisconnectNotify(TypeIO typeIO)
         {
         }
 
@@ -99,6 +99,9 @@ namespace Backend.Node
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+        public void TypeChangeNotify(TypeIO typeIO)
+        {
         }
     }
 }

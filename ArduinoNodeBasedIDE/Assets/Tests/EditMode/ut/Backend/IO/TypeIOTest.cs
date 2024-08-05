@@ -6,6 +6,7 @@ using Backend.Exceptions.InOut;
 using Backend.IO;
 using Backend.Type;
 using NSubstitute;
+using NSubstitute.ReceivedExtensions;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
 
@@ -17,11 +18,14 @@ namespace Tests.EditMode.ut.Backend.IO
     public class TypeIOTest
     {
         private TypeIO _typeInput;
+        private ISubscribeIO _sub1;
 
         [SetUp]
         public void Init()
         {
+            _sub1 = Substitute.For<ISubscribeIO>();
             _typeInput = IOHelper.CreateTypeIO(IOSide.Input);
+            _typeInput.Subscribe(_sub1);
         }
 
         private static List<BaseIO> _wrong = new()
@@ -30,57 +34,77 @@ namespace Tests.EditMode.ut.Backend.IO
             IOHelper.CreateFlowIO(),
         };
 
+        private void ExpectNoNotify()
+        {
+            _sub1.DidNotReceiveWithAnyArgs().ConnectNotify(default);
+            _sub1.DidNotReceiveWithAnyArgs().DisconnectNotify(default);
+            _sub1.DidNotReceiveWithAnyArgs().TypeChangeNotify(default);
+        }
+
+        private void ExpectConnectNotify()
+        {
+            _sub1.Received().ConnectNotify(_typeInput);
+            _sub1.DidNotReceiveWithAnyArgs().DisconnectNotify(default);
+            _sub1.DidNotReceiveWithAnyArgs().TypeChangeNotify(default);
+        }
+
+        private void ExpectFullNotify()
+        {
+            _sub1.Received().ConnectNotify(_typeInput);
+            _sub1.Received().TypeChangeNotify(_typeInput);
+            _sub1.Received().DisconnectNotify(_typeInput);
+        }
         [Test]
         [TestCaseSource(nameof(_wrong))]
         public void ConnectionWrongConnectionTypeException(BaseIO output)
         {
-            //given
-            //when
             var exception = Assert.Throws<WrongConnectionTypeException>(() => _typeInput.Connect(output));
-            //then
+
+            ExpectNoNotify();
         }
 
         [Test]
         public void ConnectionCannotBeCastException()
         {
-            //given
+
             var output = IOHelper.CreateTypeIO();
             output.MyType.CanBeCast(_typeInput.MyType).Returns(false);
-            //when
+
             var exception = Assert.Throws<CannotBeCastException>(() => _typeInput.Connect(output));
-            //then
+
             output.MyType.Received().CanBeCast(_typeInput.MyType);
             _typeInput.MyType.DidNotReceiveWithAnyArgs().CanBeCast(default);
+            ExpectNoNotify();
         }
 
         [Test]
         public void ConnectionNeedAdapterException()
         {
-            //given
+
             var output = IOHelper.CreateTypeIO();
             output.MyType.CanBeCast(_typeInput.MyType).Returns(true);
             output.MyType.IsAdapterNeed(_typeInput.MyType).Returns(true);
-            //when
+
             var exception = Assert.Throws<AdapterNeedException>(() => _typeInput.Connect(output));
-            //then
+
             output.MyType.Received().CanBeCast(_typeInput.MyType);
             _typeInput.MyType.DidNotReceiveWithAnyArgs().CanBeCast(default);
+            ExpectNoNotify();
         }
 
         [Test]
         public void ConnectionOk()
         {
-            //given
             var output = IOHelper.CreateTypeIO();
             output.MyType.CanBeCast(_typeInput.MyType).Returns(true);
             output.MyType.IsAdapterNeed(_typeInput.MyType).Returns(false);
 
-            //when
             _typeInput.Connect(output);
-            //then
+
             IOHelper.ExpectAreConnected(_typeInput, output);
             output.MyType.Received().CanBeCast(_typeInput.MyType);
             _typeInput.MyType.DidNotReceiveWithAnyArgs().CanBeCast(default);
+            ExpectConnectNotify();
         }
 
         [Test]
@@ -104,6 +128,7 @@ namespace Tests.EditMode.ut.Backend.IO
             var exception = Assert.Throws<ArgumentNullException>(() => _typeInput.ChangeType(null));
             //then 
             Assert.AreEqual("Cannot change type to null.", exception.Message);
+            ExpectNoNotify();
         }
 
         [Test]
@@ -115,22 +140,23 @@ namespace Tests.EditMode.ut.Backend.IO
             var exception = Assert.Throws<WrongTypeException>(() => _typeInput.ChangeType(newType));
             //then 
             Assert.AreEqual("Cannot change type to void for input side.", exception.Message);
+            ExpectNoNotify();
         }
 
         [Test]
         public void ChangeTypeDisconnectAndCannotBeCastException()
         {
-            //given
             var output = IOHelper.CreateTypeIO();
             IOHelper.Connect(_typeInput, output);
 
             var newType = MockHelper.CreateType();
             output.MyType.CanBeCast(newType).Returns(false);
-            //when
+
             Assert.Throws<CannotBeCastException>(() => _typeInput.ChangeType(newType));
-            //then 
+
             Assert.AreSame(newType, _typeInput.MyType);
             IOHelper.ExpectNullConnected(_typeInput, output);
+            ExpectFullNotify();
         }
 
         [Test]
@@ -148,6 +174,7 @@ namespace Tests.EditMode.ut.Backend.IO
             //then 
             Assert.AreSame(newType, _typeInput.MyType);
             IOHelper.ExpectNullConnected(_typeInput, output);
+            ExpectFullNotify();
         }
 
         [Test]
@@ -165,6 +192,10 @@ namespace Tests.EditMode.ut.Backend.IO
             //then 
             Assert.AreSame(newType, _typeInput.MyType);
             IOHelper.ExpectAreConnected(_typeInput, output);
+            
+            _sub1.Received().ConnectNotify(_typeInput);
+            _sub1.DidNotReceiveWithAnyArgs().DisconnectNotify(default);
+            _sub1.Received().TypeChangeNotify(_typeInput);
         }
     }
 }
