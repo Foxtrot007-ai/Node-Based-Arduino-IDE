@@ -13,7 +13,7 @@ namespace Backend
 {
     public class BackendManager : IBackendManager
     {
-        public IFunction Start { get; private set; }
+        public IFunction Setup { get; private set; }
         public IFunction Loop { get; private set; }
         public IVariablesManager GlobalVariables { get; private set; }
         public IUserFunctionsManager Functions { get; private set; }
@@ -35,7 +35,7 @@ namespace Backend
         public void Clear()
         {
             var rootPn = new PathName("ROOT-1");
-            Start = new Function(this, "start", new PathName(rootPn, "START"));
+            Setup = new Function(this, "setup", new PathName(rootPn, "SETUP"));
             Loop = new Function(this, "loop", new PathName(rootPn, "LOOP"));
             GlobalVariables = new GlobalVariablesManager(this, rootPn);
             Functions = new UserFunctionManager(this);
@@ -69,8 +69,8 @@ namespace Backend
                     codeManager.AddLine("");
                 });
 
-            // Start
-            ((Function)Start).ToCode(codeManager);
+            // Setup
+            ((Function)Setup).ToCode(codeManager);
             codeManager.AddLine("");
 
             // Loop
@@ -91,7 +91,7 @@ namespace Backend
             Debug.Log(json);
             var backendJson = JsonConvert.DeserializeObject<BackendManagerJson>(json);
             Debug.Log(backendJson);
-            Start = new Function(this, backendJson.StartVariables);
+            Setup = new Function(this, backendJson.SetupVariables);
             Loop = new Function(this, backendJson.LoopVariables);
             GlobalVariables = new GlobalVariablesManager(this, backendJson.GlobalVariables);
             Functions = new UserFunctionManager(this, backendJson.UserFunctions);

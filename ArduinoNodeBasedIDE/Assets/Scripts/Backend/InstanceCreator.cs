@@ -64,7 +64,7 @@ namespace Backend
             {
                 "GLOBAL_VAR" => GetVariable(nextPn, _backendManager.GlobalVariables),
                 "TEMPLATE" => GetTemplate(nextPn, null),
-                "START" => GetVariable(nextPn.GetNextPath(), _backendManager.Start.Variables),
+                "SETUP" => GetVariable(nextPn.GetNextPath(), _backendManager.Setup.Variables),
                 "LOOP" => GetVariable(nextPn.GetNextPath(), _backendManager.Loop.Variables),
                 "USER_FUNCTION" => GetFunction(nextPn),
                 _ => throw new Exception(),
@@ -85,7 +85,7 @@ namespace Backend
             {
                 "GLOBAL_VAR" => GetVariable(nextPn, _backendManager.GlobalVariables),
                 "TEMPLATE" => GetTemplate(nextPn, function),
-                "START" => GetVariable(nextPn.GetNextPath(), _backendManager.Start.Variables),
+                "SETUP" => GetVariable(nextPn.GetNextPath(), _backendManager.Setup.Variables),
                 "LOOP" => GetVariable(nextPn.GetNextPath(), _backendManager.Loop.Variables),
                 "USER_FUNCTION" => GetFunction(nextPn),
                 _ => throw new Exception(),

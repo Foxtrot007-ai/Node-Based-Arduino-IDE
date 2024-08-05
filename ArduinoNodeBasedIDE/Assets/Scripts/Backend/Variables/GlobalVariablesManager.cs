@@ -25,7 +25,7 @@ namespace Backend.Variables
         public override bool IsVariableDuplicate(string name)
         {
             return IsDuplicateName(name)
-                   || ((Function)_backendManager.Start).IsVariableLocalDuplicate(name)
+                   || ((Function)_backendManager.Setup).IsVariableLocalDuplicate(name)
                    || ((Function)_backendManager.Loop).IsVariableLocalDuplicate(name)
                    || _backendManager.Functions.Functions.Any(fun => ((UserFunction)fun).IsVariableLocalDuplicate(name));
         }

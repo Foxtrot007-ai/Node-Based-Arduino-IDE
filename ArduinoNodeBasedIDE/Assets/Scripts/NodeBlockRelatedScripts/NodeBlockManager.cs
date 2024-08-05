@@ -55,11 +55,11 @@ public class NodeBlockManager : MonoBehaviour
     
     public void instantiateBasicFunctions()
     {
-        viewsManager.AddNewView(backendManager.Start);
-        viewsManager.ChangeView(backendManager.Start);
+        viewsManager.AddNewView(backendManager.Setup);
+        viewsManager.ChangeView(backendManager.Setup);
         NodeBlockController startNodeBlockObject = SpawnNodeBlockWithoutValidation(nodeBlockPrefab).GetComponent<NodeBlockController>();
         startNodeBlockObject.isStartNodeBlock = true;
-        startNodeBlockObject.InstantiateNodeBlockController(backendManager.Start.StartNode);
+        startNodeBlockObject.InstantiateNodeBlockController(backendManager.Setup.StartNode);
 
         viewsManager.AddNewView(backendManager.Loop);
         viewsManager.ChangeView(backendManager.Loop);
@@ -323,9 +323,9 @@ public class NodeBlockManager : MonoBehaviour
         localVariableList.GetComponent<LocalVariableListManager>().ReloadVariables();
     }
 
-    public void ChangeViewToStart()
+    public void ChangeViewToSetup()
     {
-        viewsManager.ChangeView(backendManager.Start);
+        viewsManager.ChangeView(backendManager.Setup);
         localVariableList.GetComponent<LocalVariableListManager>().ReloadVariables();
     }
 
@@ -358,7 +358,7 @@ public class NodeBlockManager : MonoBehaviour
 
     public void GenerateCode()
     {
-        backendManager.BuildCode("Assets/Resources/code.cpp");
+        backendManager.BuildCode("Assets/Resources/code.ino");
         messageInfo.addMessage("Code generate succesfully", 0.3f);
     }
 }

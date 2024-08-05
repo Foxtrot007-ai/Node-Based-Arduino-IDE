@@ -98,7 +98,7 @@ namespace Tests.EditMode.ut.Backend
         {
             var path = "ROOT-1/START-1/LOCAL_VAR-1/GET-1";
             MockGetVariableByPn("LOCAL_VAR-1/GET-1");
-            _backendManagerMock.Start.Variables.Returns(_variablesManagerMock);
+            _backendManagerMock.Setup.Variables.Returns(_variablesManagerMock);
             
             Assert.AreSame(_getVariable, _sut.CreateNodeInstance(path));
         }
@@ -108,7 +108,7 @@ namespace Tests.EditMode.ut.Backend
         {
             var path = "ROOT-1/START-1/LOCAL_VAR-1/SET-1";
             MockGetVariableByPn("LOCAL_VAR-1/SET-1");
-            _backendManagerMock.Start.Variables.Returns(_variablesManagerMock);
+            _backendManagerMock.Setup.Variables.Returns(_variablesManagerMock);
 
             Assert.AreSame(_setVariable, _sut.CreateNodeInstance(path));
         }

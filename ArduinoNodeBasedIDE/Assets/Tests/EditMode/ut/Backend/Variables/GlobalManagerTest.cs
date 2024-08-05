@@ -32,7 +32,7 @@ namespace Tests.EditMode.ut.Backend.Variables
 
             _backendManagerMock = Substitute.For<IBackendManager>();
 
-            _backendManagerMock.Start.Returns(_startMock);
+            _backendManagerMock.Setup.Returns(_startMock);
             _backendManagerMock.Loop.Returns(_loopMock);
             _backendManagerMock.Functions.Functions.Returns(new List<IUserFunction> { _userFunctionMock });
             _sut = new GlobalVariablesManager(_backendManagerMock, new PathName("TEST-1"));

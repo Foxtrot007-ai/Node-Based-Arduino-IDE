@@ -5,9 +5,9 @@ namespace Backend.API
     public interface IBackendManager
     {
         /*
-         * Start function
+         * Setup function
          */
-        public IFunction Start { get; }
+        public IFunction Setup { get; }
 
         /*
          * Loop function

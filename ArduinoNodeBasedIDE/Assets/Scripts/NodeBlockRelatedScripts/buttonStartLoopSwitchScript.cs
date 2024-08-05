@@ -6,19 +6,18 @@ using UnityEngine;
 public class buttonStartLoopSwitchScript : MonoBehaviour
 {
     NodeBlockManager nodeBlockManager;
-    public string type = "start";
+    public string type = "setup";
 
     public void Start()
     {
-        
         nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
     }
     public void OnClick()
     {
         switch (type)
         {
-            case "start":
-                nodeBlockManager.ChangeViewToStart();
+            case "setup":
+                nodeBlockManager.ChangeViewToSetup();
                 break;
             case "loop":
                 nodeBlockManager.ChangeViewToLoop();

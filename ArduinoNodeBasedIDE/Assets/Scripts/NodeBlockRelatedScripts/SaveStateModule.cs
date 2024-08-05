@@ -150,9 +150,9 @@ public class SaveStateModule
             Debug.Log("viewName: " + view.viewName);
             IFunction function = backendManager.Functions.Functions.Find(v => v.Name == view.viewName);
 
-            if (view.viewName == "start")
+            if (view.viewName == "setup")
             {
-                function = backendManager.Start;
+                function = backendManager.Setup;
             }
             else if (view.viewName == "loop")
             {
@@ -179,9 +179,9 @@ public class SaveStateModule
                 GameObject nodeBlockObject = nodeBlockManager.SpawnNodeBlockWithoutValidation(nodeBlockManager.nodeBlockPrefab);
                 nodeBlockObject.transform.position = controller.positionOnScene;
                 INode node;
-                if (view.viewName == "start" && controller.isStartNode)
+                if (view.viewName == "setup" && controller.isStartNode)
                 {
-                    node = backendManager.Start.StartNode;
+                    node = backendManager.Setup.StartNode;
                 }
                 else if (view.viewName == "loop" && controller.isStartNode)
                 {
