@@ -4,7 +4,7 @@ using Backend.Node.BuildIn;
 using NSubstitute;
 using NUnit.Framework;
 using Tests.EditMode.ut.Backend.Helpers;
-using MyFunction = Backend.Function.Function;
+using MyFunction = Backend.MyFunction.Function;
 
 namespace Tests.EditMode.ut.Backend.Function
 {

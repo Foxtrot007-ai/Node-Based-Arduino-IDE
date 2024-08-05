@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Backend;
 using Backend.API;
 using Backend.Exceptions;
-using Backend.Function;
+using Backend.MyFunction;
 using Backend.Variables;
 using NSubstitute;
 using NUnit.Framework;
@@ -19,15 +19,15 @@ namespace Tests.EditMode.ut.Backend.Variables
     {
         private IBackendManager _backendManagerMock;
         private GlobalVariablesManager _sut;
-        private global::Backend.Function.Function _startMock;
-        private global::Backend.Function.Function _loopMock;
+        private global::Backend.MyFunction.Function _startMock;
+        private global::Backend.MyFunction.Function _loopMock;
         private UserFunction _userFunctionMock;
 
         [SetUp]
         public void Init()
         {
-            _startMock = Substitute.For<global::Backend.Function.Function>();
-            _loopMock = Substitute.For<global::Backend.Function.Function>();
+            _startMock = Substitute.For<global::Backend.MyFunction.Function>();
+            _loopMock = Substitute.For<global::Backend.MyFunction.Function>();
             _userFunctionMock = Substitute.For<UserFunction>();
 
             _backendManagerMock = Substitute.For<IBackendManager>();

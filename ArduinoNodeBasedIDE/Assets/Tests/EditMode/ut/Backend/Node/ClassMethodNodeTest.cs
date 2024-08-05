@@ -47,7 +47,7 @@ namespace Tests.EditMode.ut.Backend.Node
         {
             _classMethodTemplate.OutputType.EType.Returns(EType.Int);
             SetInputsList(_class1, _type1, _type2);
-            SetOutputsList(_type3);
+            SetOutputsList(_typeOut3);
         }
 
         [Test]

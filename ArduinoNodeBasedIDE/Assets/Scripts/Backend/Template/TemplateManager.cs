@@ -113,7 +113,7 @@ namespace Backend
             _templates.Add(1, new BuildInTemplate(1, "Input", typeof(InputNode)));
             _templates.Add(2, new BuildInTemplate(2, "If", typeof(IfNode)));
             _templates.Add(3, new BuildInTemplate(3, "While", typeof(WhileNode)));
-            _templates.Add(4, new BuildInTemplate(4, "Return", typeof(ReturnNode)));
+            _templates.Add(4, new ReturnNodeTemplate(4));
             _templates.Add(5, new BuildInTemplate(5, "Break", typeof(BreakNode)));
             _templates.Add(6, new BuildInTemplate(6, "Continue", typeof(ContinueNode)));
 

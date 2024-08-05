@@ -1,6 +1,6 @@
 using Backend;
 using Backend.Exceptions;
-using Backend.Function;
+using Backend.MyFunction;
 using Backend.Variables;
 using NSubstitute;
 using NUnit.Framework;

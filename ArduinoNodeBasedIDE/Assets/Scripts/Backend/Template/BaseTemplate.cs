@@ -24,5 +24,10 @@ namespace Backend.Template
         {
             return (INode)Activator.CreateInstance(_instanceType, this);
         }
+
+        public virtual INode CreateNodeInstance(IFunction function)
+        {
+            return (INode)Activator.CreateInstance(_instanceType, this);
+        }
     }
 }

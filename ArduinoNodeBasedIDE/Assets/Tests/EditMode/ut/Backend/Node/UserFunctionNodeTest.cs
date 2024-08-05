@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Backend.API;
 using Backend.Connection;
-using Backend.Function;
+using Backend.MyFunction;
 using Backend.Node;
 using Backend.Type;
 using NSubstitute;
@@ -44,7 +44,7 @@ namespace Tests.EditMode.ut.Backend.Node
         private void PrepareNonVoidSetup()
         {
             SetInputsList(_type1, _type2);
-            SetOutputsList(_type3);
+            SetOutputsList(_typeOut3);
         }
 
         [Test]
@@ -163,7 +163,7 @@ namespace Tests.EditMode.ut.Backend.Node
 
             EqualSizeOutput(1);
             EqualOutput(_nextMock, 0);
-            _type3.Received().Delete();
+            _typeOut3.Received().Delete();
         }
 
         [Test]
@@ -203,8 +203,8 @@ namespace Tests.EditMode.ut.Backend.Node
             EqualInput(_type2, 1);
 
             EqualSizeOutput(1);
-            EqualOutput(_type3, 0);
-            _type3.Received().ChangeType(type);
+            EqualOutput(_typeOut3, 0);
+            _typeOut3.Received().ChangeType(type);
         }
 
         [Test]

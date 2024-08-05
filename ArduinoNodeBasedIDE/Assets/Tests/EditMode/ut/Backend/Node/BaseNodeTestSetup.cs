@@ -21,7 +21,7 @@ namespace Tests.EditMode.ut.Backend.Node
         protected FlowIOMock _nextMock;
         protected BuildInTemplate _buildInTemplateMock;
 
-        protected TypeIOMock _type1, _type2, _type3;
+        protected TypeIOMock _type1, _type2, _typeOut3;
         protected AutoIOMock _auto1;
         protected TypeIOMock _class1;
 
@@ -35,7 +35,7 @@ namespace Tests.EditMode.ut.Backend.Node
             _nextMock = MockHelper.CreateFlowIO();
             _type1 = MockHelper.CreateTypeIO();
             _type2 = MockHelper.CreateTypeIO();
-            _type3 = MockHelper.CreateTypeIO();
+            _typeOut3 = MockHelper.CreateTypeIO(IOSide.Output);
             _auto1 = MockHelper.CreateAutoIO();
             _class1 = MockHelper.CreateClassIO();
 
@@ -51,7 +51,7 @@ namespace Tests.EditMode.ut.Backend.Node
             _nextMock.MakeConnect();
             _type1.MakeConnect();
             _type2.MakeConnect();
-            _type3.MakeConnect();
+            _typeOut3.MakeConnect();
             _auto1.MakeConnect();
             _class1.MakeConnect();
         }

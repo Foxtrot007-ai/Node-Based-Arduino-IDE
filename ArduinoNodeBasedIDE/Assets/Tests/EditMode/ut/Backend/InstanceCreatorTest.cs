@@ -1,7 +1,7 @@
 using System;
 using Backend;
 using Backend.API;
-using Backend.Function;
+using Backend.MyFunction;
 using Backend.Variables;
 using NSubstitute;
 using NUnit.Framework;
@@ -65,12 +65,12 @@ namespace Tests.EditMode.ut.Backend
         {
             var path = "ROOT-1/TEMPLATE-1";
             var template = Substitute.For<ITemplate>();
-            template.CreateNodeInstance().Returns(_nodeMock);
+            template.CreateNodeInstance(null).Returns(_nodeMock);
             var templateManager = Substitute.For<TemplateManager>();
             templateManager.GetTemplateById(1).Returns(template);
             _backendManagerMock.Templates.Returns(templateManager);
             
-            Assert.AreSame(_nodeMock, _sut.CreateNodeInstance(path));
+            Assert.AreSame(_nodeMock, _sut.CreateNodeInstance(path, null));
         }
 
         [Test]

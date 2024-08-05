@@ -48,9 +48,9 @@ namespace Tests.EditMode.ut.Backend.Helpers
                 .GetValue(owner, null);
         }
         
-        public static TypeIOMock CreateTypeIO()
+        public static TypeIOMock CreateTypeIO(IOSide side = IOSide.Input)
         {
-            var inOut = Substitute.For<TypeIOMock>();
+            var inOut = Substitute.For<TypeIOMock>(side);
             inOut.IOType.Returns(IOType.Dynamic);
             inOut.IsOptional.Returns(false);
             return inOut;

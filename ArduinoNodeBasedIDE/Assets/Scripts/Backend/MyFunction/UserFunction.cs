@@ -7,7 +7,7 @@ using Backend.Node;
 using Backend.Type;
 using Backend.Variables;
 
-namespace Backend.Function
+namespace Backend.MyFunction
 {
     public class UserFunction : Function, IUserFunction
     {
@@ -57,6 +57,7 @@ namespace Backend.Function
 
             OutputType = functionManageDto.OutputType;
             _refs.ForEach(node => node.ChangeOutputType(OutputType));
+            _returnRefs.ForEach(node => node.ChangeInputType(OutputType));
         }
 
         public override bool IsVariableLocalDuplicate(string name)

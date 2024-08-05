@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
 using Backend.API;
-using Backend.Function;
 using Backend.Json;
+using Backend.MyFunction;
 using Backend.Type;
 using Backend.Validator;
 using Backend.Variables;
@@ -35,8 +35,8 @@ namespace Backend
         public void Clear()
         {
             var rootPn = new PathName("ROOT-1");
-            Start = new Function.Function(this, "start", new PathName(rootPn, "START"));
-            Loop = new Function.Function(this, "loop", new PathName(rootPn, "LOOP"));
+            Start = new Function(this, "start", new PathName(rootPn, "START"));
+            Loop = new Function(this, "loop", new PathName(rootPn, "LOOP"));
             GlobalVariables = new GlobalVariablesManager(this, rootPn);
             Functions = new UserFunctionManager(this);
         }
@@ -70,11 +70,11 @@ namespace Backend
                 });
 
             // Start
-            ((Function.Function)Start).ToCode(codeManager);
+            ((Function)Start).ToCode(codeManager);
             codeManager.AddLine("");
 
             // Loop
-            ((Function.Function)Loop).ToCode(codeManager);
+            ((Function)Loop).ToCode(codeManager);
             codeManager.AddLine("");
 
             File.WriteAllText(path, codeManager.BuildCode());
@@ -91,8 +91,8 @@ namespace Backend
             Debug.Log(json);
             var backendJson = JsonConvert.DeserializeObject<BackendManagerJson>(json);
             Debug.Log(backendJson);
-            Start = new Function.Function(this, backendJson.StartVariables);
-            Loop = new Function.Function(this, backendJson.LoopVariables);
+            Start = new Function(this, backendJson.StartVariables);
+            Loop = new Function(this, backendJson.LoopVariables);
             GlobalVariables = new GlobalVariablesManager(this, backendJson.GlobalVariables);
             Functions = new UserFunctionManager(this, backendJson.UserFunctions);
         }

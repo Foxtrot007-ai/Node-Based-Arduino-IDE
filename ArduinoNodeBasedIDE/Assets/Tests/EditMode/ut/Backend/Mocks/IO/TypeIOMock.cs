@@ -9,7 +9,12 @@ namespace Tests.EditMode.ut.Backend.Mocks.IO
     public class TypeIOMock : TypeIO
     {
         public BaseIOMock _connectedMock;
-        public TypeIOMock() : base(Substitute.For<BaseNode>(), IOSide.Output, null)
+
+        public TypeIOMock(IOSide side = IOSide.Input) : base(Substitute.For<BaseNode>(), side, null)
+        {
+            _connectedMock = Substitute.For<BaseIOMock>();
+        }
+        public TypeIOMock() : base(Substitute.For<BaseNode>(), IOSide.Input, null)
         {
             _connectedMock = Substitute.For<BaseIOMock>();
         }

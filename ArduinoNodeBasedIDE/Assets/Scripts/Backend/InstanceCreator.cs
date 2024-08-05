@@ -1,6 +1,6 @@
 using System;
 using Backend.API;
-using Backend.Function;
+using Backend.MyFunction;
 using Backend.Variables;
 
 namespace Backend
@@ -26,11 +26,11 @@ namespace Backend
             };
         }
 
-        private INode GetTemplate(PathName pathName)
+        private INode GetTemplate(PathName pathName, IFunction function)
         {
             return ((TemplateManager)_backendManager.Templates)
                 .GetTemplateById(pathName.GetId())
-                .CreateNodeInstance();
+                .CreateNodeInstance(function);
         }
 
         private INode GetFunction(PathName pathName)
@@ -49,6 +49,7 @@ namespace Backend
             };
         }
 
+        // DEPRECATED
         public INode CreateNodeInstance(string id)
         {
             var pathName = new PathName(id);
@@ -62,7 +63,28 @@ namespace Backend
             return nextPn.GetClassName() switch
             {
                 "GLOBAL_VAR" => GetVariable(nextPn, _backendManager.GlobalVariables),
-                "TEMPLATE" => GetTemplate(nextPn),
+                "TEMPLATE" => GetTemplate(nextPn, null),
+                "START" => GetVariable(nextPn.GetNextPath(), _backendManager.Start.Variables),
+                "LOOP" => GetVariable(nextPn.GetNextPath(), _backendManager.Loop.Variables),
+                "USER_FUNCTION" => GetFunction(nextPn),
+                _ => throw new Exception(),
+            };
+        }
+
+        public INode CreateNodeInstance(string id, IFunction function)
+        {
+            var pathName = new PathName(id);
+            if (pathName.GetFirstPath().ToString() != "ROOT-1")
+            {
+                throw new ArgumentException();
+            }
+
+            var nextPn = pathName.GetNextPath();
+
+            return nextPn.GetClassName() switch
+            {
+                "GLOBAL_VAR" => GetVariable(nextPn, _backendManager.GlobalVariables),
+                "TEMPLATE" => GetTemplate(nextPn, function),
                 "START" => GetVariable(nextPn.GetNextPath(), _backendManager.Start.Variables),
                 "LOOP" => GetVariable(nextPn.GetNextPath(), _backendManager.Loop.Variables),
                 "USER_FUNCTION" => GetFunction(nextPn),

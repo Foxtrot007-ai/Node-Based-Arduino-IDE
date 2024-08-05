@@ -5,9 +5,8 @@ using Backend.Node.BuildIn;
 using Backend.Template;
 using Backend.Type;
 using Backend.Variables;
-using UnityEngine;
 
-namespace Backend.Function
+namespace Backend.MyFunction
 {
     public class Function : IFunction
     {
@@ -21,6 +20,7 @@ namespace Backend.Function
         private StartNode _startNode = new(new BuildInTemplate(0, "Start", typeof(StartNode)));
         private LocalVariablesManager _localVariablesManager;
         protected IBackendManager _backendManager;
+        protected List<ReturnNode> _returnRefs = new();
         public PathName PathName { get; protected init; }
         protected Function()
         {
@@ -81,6 +81,16 @@ namespace Backend.Function
             _startNode.ToCode(clonedCodeManager);
 
             codeManager.AddLines(clonedCodeManager.CodeLines, true);
+        }
+
+        public void AddReturnRef(ReturnNode node)
+        {
+            _returnRefs.Add(node);
+        }
+
+        public void RemoveReturnRef(ReturnNode node)
+        {
+            _returnRefs.Remove(node);
         }
     }
 }

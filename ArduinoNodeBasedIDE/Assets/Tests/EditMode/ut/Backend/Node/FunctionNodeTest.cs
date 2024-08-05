@@ -43,7 +43,7 @@ namespace Tests.EditMode.ut.Backend.Node
         {
             _functionTemplateMock.OutputType.EType.Returns(EType.Int);
             SetInputsList(_type1, _type2);
-            SetOutputsList(_type3);
+            SetOutputsList(_typeOut3);
         }
 
         [Test]

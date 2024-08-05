@@ -4,7 +4,7 @@ using Backend.API.DTO;
 using Backend.Exceptions;
 using Backend.Json;
 
-namespace Backend.Function
+namespace Backend.MyFunction
 {
     public class UserFunctionManager : IUserFunctionsManager
     {

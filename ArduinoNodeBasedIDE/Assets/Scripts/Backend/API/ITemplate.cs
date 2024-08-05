@@ -18,8 +18,14 @@ namespace Backend.API
         public string Id { get; }
 
         /*
+         * DEPRECATED
          * Create new INode instance
          */
         public INode CreateNodeInstance();
+        
+        /*
+         * Create new INode instance
+         */
+        public INode CreateNodeInstance(IFunction function);
     }
 }

@@ -3,8 +3,8 @@ using Backend;
 using Backend.API;
 using Backend.API.DTO;
 using Backend.Exceptions;
-using Backend.Function;
 using Backend.Json;
+using Backend.MyFunction;
 using Backend.Node;
 using Backend.Node.BuildIn;
 using Backend.Type;
@@ -26,6 +26,8 @@ namespace Tests.EditMode.ut.Backend.Function
         private FunctionManageDto _dto;
         private UserFunctionNode _userNode1;
         private UserFunctionNode _userNode2;
+        private ReturnNode _returnNode1;
+        private ReturnNode _returnNode2;
         private CodeManager _codeManagerMock;
         private IBackendManager _backendManager;
         private UserFunction _sut;
@@ -38,15 +40,21 @@ namespace Tests.EditMode.ut.Backend.Function
             _startNodeMock = Substitute.For<StartNode>();
             _userNode1 = Substitute.For<UserFunctionNode>();
             _userNode2 = Substitute.For<UserFunctionNode>();
+
+            _returnNode1 = Substitute.For<ReturnNode>();
+            _returnNode2 = Substitute.For<ReturnNode>();
+            
             _codeManagerMock = Substitute.For<CodeManager>();
             _backendManager = Substitute.For<IBackendManager>();
             _dto = DtoHelper.CreateFunctionManage();
 
             _sut = new UserFunction(_userFunctionManagerMock, _backendManager, new PathName("TEST-1"), _dto);
-            MockHelper.SetFieldValue<global::Backend.Function.Function, StartNode>(_sut, "_startNode", _startNodeMock);
+            MockHelper.SetFieldValue<global::Backend.MyFunction.Function, StartNode>(_sut, "_startNode", _startNodeMock);
             MockHelper.SetFieldValue<UserFunction, ParamsManager>(_sut, "_paramsManager", _paramsManagerMock);
             _sut.AddRef(_userNode1);
             _sut.AddRef(_userNode2);
+            _sut.AddReturnRef(_returnNode1);
+            _sut.AddReturnRef(_returnNode2);
         }
 
         [Test]
@@ -122,6 +130,8 @@ namespace Tests.EditMode.ut.Backend.Function
 
             _userNode1.DidNotReceiveWithAnyArgs().ChangeOutputType(default);
             _userNode2.DidNotReceiveWithAnyArgs().ChangeOutputType(default);
+            _returnNode1.DidNotReceiveWithAnyArgs().ChangeInputType(default);
+            _returnNode2.DidNotReceiveWithAnyArgs().ChangeInputType(default);
         }
 
         [Test]
@@ -136,6 +146,8 @@ namespace Tests.EditMode.ut.Backend.Function
 
             _userNode1.DidNotReceiveWithAnyArgs().ChangeOutputType(default);
             _userNode2.DidNotReceiveWithAnyArgs().ChangeOutputType(default);
+            _returnNode1.DidNotReceiveWithAnyArgs().ChangeInputType(default);
+            _returnNode2.DidNotReceiveWithAnyArgs().ChangeInputType(default);
         }
 
         [Test]
@@ -150,6 +162,8 @@ namespace Tests.EditMode.ut.Backend.Function
 
             _userNode1.Received().ChangeOutputType(newDto.OutputType);
             _userNode2.Received().ChangeOutputType(newDto.OutputType);
+            _returnNode1.Received().ChangeInputType(newDto.OutputType);
+            _returnNode2.Received().ChangeInputType(newDto.OutputType);
         }
 
         [Test]
