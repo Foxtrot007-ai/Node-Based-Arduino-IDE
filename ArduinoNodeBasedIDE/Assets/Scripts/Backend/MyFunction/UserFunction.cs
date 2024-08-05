@@ -54,7 +54,7 @@ namespace Backend.MyFunction
             Name = functionManageDto.FunctionName;
 
             if (OutputType.Equals(functionManageDto.OutputType)) return;
-
+            
             OutputType = functionManageDto.OutputType;
             _refs.ForEach(node => node.ChangeOutputType(OutputType));
             _returnRefs.ForEach(node => node.ChangeInputType(OutputType));

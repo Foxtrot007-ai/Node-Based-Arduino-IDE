@@ -29,7 +29,7 @@ namespace Backend.Node
             }
             else
             {
-                AddOutputs(new TypeIO(this, IOSide.Input, (IType)userFunction.OutputType));
+                AddOutputs(new TypeIO(this, IOSide.Output, (IType)userFunction.OutputType));
             }
         }
 

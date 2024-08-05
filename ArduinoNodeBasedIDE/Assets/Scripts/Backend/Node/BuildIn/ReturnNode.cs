@@ -18,10 +18,9 @@ namespace Backend.Node.BuildIn
         {
             _function = function;
             AddInputs(_prevNode);
-            _returnIn = new TypeIO(this, IOSide.Input, (IType)function.OutputType);
-
             if (_function.OutputType.EType != EType.Void)
             {
+                _returnIn = new TypeIO(this, IOSide.Input, (IType)function.OutputType);
                 AddInputs(_returnIn);
             }
 
@@ -50,7 +49,8 @@ namespace Backend.Node.BuildIn
             {
                 if (_returnIn is null)
                 {
-                    AddInputs(new TypeIO(this, IOSide.Output, (IType)type));
+                    _returnIn = new TypeIO(this, IOSide.Input, (IType)type);
+                    AddInputs(_returnIn);
                 }
                 else
                 {
