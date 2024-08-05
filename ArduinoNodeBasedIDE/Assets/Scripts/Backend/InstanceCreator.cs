@@ -17,7 +17,7 @@ namespace Backend
         private INode GetVariable(PathName pathName, IVariablesManager variablesManager)
         {
             var variable = ((VariablesManager)variablesManager).GetVariableByPn(pathName);
-            
+
             return pathName.GetNextPath().GetClassName() switch
             {
                 "GET" => variable.CreateGetNode(),
@@ -37,6 +37,10 @@ namespace Backend
         {
             var userFunction = ((UserFunctionManager)_backendManager.Functions).GetFunctionByPn(pathName);
             var nextPn = pathName.GetNextPath();
+            if (nextPn is null)
+            {
+                return userFunction.CreateNode();
+            }
             return nextPn.GetClassName() switch
             {
                 "LOCAL_VAR" => GetVariable(nextPn, userFunction.Variables),
@@ -44,7 +48,7 @@ namespace Backend
                 _ => throw new Exception(),
             };
         }
-        
+
         public INode CreateNodeInstance(string id)
         {
             var pathName = new PathName(id);
