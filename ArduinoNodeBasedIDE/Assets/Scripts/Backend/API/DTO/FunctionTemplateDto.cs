@@ -1,10 +1,9 @@
 using System.Collections.Generic;
-using Backend.Type;
 using Castle.Core.Internal;
 
 namespace Backend.API.DTO
 {
-    public record FunctionTemplateDto()
+    public record FunctionTemplateDto
     {
         public string FunctionName { get; init; }
         public string Library { get; init; }

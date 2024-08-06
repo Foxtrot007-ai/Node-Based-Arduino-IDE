@@ -1,6 +1,8 @@
 using System;
 using Backend.API;
+using Backend.API.DTO;
 using Backend.Connection;
+using Backend.Exceptions;
 using Backend.Exceptions.InOut;
 using Backend.IO;
 using Backend.Node.BuildIn;
@@ -102,6 +104,17 @@ namespace Backend.Node
         }
         public void TypeChangeNotify(TypeIO typeIO)
         {
+        }
+
+        public void SetValue(InputNodeValueDto inputNodeValueDto)
+        {
+            if (!inputNodeValueDto.IsDtoValid())
+            {
+                throw new InvalidInputNodeValueDto();
+            }
+
+            Value = inputNodeValueDto.Value;
+            
         }
     }
 }
