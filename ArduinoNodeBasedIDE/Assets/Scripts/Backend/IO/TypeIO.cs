@@ -40,7 +40,7 @@ namespace Backend.IO
             {
                 if (!autoIO.CanBeType(MyType))
                     throw new WrongConnectionTypeException();
-                if (autoIO.MyType == null)
+                if (!autoIO.WasMyTypeSet)
                     return;
             }
             CheckCast(typeInput);
@@ -49,7 +49,6 @@ namespace Backend.IO
 
         private void CheckCast(TypeIO typeInput)
         {
-
             if (!MyType.CanBeCast(typeInput.MyType))
             {
                 throw new CannotBeCastException();
@@ -96,6 +95,11 @@ namespace Backend.IO
                 throw new WrongTypeException("Cannot change type to void for input side.");
             }
             _myType = iType;
+
+            if (Connected is AutoIO autoIO)
+            {
+                autoIO.UpdateType(iType);
+            }
             _subscribe.ForEach(x => x.TypeChangeNotify(this));
             ReCheck();
         }

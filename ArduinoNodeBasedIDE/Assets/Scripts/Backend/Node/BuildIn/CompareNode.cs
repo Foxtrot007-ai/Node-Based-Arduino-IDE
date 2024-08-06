@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Backend.API;
 using Backend.Connection;
 using Backend.IO;
 using Backend.Template;
@@ -5,48 +7,27 @@ using Backend.Type;
 
 namespace Backend.Node.BuildIn
 {
-    public class CompareNode : BuildInNode, ISubscribeIO
+    public class CompareNode : BuildInNode
     {
         private CompareOpTemplate _compareTemplate;
-        private AutoIO _in1;
-        private AutoIO _in2;
+        private ChainIO _chain1;
+        private ChainIO _chain2;
 
-        private int _connectionCounter = 0;
+        public override List<IConnection> InputsList => _chain1.ToList();
 
         public CompareNode(CompareOpTemplate compareTemplate) : base(compareTemplate)
         {
             _compareTemplate = compareTemplate;
+            _chain1 = new ChainIO(this, IOSide.Input, false, false);
+            _chain2 = new ChainIO(this, IOSide.Input, false, false);
 
-            _in1 = new AutoIO(this, IOSide.Input);
-            _in1.Subscribe(this);
-            _in2 = new AutoIO(this, IOSide.Input);
-            _in2.Subscribe(this);
-            AddInputs(_in1, _in2);
+            _chain1.AppendChain(_chain2);
             AddOutputs(new TypeIO(this, IOSide.Output, new PrimitiveType(EType.Bool)));
-        }
-        public void ConnectNotify(TypeIO typeIO)
-        {
-            _connectionCounter++;
-            if (_connectionCounter != 1) return;
-
-            _in1.ChangeType(typeIO.MyType);
-            _in2.ChangeType(typeIO.MyType);
-        }
-        public void DisconnectNotify(TypeIO typeIO)
-        {
-            _connectionCounter--;
-            if (_connectionCounter != 0) return;
-            _in1.ResetMyType();
-            _in2.ResetMyType();
-        }
-
-        public void TypeChangeNotify(TypeIO typeIO)
-        {
         }
 
         protected override string MakeCodeParam(CodeManager codeManager)
         {
-            return $"{ConnectedToCodeParam(codeManager, _in1)} {_compareTemplate.ToCode()} {ConnectedToCodeParam(codeManager, _in2)}";
+            return $"{ConnectedToCodeParam(codeManager, _chain1)} {_compareTemplate.ToCode()} {ConnectedToCodeParam(codeManager, _chain2)}";
         }
     }
 }

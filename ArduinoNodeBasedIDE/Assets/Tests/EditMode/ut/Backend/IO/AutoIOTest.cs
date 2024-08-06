@@ -28,7 +28,7 @@ namespace Tests.EditMode.ut.Backend.IO
         public void ShouldSetTypeAfterConnectAndDisconnect()
         {
             //given
-            IOHelper.Connect(_autoInput, _myTypeOutput);
+            IOHelper.ConnectAuto(_autoInput, _myTypeOutput);
             Assert.AreSame(_myTypeOutput.MyType, _autoInput.MyType);
             //when
             _autoInput.Disconnect();
@@ -92,18 +92,17 @@ namespace Tests.EditMode.ut.Backend.IO
         public void ShouldUpdateTypeAfterConnectedChangeType()
         {
             //given
-            var anyOutput = IOHelper.CreateTypeIO();
-            IOHelper.Connect(_autoInput, anyOutput);
+            IOHelper.ConnectAuto(_autoInput, _myTypeOutput);
 
-            Assert.AreSame(anyOutput.MyType, _autoInput.MyType);
+            Assert.AreSame(_myTypeOutput.MyType, _autoInput.MyType);
             //when
             var newType = MockHelper.CreateType();
             newType.CanBeCast(newType).Returns(true);
-            anyOutput.ChangeType(newType);
-            Assert.AreSame(newType, anyOutput.MyType);
+            _myTypeOutput.ChangeType(newType);
+            Assert.AreSame(newType, _myTypeOutput.MyType);
             //then
-            IOHelper.ExpectAreConnected(_autoInput, anyOutput);
-            Assert.AreSame(anyOutput.MyType, _autoInput.MyType);
+            IOHelper.ExpectAreConnected(_autoInput, _myTypeOutput);
+            Assert.AreSame(_myTypeOutput.MyType, _autoInput.MyType);
         }
 
         [Test]
@@ -126,14 +125,14 @@ namespace Tests.EditMode.ut.Backend.IO
 
             Assert.Throws<WrongTypeException>(() => autoI.ChangeType(MockHelper.CreateClassType("test")));
         }
-        
+
         [Test]
         public void AutoCannotBeClassConnectTest()
         {
             var autoI = new AutoIO(Substitute.ForPartsOf<BaseNode>(), IOSide.Input, false);
             var classO = IOHelper.CreateTypeIO(myType: MockHelper.CreateClassType("test"));
-            
-            
+
+
             Assert.Throws<WrongConnectionTypeException>(() => autoI.Connect(classO));
         }
     }

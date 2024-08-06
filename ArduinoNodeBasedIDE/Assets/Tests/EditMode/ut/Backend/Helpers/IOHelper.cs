@@ -67,10 +67,22 @@ namespace Tests.EditMode.ut.Backend.Helpers
             Assert.AreSame(inOut2, inOut1.Connected);
         }
 
+        public static void AllowConnect(TypeIO output, IType type)
+        {
+            output.MyType.CanBeCast(type).Returns(true);
+            output.MyType.IsAdapterNeed(type).Returns(false);
+        }
+
         public static void Connect(TypeIO input, TypeIO output)
         {
-            output.MyType.CanBeCast(input.MyType).Returns(true);
-            output.MyType.IsAdapterNeed(input.MyType).Returns(false);
+            AllowConnect(output, input.MyType);
+            output.Connect(input);
+            ExpectAreConnected(output, input);
+        }
+
+        public static void ConnectAuto(AutoIO input, TypeIO output)
+        {
+            AllowConnect(output, output.MyType);
             output.Connect(input);
             ExpectAreConnected(output, input);
         }
