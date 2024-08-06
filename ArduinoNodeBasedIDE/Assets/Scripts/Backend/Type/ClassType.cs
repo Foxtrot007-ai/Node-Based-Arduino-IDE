@@ -33,7 +33,7 @@ namespace Backend.Type
             {
                 return false;
             }
-            return classType == this;
+            return classType.Equals(this);
         }
         public bool IsAdapterNeed(IType iMyType)
         {
@@ -41,7 +41,7 @@ namespace Backend.Type
         }
         public virtual string ToCode()
         {
-            return char.ToUpper(TypeName[0]) + TypeName.Substring(1);
+            return TypeName;
         }
 
         protected bool Equals(ClassType other)
