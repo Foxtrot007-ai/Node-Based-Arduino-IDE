@@ -8,6 +8,7 @@ using Backend.Type;
 using System;
 using System.IO;
 using UnityEngine.UIElements;
+using System.Linq.Expressions;
 
 public class SaveStateModule
 {
@@ -34,6 +35,7 @@ public class SaveStateModule
     {
         public string controllerId;
         public bool isStartNode;
+        public bool isInputNode;
         public string creatorId;
         public Vector3 positionOnScene;
     }
@@ -89,6 +91,14 @@ public class SaveStateModule
                 controller.positionOnScene = obj.GetComponent<NodeBlockController>().transform.position;
                 controller.creatorId = obj.GetComponent<NodeBlockController>().nodeBlock.CreatorId;
                 controller.isStartNode = obj.GetComponent<NodeBlockController>().isStartNodeBlock;
+                if(obj.GetComponent<NodeBlockControllerInput>() != null)
+                {
+                    controller.isInputNode = true;
+                }
+                else
+                {
+                    controller.isInputNode = false;
+                }
                 view.sControllers.Add(controller);
             }
             save.sViews.Add(view);
@@ -176,7 +186,16 @@ public class SaveStateModule
 
                 Debug.Log(controller.isStartNode);
 
-                GameObject nodeBlockObject = nodeBlockManager.SpawnNodeBlockWithoutValidation(nodeBlockManager.nodeBlockPrefab);
+                GameObject nodeBlockObject;
+                if (!controller.isInputNode)
+                {
+                    nodeBlockObject = nodeBlockManager.SpawnNodeBlockWithoutValidation(nodeBlockManager.nodeBlockPrefab);
+                }
+                else
+                {
+                    nodeBlockObject = nodeBlockManager.SpawnNodeBlockWithoutValidation(nodeBlockManager.nodeBlockInputPrefab);
+                }
+                
                 nodeBlockObject.transform.position = controller.positionOnScene;
                 INode node;
                 if (view.viewName == "setup" && controller.isStartNode)
@@ -193,7 +212,7 @@ public class SaveStateModule
                 }
                 else
                 {
-                    node = backendManager.InstanceCreator.CreateNodeInstance(controller.creatorId);
+                    node = backendManager.InstanceCreator.CreateNodeInstance(controller.creatorId, function);
                 }
 
                 if (controller.isStartNode) { //startnode 
@@ -209,8 +228,10 @@ public class SaveStateModule
         //connect them;
         foreach(sConnection con in save.sConnections)
         {
+           
             INode controllerFirst = controllerIDs[con.controllerIdFirst];
             INode controllerSecond = controllerIDs[con.controllerIdSecond];
+            Debug.Log(controllerFirst.NodeName + ", " + controllerSecond.NodeName);
             controllerFirst.OutputsList[con.outputIndex].Connect(controllerSecond.InputsList[con.inputIndex]);
         }
     }

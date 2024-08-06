@@ -12,15 +12,13 @@ public class ConnectionPoint : MonoBehaviour
     public GameObject typeText;
     public GameObject line;
 
-    Vector3[] points = new Vector3[2];
+    public Vector3[] points = new Vector3[2];
     Vector2 directionPoint;
     public bool holding = false;
-    public bool showLine;
 
     void Start()
     {
         nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
-        showLine = false;
     }
 
     private void UpdateType()
@@ -33,7 +31,7 @@ public class ConnectionPoint : MonoBehaviour
 
     void Update()
     {
-
+        
         UpdateType();
 
         if (transform.position != points[0])
@@ -41,7 +39,7 @@ public class ConnectionPoint : MonoBehaviour
             points[0] = transform.position;
             DrawLine();
         }
-
+       
         if (connection.Connected != null)
         {
             if (connection.Connected.UIPoint.transform.position != points[1])
@@ -55,7 +53,6 @@ public class ConnectionPoint : MonoBehaviour
             if (!holding)
             {
                 ClearLine();
-                showLine = false;
             }
         }
 
@@ -73,12 +70,11 @@ public class ConnectionPoint : MonoBehaviour
         line.GetComponent<LineRenderer>().SetPositions(zeroes);
     }
 
-    private void DrawLine()
+    public void DrawLine()
     {
-        if (showLine)
-        {
-            line.GetComponent<LineRenderer>().SetPositions(points);
-        }
+        Debug.Log("Drawing");
+        line.GetComponent<LineRenderer>().SetPositions(points);
+       
     }
     private void OnMouseOver()
     {
@@ -87,7 +83,6 @@ public class ConnectionPoint : MonoBehaviour
             points[0] = transform.position;
             directionPoint = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;
             holding = true;
-            showLine = true;
         }
 
         if (Input.GetMouseButtonDown(0) && Input.GetKey(KeyCode.LeftControl))
@@ -99,7 +94,6 @@ public class ConnectionPoint : MonoBehaviour
     public void Disconnect()
     {
         connection.Connected.Disconnect();
-        showLine = false;
         ClearLine();
     }
 
@@ -125,12 +119,18 @@ public class ConnectionPoint : MonoBehaviour
         if (hit.collider != null
             && CompareTag(hit.collider.tag))
         {
-            connection.Connect(hit.collider.gameObject.GetComponent<ConnectionPoint>().connection);
+            try
+            {
+                connection.Connect(hit.collider.gameObject.GetComponent<ConnectionPoint>().connection);
+            }
+            catch
+            {
+                ClearLine();
+            }
         }
         else
         {
             ClearLine();
-            showLine = false;
         }
 
         holding = false;
