@@ -116,11 +116,25 @@ namespace Backend
             _templates.Add(4, new ReturnNodeTemplate(4));
             _templates.Add(5, new BuildInTemplate(5, "Break", typeof(BreakNode)));
             _templates.Add(6, new BuildInTemplate(6, "Continue", typeof(ContinueNode)));
+            _templates.Add(7, new BuildInTemplate(7, "!", typeof(NotNode)));
+            _templates.Add(8, new BuildInTemplate(8, "()", typeof(BracketNode)));
 
-            var id = 7;
+            var id = 9;
             foreach (CompareOpTemplate.ECompareOp op in Enum.GetValues(typeof(CompareOpTemplate.ECompareOp)))
             {
                 _templates.Add(id, new CompareOpTemplate(id, op));
+                id++;
+            }
+
+            foreach (LogicalOpTemplate.ELogicalOp op in Enum.GetValues(typeof(LogicalOpTemplate.ELogicalOp)))
+            {
+                _templates.Add(id, new LogicalOpTemplate(id, op));
+                id++;
+            }
+            
+            foreach (ArithmeticOpTemplate.EArithmeticOp op in Enum.GetValues(typeof(ArithmeticOpTemplate.EArithmeticOp)))
+            {
+                _templates.Add(id, new ArithmeticOpTemplate(id, op));
                 id++;
             }
         }

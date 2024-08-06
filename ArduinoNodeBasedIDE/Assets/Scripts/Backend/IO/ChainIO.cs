@@ -102,7 +102,7 @@ namespace Backend.IO
             // Tail
             if (_autoResize && Next == null)
             {
-                Next = new ChainIO(ParentNode, Side, _autoResize, true, _singleType ? _myType : null);
+                AppendChain(new ChainIO(ParentNode, Side, _autoResize, true, _singleType ? _myType : null));
                 if (WasMyTypeSet)
                 {
                     Next.ChangeType(MyType);

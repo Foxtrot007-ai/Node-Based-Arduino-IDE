@@ -16,7 +16,7 @@ namespace Tests.EditMode.ut.Backend
         private MockFileSystem _fileSystem;
         private IDirectory _functionsDir;
         private IDirectory _classesDir;
-        private const int BuildInNumber = 12;
+        private const int BuildInNumber = 21;
         
         [SetUp]
         public void Init()
