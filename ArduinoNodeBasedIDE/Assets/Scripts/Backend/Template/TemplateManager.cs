@@ -181,6 +181,7 @@ namespace Backend
             {
                 classJson = new ClassJson
                 {
+                    ClassName = className,
                     Library = functionTemplateDto.Library,
                 };
                 _classes.Add(className, classJson);
@@ -197,7 +198,7 @@ namespace Backend
         public void AddClassConstructorTemplate(string className, string library, List<string> inputs)
         {
             if (library.IsNullOrEmpty()
-                || inputs.TrueForAll(x => !x.IsNullOrEmpty() && x != "void"))
+                || !inputs.TrueForAll(x => !x.IsNullOrEmpty() && x != "void"))
             {
                 throw new Exception();
             }
@@ -212,6 +213,7 @@ namespace Backend
             {
                 classJson = new ClassJson
                 {
+                    ClassName = className,
                     Library = library,
                 };
                 _classes.Add(className, classJson);
