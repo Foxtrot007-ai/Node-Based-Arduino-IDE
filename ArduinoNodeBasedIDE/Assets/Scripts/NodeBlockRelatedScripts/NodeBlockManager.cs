@@ -4,6 +4,7 @@ using UnityEngine;
 using Backend.API;
 using Backend;
 using Backend.Type;
+using Backend.MyFunction;
 
 public class NodeBlockManager : MonoBehaviour
 {
@@ -187,14 +188,24 @@ public class NodeBlockManager : MonoBehaviour
         //setter
         SpawnNodeBlock(button.variable.CreateSetNode());
     }
+
     public void SpawnNodeBlock(FunctionButtonScript button)
     {
         SpawnNodeBlock(button.function.CreateNode());
     }
-    public void SpawnNodeBlock(InputButtonScript button)
+    public void SpawnNodeBlock(InputButtonScript button, IFunction function)
     {
-        //throw exception
-        Debug.Log("what?");
+        if(viewsManager.actualView == function)
+        {
+            SpawnNodeBlock(button.variable.CreateGetNode());
+        }
+    }
+    public void SpawnSetNodeBlock(InputButtonScript button, IFunction function)
+    {
+        if (viewsManager.actualView == function)
+        {
+            SpawnNodeBlock(button.variable.CreateSetNode());
+        }
     }
 
     //DeleteNodeBlock Section

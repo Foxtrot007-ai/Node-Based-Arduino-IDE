@@ -1780,6 +1780,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DropdownTypes
       objectReference: {fileID: 0}
+    - target: {fileID: 7198903391342813375, guid: ddb37e453dbd2054c8c175e9beeb0bf8, type: 3}
+      propertyPath: type
+      value: funcOut
+      objectReference: {fileID: 0}
     - target: {fileID: 8107898541940447215, guid: ddb37e453dbd2054c8c175e9beeb0bf8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

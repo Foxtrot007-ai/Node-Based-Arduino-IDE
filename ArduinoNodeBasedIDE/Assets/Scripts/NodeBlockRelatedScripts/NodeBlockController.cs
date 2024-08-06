@@ -20,6 +20,7 @@ public class NodeBlockController : MonoBehaviour
 
     public Vector3 inPointStartPointIncrease;
     public Vector3 outPointStartPointIncrease;
+    public Vector3 startFieldPoint;
 
     public GameObject inPointPrefab;
     public GameObject outPointPrefab;
@@ -43,6 +44,7 @@ public class NodeBlockController : MonoBehaviour
     public void Start()
     {
         nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
+        startFieldPoint = field.transform.localPosition;
     }
     public void Update()
     {
@@ -69,10 +71,11 @@ public class NodeBlockController : MonoBehaviour
 
     public void ResizeConnections()
     {
+        field.transform.localPosition = startFieldPoint;
         AddInPoints();
         AddOutPoint();
-        field.transform.localScale = new Vector3(60, Math.Max(inPointsList.Count, outPointsList.Count) * 10, 0);
-        field.transform.position -= new Vector3(0, Math.Max(inPointsList.Count, outPointsList.Count) * 5, 0);
+        field.transform.localScale = new Vector3(60, 21 + Math.Max(inPointsList.Count - 1, outPointsList.Count - 1) * 3.5f , 0);
+        field.transform.localPosition -= new Vector3(0, Math.Max(inPointsList.Count - 1, outPointsList.Count - 1) * 1.5f, 0);
     }
 
     public void CheckForNameChange()

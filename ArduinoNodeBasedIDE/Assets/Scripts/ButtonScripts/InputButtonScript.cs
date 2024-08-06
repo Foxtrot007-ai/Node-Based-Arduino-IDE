@@ -12,11 +12,18 @@ public class InputButtonScript : ButtonScript
     }
     public override void SpawnNodeBlock()
     {
-        nodeBlockManager.SpawnNodeBlock(this);
+        IFunction function = GameObject.FindGameObjectWithTag("NodeBlockEditor").GetComponent<NodeBlockEditor>().currentNodeBlock;
+        nodeBlockManager.SpawnNodeBlock(this, function);
     }
     public override void DeleteNodeBlock()
     {
+        
         nodeBlockManager.DeleteNodeBlock(this);
+    }
+    public void SpawnSetNodeBlock()
+    {
+        IFunction function = GameObject.FindGameObjectWithTag("NodeBlockEditor").GetComponent<NodeBlockEditor>().currentNodeBlock;
+        nodeBlockManager.SpawnSetNodeBlock(this, function);
     }
     public void RemoveVariable()
     {

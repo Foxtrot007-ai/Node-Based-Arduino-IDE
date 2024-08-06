@@ -94,6 +94,11 @@ public class NodeBlockEditor : MonoBehaviour
     
     public void AddInput()
     {
+        if (currentNodeBlock == null)
+        {
+            return;
+        }
+
         IVariable newVariable = currentNodeBlock.InputList.AddVariable(new Backend.API.DTO.VariableManageDto
         {
             VariableName = "var" + ++newVariableNameIndex,
