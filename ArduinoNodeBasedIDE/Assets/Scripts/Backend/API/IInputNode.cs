@@ -6,11 +6,6 @@ namespace Backend.API
     {
         public string Value { get; }
         /*
-         * DEPRECATED
-         */
-        public void SetValue(string value);
-        
-        /*
          * Might throw:
          * InvalidInputNodeValueDto
          * WrongConnectionType

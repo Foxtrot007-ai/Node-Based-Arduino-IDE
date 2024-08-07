@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using Backend.Exceptions.InOut;
+using Backend.API.DTO;
+using Backend.Exceptions;
 using Backend.Node;
 using Backend.Type;
 using NSubstitute;
@@ -21,7 +22,9 @@ namespace Tests.EditMode.ut.Backend.Node
             _sut = new InputNode(_buildInTemplateMock);
 
             PrepareBaseSetup(_sut);
-            SetInOutMock<InputNode>("_output", _auto1);
+            SetInOutMock<InputNode>("_output", _typeOut3);
+            SetOutputsList(_typeOut3);
+            SetValue("test");
         }
 
         private void SetValue(string value)
@@ -39,66 +42,57 @@ namespace Tests.EditMode.ut.Backend.Node
 
         [Test]
         [TestCaseSource(nameof(_numbers))]
-        public void SetValueNumber(EType eType)
+        [TestCase(EType.Float)]
+        [TestCase(EType.Double)]
+        [TestCase(EType.Bool)]
+        [TestCase(EType.String)]
+        public void ValidDtoEmptyTrue(EType eType)
         {
-            _auto1.MyType.EType.Returns(eType);
-
-            _sut.SetValue("1234");
+            var dto = new InputNodeValueDto
+            {
+                Type = MockHelper.CreateType(eType),
+                Value = "",
+            };
+            Assert.True(dto.IsDtoValid());
         }
 
         [Test]
         [TestCaseSource(nameof(_numbers))]
-        public void SetValueNumberNoDisconnect(EType eType)
+        public void ValidDtoNumberTrue(EType eType)
         {
-            SetValue("123");
-            _auto1.MyType.EType.Returns(eType);
-
-            _sut.ConnectNotify(_auto1._connectedMock);
-            _auto1.DidNotReceive().Disconnect();
+            var dto = new InputNodeValueDto
+            {
+                Type = MockHelper.CreateType(eType),
+                Value = "123",
+            };
+            Assert.True(dto.IsDtoValid());
         }
+
 
         [Test]
         [TestCase("false")]
         [TestCase("true")]
-        public void SetValueBool(string val)
+        public void ValidDtoBoolTrue(string val)
         {
-            _auto1.MyType.EType.Returns(EType.Bool);
-
-            _sut.SetValue(val);
-        }
-
-        [Test]
-        [TestCase("false")]
-        [TestCase("true")]
-        public void SetValueBoolNoDisconnect(string val)
-        {
-            SetValue(val);
-            _auto1.MyType.EType.Returns(EType.Bool);
-
-            _sut.ConnectNotify(_auto1._connectedMock);
-            _auto1.DidNotReceive().Disconnect();
+            var dto = new InputNodeValueDto
+            {
+                Type = MockHelper.CreateType(EType.Bool),
+                Value = val,
+            };
+            Assert.True(dto.IsDtoValid());
         }
 
         [Test]
         [TestCase(EType.Double)]
         [TestCase(EType.Float)]
-        public void SetValueFDNumber(EType eType)
+        public void ValidDtoFDNumberTrue(EType eType)
         {
-            _auto1.MyType.EType.Returns(eType);
-
-            _sut.SetValue("12,12");
-        }
-
-        [Test]
-        [TestCase(EType.Double)]
-        [TestCase(EType.Float)]
-        public void SetValueFDNumberNoDisconnect(EType eType)
-        {
-            SetValue("12,12");
-            _auto1.MyType.EType.Returns(eType);
-
-            _sut.ConnectNotify(_auto1._connectedMock);
-            _auto1.DidNotReceive().Disconnect();
+            var dto = new InputNodeValueDto
+            {
+                Type = MockHelper.CreateType(eType),
+                Value = "12,3",
+            };
+            Assert.True(dto.IsDtoValid());
         }
 
         [Test]
@@ -107,63 +101,160 @@ namespace Tests.EditMode.ut.Backend.Node
         [TestCase("123")]
         [TestCase("1,23")]
         [TestCase("1.da23")]
-        public void SetValueString(string val)
+        public void ValidDtoStringTrue(string val)
         {
-            _auto1.MyType.EType.Returns(EType.String);
-
-            _sut.SetValue(val);
+            var dto = new InputNodeValueDto
+            {
+                Type = MockHelper.CreateType(EType.String),
+                Value = val,
+            };
+            Assert.True(dto.IsDtoValid());
         }
 
         [Test]
-        [TestCase("false")]
-        [TestCase("true")]
-        [TestCase("123")]
-        [TestCase("1,23")]
-        [TestCase("1.da23")]
-        public void SetValueStringNoDisconnect(string val)
+        public void ValidDtoVoidFalse()
         {
-            SetValue(val);
-            _auto1.MyType.EType.Returns(EType.String);
+            var dto = new InputNodeValueDto
+            {
+                Type = MockHelper.CreateType(EType.Void),
+                Value = "any",
+            };
+            Assert.False(dto.IsDtoValid());
+        }
 
-            _sut.ConnectNotify(_auto1._connectedMock);
-            _auto1.DidNotReceive().Disconnect();
+        [Test]
+        public void ValidDtoClassFalse()
+        {
+            var dto = new InputNodeValueDto
+            {
+                Type = MockHelper.CreateType(EType.Class),
+                Value = "any",
+            };
+            Assert.False(dto.IsDtoValid());
         }
 
         [Test]
         [TestCaseSource(nameof(_numbers))]
-        [TestCase(EType.Bool)]
-        public void SetValueNoNumber(EType eType)
+        public void ValidDtoNumberFalse(EType eType)
         {
-            _auto1.MyType.EType.Returns(eType);
+            var dto = new InputNodeValueDto
+            {
+                Type = MockHelper.CreateType(eType),
+                Value = "12,34",
+            };
+            Assert.False(dto.IsDtoValid());
+        }
 
-            Assert.Throws<WrongConnectionTypeException>(() => _sut.SetValue("abxc"));
-            Assert.Throws<WrongConnectionTypeException>(() => _sut.SetValue("12,32"));
+        [Test]
+        [TestCase("test")]
+        [TestCase("1")]
+        [TestCase("123,43")]
+        public void ValidDtoNumberFalse(string val)
+        {
+            var dto = new InputNodeValueDto
+            {
+                Type = MockHelper.CreateType(EType.Bool),
+                Value = val,
+            };
+            Assert.False(dto.IsDtoValid());
         }
 
         [Test]
         [TestCase(EType.Double)]
         [TestCase(EType.Float)]
-        public void SetValueNoFDNumber(EType eType)
+        public void ValidDtoFDNumberFalse(EType eType)
         {
-            _auto1.MyType.EType.Returns(eType);
+            var dto = new InputNodeValueDto
+            {
+                Type = MockHelper.CreateType(eType),
+                Value = "12.34",
+            };
+            Assert.False(dto.IsDtoValid());
+        }
 
-            Assert.Throws<WrongConnectionTypeException>(() => _sut.SetValue("abxc"));
-            Assert.Throws<WrongConnectionTypeException>(() => _sut.SetValue("12.32"));
+        [Test]
+        public void SetValueInvalidDto()
+        {
+            var dto = new InputNodeValueDto
+            {
+                Type = MockHelper.CreateType(EType.Bool),
+                Value = "gdsrt",
+            };
+
+            Assert.Throws<InvalidInputNodeValueDto>(() => _sut.SetValue(dto));
+
+            _typeOut3.DidNotReceiveWithAnyArgs().ChangeType(default);
+            Assert.AreEqual("test", _sut.Value);
+        }
+
+        [Test]
+        public void SetValueOk()
+        {
+            var type = MockHelper.CreateType(EType.Float);
+            var dto = new InputNodeValueDto
+            {
+                Type = type,
+                Value = "12,54",
+            };
+
+            _sut.SetValue(dto);
+
+            _typeOut3.Received().ChangeType(type);
+            Assert.AreEqual("12,54", _sut.Value);
         }
 
         [Test]
         [TestCaseSource(nameof(_numbers))]
-        [TestCase(EType.Bool)]
-        [TestCase(EType.Double)]
-        [TestCase(EType.Float)]
-        public void SetValueNoNumberDisconnect(EType eType)
+        public void ToCodeParamEmptyNumber(EType eType)
         {
-            SetValue("abc");
-            _auto1.MyType.EType.Returns(eType);
+            SetValue("");
+            _typeOut3.MyType.EType.Returns(eType);
 
-            Assert.Throws<WrongConnectionTypeException>(() => _sut.ConnectNotify(_auto1._connectedMock));
+            Assert.AreEqual("0", _sut.ToCodeParam(_codeManagerMock));
+        }
 
-            _auto1.Received().Disconnect();
+        [Test]
+        [TestCase(EType.Bool, "false")]
+        [TestCase(EType.Double, "0")]
+        [TestCase(EType.Float, "0")]
+        [TestCase(EType.String, "\"\"")]
+        public void ToCodeParamEmpty(EType eType, string expect)
+        {
+            SetValue("");
+            _typeOut3.MyType.EType.Returns(eType);
+
+            Assert.AreEqual(expect, _sut.ToCodeParam(_codeManagerMock));
+        }
+
+        [Test]
+        [TestCaseSource(nameof(_numbers))]
+        public void ToCodeParamNumber(EType eType)
+        {
+            SetValue("1234");
+            _typeOut3.MyType.EType.Returns(eType);
+
+            Assert.AreEqual("1234", _sut.ToCodeParam(_codeManagerMock));
+        }
+
+        [Test]
+        [TestCase(EType.Bool, "false")]
+        [TestCase(EType.Double, "124,35")]
+        [TestCase(EType.Float, "124,35")]
+        public void ToCodeParam(EType eType, string expect)
+        {
+            SetValue(expect);
+            _typeOut3.MyType.EType.Returns(eType);
+
+            Assert.AreEqual(expect, _sut.ToCodeParam(_codeManagerMock));
+        }
+
+        [Test]
+        public void ToCodeParamString()
+        {
+            SetValue("test");
+            _typeOut3.MyType.EType.Returns(EType.String);
+
+            Assert.AreEqual("\"test\"", _sut.ToCodeParam(_codeManagerMock));
         }
     }
 }
