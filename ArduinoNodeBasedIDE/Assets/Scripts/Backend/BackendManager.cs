@@ -6,8 +6,6 @@ using Backend.MyFunction;
 using Backend.Type;
 using Backend.Validator;
 using Backend.Variables;
-using Unity.Plastic.Newtonsoft.Json;
-using UnityEngine;
 
 namespace Backend
 {
@@ -41,7 +39,7 @@ namespace Backend
             Functions = new UserFunctionManager(this);
         }
 
-        public void BuildCode(string path)
+        public void BuildCode(string savePath, string programPath)
         {
             var codeManager = new CodeManager();
 
@@ -75,26 +73,20 @@ namespace Backend
 
             // Loop
             ((Function)Loop).ToCode(codeManager);
-            codeManager.AddLine("");
 
-            File.WriteAllText(path, codeManager.BuildCode());
+            File.WriteAllText(savePath, codeManager.BuildCode());
         }
-        public void Save(string path)
+        public BackendManagerJson Save()
         {
-            var backendJson = new BackendManagerJson(this);
-            var json = JsonConvert.SerializeObject(backendJson);
-            File.WriteAllText(path, json);
+            return new BackendManagerJson(this);
         }
-        public void Load(string path)
+
+        public void Load(BackendManagerJson json)
         {
-            var json = File.ReadAllText(path);
-            Debug.Log(json);
-            var backendJson = JsonConvert.DeserializeObject<BackendManagerJson>(json);
-            Debug.Log(backendJson);
-            Setup = new Function(this, backendJson.SetupVariables);
-            Loop = new Function(this, backendJson.LoopVariables);
-            GlobalVariables = new GlobalVariablesManager(this, backendJson.GlobalVariables);
-            Functions = new UserFunctionManager(this, backendJson.UserFunctions);
+            Setup = new Function(this, json.SetupVariables);
+            Loop = new Function(this, json.LoopVariables);
+            GlobalVariables = new GlobalVariablesManager(this, json.GlobalVariables);
+            Functions = new UserFunctionManager(this, json.UserFunctions);
         }
     }
 }

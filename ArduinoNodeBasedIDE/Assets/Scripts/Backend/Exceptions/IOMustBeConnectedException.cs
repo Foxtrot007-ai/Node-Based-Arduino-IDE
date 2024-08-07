@@ -9,6 +9,6 @@ namespace Backend.Exceptions
         {
             InOut = inOut;
         }
-        public IConnection InOut { get;  }
+        public IConnection InOut { get; }
     }
 }

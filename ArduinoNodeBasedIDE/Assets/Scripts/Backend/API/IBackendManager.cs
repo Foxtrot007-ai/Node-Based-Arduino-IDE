@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Backend.Json;
 
 namespace Backend.API
 {
@@ -42,24 +43,24 @@ namespace Backend.API
         /*
          * Build code
          *
+         * code will be set in savePath
+         * programPath will be add in header of generated file
          * Might throw:
          *
          * IOMustBeConnected
          * VariableNotSet
          */
-        public void BuildCode(string path);
+        public void BuildCode(string savePath, string programPath);
         
         /*
-         * Save code
-         * Will save globalVariable, function in file
+         * Will save globalVariable, function in json
          */
-        public void Save(string path);
+        public BackendManagerJson Save();
         
         /*
-         * Load code
-         * Will reset to default value and then load globalVariable, functions from file
+         * Will reset to default value and then load globalVariable, functions from json
          */
-        public void Load(string path);
+        public void Load(BackendManagerJson json);
 
         public void Clear();
     }

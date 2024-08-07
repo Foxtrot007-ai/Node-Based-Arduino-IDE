@@ -28,6 +28,11 @@ namespace Backend.API
         public INode ParentNode { get; }
         
         /*
+         * IO must be connected when generate code
+         */
+        public bool IsOptional { get; }
+        
+        /*
          * Make validation and might throw specific exception:
          * AlreadyConnected
          * SelfConnected

@@ -169,7 +169,7 @@ public class NodeBlockManager : MonoBehaviour
     }
     public void SpawnNodeBlock(ReferenceButtonScript button)
     {
-        INode node = button.template.CreateNodeInstance();
+        INode node = button.template.CreateNodeInstance(viewsManager.actualView);
         if(node.NodeType == Backend.Node.NodeType.Input)
         {
             SpawnNodeBlockInput(node);
