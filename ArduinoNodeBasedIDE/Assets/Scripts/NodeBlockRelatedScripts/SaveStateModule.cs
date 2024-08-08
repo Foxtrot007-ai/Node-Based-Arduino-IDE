@@ -7,6 +7,8 @@ using Backend;
 using Backend.Type;
 using System;
 using System.IO;
+using TMPro;
+
 using UnityEngine.UIElements;
 using System.Linq.Expressions;
 
@@ -15,7 +17,8 @@ public class SaveStateModule
     private NodeBlockManager nodeBlockManager;
     private IBackendManager backendManager;
     private ViewsManager viewManager;
-    private string currentPath = "Assets/Resources/nodesOnScene.json";
+    public GameObject inputFieldNameFile;
+    private string defaultPath = "defaultSaveFile";
 
     [Serializable]
     public class sSaveFile
@@ -48,22 +51,26 @@ public class SaveStateModule
         public int inputIndex;
     }
 
-    public void Instantiate(NodeBlockManager manager, IBackendManager bManager, ViewsManager vManager)
+    public void Instantiate(NodeBlockManager manager, IBackendManager bManager, ViewsManager vManager, GameObject inputField)
     {
         this.nodeBlockManager = manager;
         this.backendManager = bManager;
         this.viewManager = vManager;
+        this.inputFieldNameFile = inputField;
+        inputFieldNameFile.GetComponent<TMP_InputField>().text = defaultPath;
     }
     private void WriteToFile(string json)
     {
-        StreamWriter writer = new StreamWriter(currentPath, false);
+        string currentPath = inputFieldNameFile.GetComponent<TMP_InputField>().text;
+        StreamWriter writer = new StreamWriter("Assets/Resources/" + currentPath + ".json", false);
         writer.Write(json);
         writer.Close();
     }
 
     private string ReadFromFile()
     {
-        StreamReader reader = new StreamReader(currentPath);
+        string currentPath = inputFieldNameFile.GetComponent<TMP_InputField>().text;
+        StreamReader reader = new StreamReader("Assets/Resources/" + currentPath + ".json");
         return reader.ReadLine();
     }
 

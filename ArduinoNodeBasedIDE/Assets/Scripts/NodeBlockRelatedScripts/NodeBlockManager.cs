@@ -25,6 +25,7 @@ public class NodeBlockManager : MonoBehaviour
     //loader
 
     public SaveStateModule saveManager = new SaveStateModule();
+    public GameObject inputFieldNameFile;
 
     //Variable List objects
     //public List<IVariablesManager> variableList = new List<IVariablesManager>();
@@ -49,7 +50,7 @@ public class NodeBlockManager : MonoBehaviour
     {
         messageInfo = GameObject.FindGameObjectWithTag("InfoMessageManager").GetComponent<InfoMessageManager>();
         instantiateBasicFunctions();
-        saveManager.Instantiate(this, backendManager, viewsManager);
+        saveManager.Instantiate(this, backendManager, viewsManager, inputFieldNameFile);
     }
 
     //Starting functions
@@ -348,7 +349,7 @@ public class NodeBlockManager : MonoBehaviour
 
     public void SaveState()
     {
-        backendManager.Save("Assets/Resources/enviroment.json");
+        //backendManager.Save("Assets/Resources/enviroment.json");
         saveManager.Save();
         messageInfo.addMessage("Code saved succesfully", 0.3f);
     }
@@ -362,14 +363,14 @@ public class NodeBlockManager : MonoBehaviour
     public void LoadState()
     {
         ResetScene();
-        backendManager.Load("Assets/Resources/enviroment.json");
+        //backendManager.Load("Assets/Resources/enviroment.json");
         saveManager.Load();
         messageInfo.addMessage("Code saved succesfully", 0.3f);
     }
 
     public void GenerateCode()
     {
-        backendManager.BuildCode("Assets/Resources/code.ino");
+        //backendManager.BuildCode("Assets/Resources/code.ino");
         messageInfo.addMessage("Code generate succesfully", 0.3f);
     }
 }

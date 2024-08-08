@@ -49,6 +49,9 @@ public class ListManager : MonoBehaviour
         GameObject newContent = Instantiate(buttonContent);
         newContent.transform.SetParent(listContainer.transform);
         newContent.transform.localScale = Vector3.one;
+
+        Vector3 defaultPosition = newContent.transform.localPosition;
+        newContent.transform.localPosition = new Vector3(defaultPosition.x, defaultPosition.y, 0);
         return newContent;
     }
     protected GameObject CreateButton(IUserFunction node)
