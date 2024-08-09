@@ -1,16 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
 using Backend.API;
-using Backend;
-using Backend.Type;
-using System;
 using System.IO;
 using TMPro;
-
-using UnityEngine.UIElements;
-using System.Linq.Expressions;
+using Backend.Json;
 
 public class SaveStateModule
 {
@@ -25,6 +19,7 @@ public class SaveStateModule
     {
         public List<sView> sViews;
         public List<sConnection> sConnections;
+        public BackendManagerJson sBackend;
     }
 
     [Serializable]
@@ -78,6 +73,7 @@ public class SaveStateModule
     {
         int currentControllerIndex = 0;
         sSaveFile save = new sSaveFile();
+        save.sBackend = backendManager.Save();
         save.sViews = new List<sView>();
         save.sConnections = new List<sConnection>();
         Dictionary<INode, string> controllerIDs = new Dictionary<INode, string>();
@@ -153,6 +149,7 @@ public class SaveStateModule
         string json = ReadFromFile();
         Debug.Log(json);
         sSaveFile save = JsonUtility.FromJson<sSaveFile>(json);
+        backendManager.Load(save.sBackend);
 
         if(save == null)
         {

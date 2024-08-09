@@ -29,6 +29,7 @@ public class NodeBlockController : MonoBehaviour
     public List<GameObject> outPointsList = new List<GameObject>();
 
     public bool instantiated = false;
+    public bool startBlockColorValidation = false;
 
     public NodeBlockManager nodeBlockManager;
 
@@ -50,8 +51,15 @@ public class NodeBlockController : MonoBehaviour
     {
         if (instantiated)
         {
+            if(!startBlockColorValidation && isStartNodeBlock)
+            {
+                SetStartBlockColor();
+                startBlockColorValidation = true;
+            }
             Validation();
         }
+
+        
     }
 
     virtual public void Validation()
@@ -163,6 +171,15 @@ public class NodeBlockController : MonoBehaviour
     {
         this.nodeBlock = nodeBlock;
         textField.GetComponent<TMP_Text>().text = nodeBlock.NodeName;
+        if(nodeBlock.NodeName == "Return")
+        {
+            field.GetComponent<SpriteRenderer>().color = new Color(255f / 255f, 122f / 255f, 122f / 255f); //grey red
+        }
+    }
+
+    public void SetStartBlockColor()
+    {
+        field.GetComponent<SpriteRenderer>().color = new Color(171f / 255f, 255f / 255f, 171f / 255f); //grey green
     }
 }
 

@@ -31,6 +31,9 @@ public class buttonStartLoopSwitchScript : MonoBehaviour
             case "generate":
                 nodeBlockManager.GenerateCode();
                 break;
+            case "exit":
+                Application.Quit();
+                break;
         }
     }
 }
