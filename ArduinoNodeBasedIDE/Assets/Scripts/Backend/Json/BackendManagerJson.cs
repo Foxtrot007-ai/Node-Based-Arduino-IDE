@@ -1,15 +1,17 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Backend.MyFunction;
 
 namespace Backend.Json
 {
+    [Serializable]
     public class BackendManagerJson
     {
-        public List<VariableJson> GlobalVariables { get; set; } = new();
-        public List<VariableJson> SetupVariables { get; set; } = new();
-        public List<VariableJson> LoopVariables { get; set; } = new();
-        public List<UserFunctionJson> UserFunctions { get; set; } = new();
+        public List<VariableJson> GlobalVariables = new();
+        public List<VariableJson> SetupVariables = new();
+        public List<VariableJson> LoopVariables  = new();
+        public List<UserFunctionJson> UserFunctions = new();
 
         public BackendManagerJson()
         {

@@ -349,8 +349,15 @@ public class NodeBlockManager : MonoBehaviour
 
     public void SaveState()
     {
-        saveManager.Save();
-        messageInfo.addMessage("Code saved succesfully", 0.3f);
+        try 
+        { 
+            saveManager.Save();
+            messageInfo.addMessage("Code saved succesfully", 0.3f);
+        }
+        catch (Exception e)
+        {
+            messageInfo.addMessage(e.Message, 0.3f);
+        }
     }
 
     public void ResetScene()
@@ -362,13 +369,23 @@ public class NodeBlockManager : MonoBehaviour
     public void LoadState()
     {
         ResetScene();
-        saveManager.Load();
-        messageInfo.addMessage("Code saved succesfully", 0.3f);
+        
+            saveManager.Load();
+            messageInfo.addMessage("Code saved succesfully", 0.3f);
+       
+        
     }
 
-    public void GenerateCode()
-    {
-        backendManager.BuildCode("Assets/Resources/code.ino", "");
-        messageInfo.addMessage("Code generate succesfully", 0.3f);
+    public void GenerateCode() 
+    { 
+        try
+        {
+            backendManager.BuildCode("Assets/Resources/code.ino", "");
+            messageInfo.addMessage("Code generate succesfully", 0.3f);
+        }
+        catch (Exception e)
+        {
+            messageInfo.addMessage(e.Message, 0.3f);
+        }
     }
 }

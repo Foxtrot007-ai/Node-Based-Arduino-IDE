@@ -86,6 +86,11 @@ public class SaveStateModule
             view.sControllers = new List<sController>();
             foreach (GameObject obj in entry.Value)
             {
+                if(obj == null)
+                {
+                    continue;
+                }
+
                 sController controller = new sController();
                 string newId = "#" + currentControllerIndex;
                 controller.controllerId = newId;

@@ -1,15 +1,18 @@
+using System;
 using System.Collections.Generic;
 using Backend.MyFunction;
 
 namespace Backend.Json
 {
+    [Serializable]
     public class UserFunctionJson
     {
-        public string PathName { get; set; }
-        public string Name { get; set; }
-        public string OutputType { get; set; }
-        public List<VariableJson> LocalVariables { get; set; } = new();
-        public List<VariableJson> ParamVariables { get; set; } = new();
+        public string PathName;
+        public string Name;
+        public string OutputType;
+    
+        public List<VariableJson> LocalVariables = new();
+        public List<VariableJson> ParamVariables = new();
 
         public UserFunctionJson()
         {

@@ -1,12 +1,14 @@
 using Backend.Variables;
+using System;
 
 namespace Backend.Json
 {
+    [Serializable]
     public class VariableJson
     {
-        public string PathName { get; set; }
-        public string Name { get; set; }
-        public string Type { get; set; }
+        public string PathName;
+        public string Name;
+        public string Type;
 
         public VariableJson()
         {
