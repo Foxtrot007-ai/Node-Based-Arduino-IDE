@@ -167,7 +167,7 @@ namespace Tests.EditMode.ut.Backend.Node
             var dto = new InputNodeValueDto
             {
                 Type = MockHelper.CreateType(eType),
-                Value = "12.34",
+                Value = "12.34h",
             };
             Assert.False(dto.IsDtoValid());
         }

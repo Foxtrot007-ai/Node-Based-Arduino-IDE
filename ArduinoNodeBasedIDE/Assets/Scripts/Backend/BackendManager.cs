@@ -47,7 +47,7 @@ namespace Backend
             GlobalVariables.Variables
                 .ForEach(variable =>
                 {
-                    codeManager.AddLine(((Variable)variable).ToCode() + ";");
+                    codeManager.AddLine(((Variable) variable).ToCode() + ";");
                     codeManager.SetVariableStatus(variable, CodeManager.VariableStatus.Global);
                 });
             codeManager.AddLine("");
@@ -55,7 +55,7 @@ namespace Backend
             // Functions declarations
             Functions
                 .Functions
-                .ForEach(fun => codeManager.AddLine(((UserFunction)fun).ToCodeDeclaration() + ";"));
+                .ForEach(fun => codeManager.AddLine(((UserFunction) fun).ToCodeDeclaration() + ";"));
             codeManager.AddLine("");
 
             // Functions with body
@@ -63,19 +63,20 @@ namespace Backend
                 .Functions
                 .ForEach(fun =>
                 {
-                    ((UserFunction)fun).ToCode(codeManager);
+                    ((UserFunction) fun).ToCode(codeManager);
                     codeManager.AddLine("");
                 });
 
             // Setup
-            ((Function)Setup).ToCode(codeManager);
+            ((Function) Setup).ToCode(codeManager);
             codeManager.AddLine("");
 
             // Loop
-            ((Function)Loop).ToCode(codeManager);
+            ((Function) Loop).ToCode(codeManager);
 
             File.WriteAllText(savePath, codeManager.BuildCode());
         }
+
         public BackendManagerJson Save()
         {
             return new BackendManagerJson(this);
@@ -83,8 +84,9 @@ namespace Backend
 
         public void Load(BackendManagerJson json)
         {
-            Setup = new Function(this, json.SetupVariables);
-            Loop = new Function(this, json.LoopVariables);
+            var rootPn = new PathName("ROOT-1");
+            Setup = new Function(this, "setup", new PathName(rootPn, "SETUP"), json.SetupVariables);
+            Loop = new Function(this, "loop", new PathName(rootPn, "LOOP"), json.LoopVariables);
             GlobalVariables = new GlobalVariablesManager(this, json.GlobalVariables);
             Functions = new UserFunctionManager(this, json.UserFunctions);
         }

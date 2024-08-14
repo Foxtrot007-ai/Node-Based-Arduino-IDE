@@ -25,12 +25,7 @@ namespace Backend.MyFunction
         protected Function()
         {
         }
-
-        public Function(IBackendManager backendManager, List<VariableJson> variableJsons)
-        {
-            _backendManager = backendManager;
-            _localVariablesManager = new LocalVariablesManager(this, variableJsons);
-        }
+        
 
         public Function(IBackendManager backendManager, string name, PathName pathName, List<VariableJson> variableJsons)
         {
