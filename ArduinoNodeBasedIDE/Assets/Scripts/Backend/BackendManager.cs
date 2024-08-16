@@ -74,7 +74,7 @@ namespace Backend
             // Loop
             ((Function) Loop).ToCode(codeManager);
 
-            File.WriteAllText(savePath, codeManager.BuildCode());
+            File.WriteAllText(savePath, codeManager.BuildCode(programPath));
         }
 
         public BackendManagerJson Save()
