@@ -1,12 +1,14 @@
 using Backend.API;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+//variable button objets for variable List content (global and local)
 public class VariableButtonScript : ButtonScript
 {
+    //Additional Child Class Attributes
     public GameObject typeField;
+
+    //Class Methods (just override)
     public override void SetNodeBlock(IVariable variable)
     {
         base.SetNodeBlock(variable);

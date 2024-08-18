@@ -4,7 +4,6 @@ using UnityEngine;
 using Backend.API;
 using Backend;
 using Backend.Type;
-using Backend.MyFunction;
 
 public class NodeBlockManager : MonoBehaviour
 {
@@ -329,6 +328,8 @@ public class NodeBlockManager : MonoBehaviour
         nodeBlockEditor.SetActive(true);
     }
 
+
+    //MenuBar buttons functions
     public void ChangeView(FunctionButtonScript button)
     {
         viewsManager.ChangeView(button.function);
@@ -380,7 +381,7 @@ public class NodeBlockManager : MonoBehaviour
     { 
         try
         {
-            backendManager.BuildCode("Assets/Resources/code.ino", "");
+            backendManager.BuildCode("Assets/Resources/code.ino", saveManager.GetCurrentLoadedFilePath());
             messageInfo.addMessage("Code generate succesfully", 0.3f);
         }
         catch (Exception e)

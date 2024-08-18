@@ -1,12 +1,11 @@
-using System;
 using Backend.API;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using Backend.API.DTO;
 using Backend.Type;
 
+
+//Variable editor class that reading user inputs and updating variable definition by backend interfaces
 public class VariableEditor : MonoBehaviour
 {
     public IVariable variable;
@@ -55,6 +54,8 @@ public class VariableEditor : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    //Changing type and variable name by dto then deactivating variable editor
     public void SaveChanges()
     {
         UpdateVariable();

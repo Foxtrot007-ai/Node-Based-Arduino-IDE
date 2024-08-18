@@ -2,6 +2,8 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
+//Script for infoMessage object on scene to simulate fade out effect
 public class InfoMessageScript : MonoBehaviour
 {
 

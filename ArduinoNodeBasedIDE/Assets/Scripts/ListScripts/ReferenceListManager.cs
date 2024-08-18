@@ -1,11 +1,10 @@
 using Backend.API;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
+//Script for Global Variable List UI Control
 public class ReferenceListManager : ListManager
 {
+    //overrided class methods
     protected override List<ITemplate> GetTemplates()
     {
         return nodeBlockManager.SearchNodeBlocks(this, lastInput);

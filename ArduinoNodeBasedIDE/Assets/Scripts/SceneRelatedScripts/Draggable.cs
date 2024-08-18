@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+
+//Dragable property script for NodeBlock objects on scene
 public class Dragable : MonoBehaviour
 {
     private Vector2 originPoint;

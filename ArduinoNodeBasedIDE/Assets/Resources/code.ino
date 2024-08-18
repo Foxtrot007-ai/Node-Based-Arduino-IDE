@@ -1,10 +1,10 @@
 
 
-int add(int var1);
+int inc(int var1);
 
-int add(int var1)
+int inc(int var1)
 {
-	return add(4 + var1);
+	return var1 + 1;
 }
 
 void setup()

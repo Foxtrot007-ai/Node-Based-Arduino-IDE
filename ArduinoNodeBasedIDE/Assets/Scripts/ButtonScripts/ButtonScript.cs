@@ -2,19 +2,23 @@ using Backend.API;
 using TMPro;
 using UnityEngine;
 
+//Parent class for buttons objects, shouldn't be used directly
 public class ButtonScript : MonoBehaviour
 {
+    //Class Attributes
     public GameObject text;
     public IUserFunction function;
     public IVariable variable;
     public ITemplate template;
     public NodeBlockManager nodeBlockManager;
 
+    //Class Methods
     public void Start()
     {
         nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
     }
 
+    //Set visual based on type of Nodeblock
     public virtual void SetNodeBlock(IUserFunction function)
     {
         this.function = function;
@@ -31,6 +35,8 @@ public class ButtonScript : MonoBehaviour
         this.template = template;
         text.GetComponent<TMP_Text>().text = template.Name;
     }
+
+    //functions for UI button
     public virtual void SpawnNodeBlock()
     {
         nodeBlockManager.SpawnNodeBlock(this);

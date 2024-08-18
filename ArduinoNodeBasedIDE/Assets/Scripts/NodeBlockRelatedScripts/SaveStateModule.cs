@@ -12,8 +12,10 @@ public class SaveStateModule
     private IBackendManager backendManager;
     private ViewsManager viewManager;
     public GameObject inputFieldNameFile;
+    private string currentLoadFileName = "defaultSaveFile";
     private string defaultPath = "defaultSaveFile";
 
+    //object which be write to/ read from json file
     [Serializable]
     public class sSaveFile
     {
@@ -54,9 +56,15 @@ public class SaveStateModule
         this.inputFieldNameFile = inputField;
         inputFieldNameFile.GetComponent<TMP_InputField>().text = defaultPath;
     }
+
+    public string GetCurrentLoadedFilePath()
+    {
+        return ("defaultSaveFile" != currentLoadFileName) ? "Assets/Resources/" + currentLoadFileName + ".json" : "Editor state not saved";
+    }
     private void WriteToFile(string json)
     {
         string currentPath = inputFieldNameFile.GetComponent<TMP_InputField>().text;
+        this.currentLoadFileName = currentPath;
         StreamWriter writer = new StreamWriter("Assets/Resources/" + currentPath + ".json", false);
         writer.Write(json);
         writer.Close();
@@ -65,6 +73,7 @@ public class SaveStateModule
     private string ReadFromFile()
     {
         string currentPath = inputFieldNameFile.GetComponent<TMP_InputField>().text;
+        this.currentLoadFileName = currentPath;
         StreamReader reader = new StreamReader("Assets/Resources/" + currentPath + ".json");
         return reader.ReadLine();
     }

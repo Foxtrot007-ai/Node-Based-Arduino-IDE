@@ -5,6 +5,8 @@ using UnityEngine;
 using Backend.API;
 using Backend.API.DTO;
 
+
+//Function Editor script for Function editor UI control
 public class NodeBlockEditor : MonoBehaviour
 {
     public IUserFunction currentNodeBlock;
@@ -30,6 +32,8 @@ public class NodeBlockEditor : MonoBehaviour
         nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
         instantiated = false;
     }
+
+    //Update function checking changes in definitions
     private void Update()
     {
         if(currentNodeBlock != null)
@@ -39,7 +43,7 @@ public class NodeBlockEditor : MonoBehaviour
         }
     }
        
-
+    //Public function to set current nodeblock to edit
     public void SetNodeBlockToEdit(IUserFunction nodeBlock)
     {
         instantiated = true;
@@ -77,6 +81,7 @@ public class NodeBlockEditor : MonoBehaviour
         }
     }
 
+    //managing funtion attributes
     public void InstantiateInputs() 
     {
         foreach(GameObject input in inputObjects)

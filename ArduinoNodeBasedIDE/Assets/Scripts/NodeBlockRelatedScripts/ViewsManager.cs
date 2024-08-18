@@ -1,8 +1,9 @@
 using Backend.API;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//Script which deciding with Nodeblock object should be currently show to user based on current edited function
 public class ViewsManager
 {
     public IFunction actualView = null;
@@ -16,10 +17,7 @@ public class ViewsManager
     {
         views[actualView].Add(ToAdd);
     }
-   /* public void AddVariableToView(IVariableManage variable)
-    {
-        views[actualView].Item2.Add(variable);
-    }*/
+
     public List<IVariable> GetLocalVariables()
     {
        return (actualView == null) ? null : actualView.Variables.Variables;

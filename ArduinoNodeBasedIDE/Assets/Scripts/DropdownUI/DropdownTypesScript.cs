@@ -7,6 +7,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+//Script for DropDownMenu UI control
+//It shows types and classes for functions and variables
 public class DropdownTypesScript : MonoBehaviour
 {
     private TMP_Dropdown dropdown;

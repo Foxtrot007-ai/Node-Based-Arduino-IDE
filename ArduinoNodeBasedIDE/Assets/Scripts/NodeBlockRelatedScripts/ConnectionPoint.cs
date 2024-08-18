@@ -2,6 +2,10 @@ using Backend.API;
 using TMPro;
 using UnityEngine;
 
+
+//Class adding logic and functionality to connection points
+//Managing type
+//Managing line drawing when mouse move
 public class ConnectionPoint : MonoBehaviour
 {
     public NodeBlockController nodeBlockController;
@@ -21,6 +25,7 @@ public class ConnectionPoint : MonoBehaviour
         nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
     }
 
+    //updating type shown to user by UI control
     private void UpdateType()
     {
         if (typeText.GetComponent<TMP_Text>().text != connection.IOName)
@@ -76,6 +81,8 @@ public class ConnectionPoint : MonoBehaviour
         line.GetComponent<LineRenderer>().SetPositions(points);
        
     }
+    
+    //check if we want to start connecting 
     private void OnMouseOver()
     {
         if (Input.GetMouseButtonDown(0) && connection.Connected == null)
@@ -97,6 +104,7 @@ public class ConnectionPoint : MonoBehaviour
         ClearLine();
     }
 
+    //Dynamicly draw line
     private void OnMouseDrag()
     {
         if (holding)
@@ -107,6 +115,7 @@ public class ConnectionPoint : MonoBehaviour
     }
 
 
+    //User released the mouse button so check if cursor is under something
     private void OnMouseUp()
     {
         if (connection.Connected != null)

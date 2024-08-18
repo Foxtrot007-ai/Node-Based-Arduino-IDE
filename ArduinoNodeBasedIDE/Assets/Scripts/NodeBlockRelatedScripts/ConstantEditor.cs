@@ -1,14 +1,10 @@
-using System;
 using Backend.API;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using Backend.API.DTO;
 using Backend.Type;
-using Codice.CM.Client.Differences;
-using Backend.Variables;
 
+//Script for Constant Editor UI 
 public class ConstantEditor : MonoBehaviour
 {
     public IInputNode node;
@@ -61,6 +57,8 @@ public class ConstantEditor : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    //Save changes updates type and value then deactivating UI object on scene
     public void SaveChanges()
     {
         UpdateVariable();

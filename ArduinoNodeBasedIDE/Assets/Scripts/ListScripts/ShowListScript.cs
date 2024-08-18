@@ -1,10 +1,9 @@
-using JetBrains.Annotations;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+//Script for key binding to open different UI controls again on scene
 public class ShowListScript : MonoBehaviour
 {
+    //supported UI controls
     public GameObject referenceListPrefab;
     public GameObject globalVariableListPrefab;
     public GameObject functionListPrefab;
@@ -24,6 +23,8 @@ public class ShowListScript : MonoBehaviour
         list.SetActive(true);
     }
 
+
+    //Keyboard key binding
     private void OnMouseOver()
     {
         if (Input.GetKeyDown(KeyCode.D))

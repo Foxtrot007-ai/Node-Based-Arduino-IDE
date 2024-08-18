@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+//Find all dropdown object on scene and update their content (adding new class type situation)
 public class DropdownTypesAlerter
 {
     public void TypeChangeAlert()

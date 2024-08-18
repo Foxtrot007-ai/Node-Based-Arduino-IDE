@@ -1,8 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
+
+//old NodeBlock class when the backend wasn't thought out
 public enum NodeBlockTypes
 {
     Function, //0 or 1 element in nextBlockList, 0 or more elements in inputList, 0 or 1 output;

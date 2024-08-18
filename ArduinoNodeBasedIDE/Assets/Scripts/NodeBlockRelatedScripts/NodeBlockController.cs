@@ -58,10 +58,10 @@ public class NodeBlockController : MonoBehaviour
             }
             Validation();
         }
-
-        
     }
 
+
+    //if there are some changes in nodeblock definition change UI apperance
     virtual public void Validation()
     {
         CheckForNameChange();

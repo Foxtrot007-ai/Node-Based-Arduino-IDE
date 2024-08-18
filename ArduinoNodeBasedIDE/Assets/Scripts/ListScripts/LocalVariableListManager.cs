@@ -1,13 +1,15 @@
 using Backend.API;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
+//Script for Local Variable List UI Control
 public class LocalVariableListManager : ListManager
 {
+    //Additional attributes
     public GameObject nameField;
+
+    //overrided class methods 
     protected override List<IVariable> GetVariables()
     {
         return nodeBlockManager.SearchNodeBlocks(this, lastInput);
@@ -18,10 +20,13 @@ public class LocalVariableListManager : ListManager
         AddContentVariables();
     }
 
+    //reload list content from editors
     public void ReloadVariables()
     {
         UpdateContent();
     }
+
+    //add button ui function
     public void CreateNewVariable()
     {
         nodeBlockManager.AddNodeBlock(this, nameField.GetComponent<TMP_InputField>().text);

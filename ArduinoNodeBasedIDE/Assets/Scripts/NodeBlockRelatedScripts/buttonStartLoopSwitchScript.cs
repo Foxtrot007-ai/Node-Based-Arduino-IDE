@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class buttonStartLoopSwitchScript : MonoBehaviour
@@ -12,6 +9,8 @@ public class buttonStartLoopSwitchScript : MonoBehaviour
     {
         nodeBlockManager = GameObject.FindGameObjectWithTag("NodeBlocksManager").GetComponent<NodeBlockManager>();
     }
+
+    //Deciding which functionality use 
     public void OnClick()
     {
         switch (type)
