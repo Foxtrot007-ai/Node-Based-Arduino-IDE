@@ -48,6 +48,7 @@ public class NodeBlockManager : MonoBehaviour
     void Awake()
     {
         messageInfo = GameObject.FindGameObjectWithTag("InfoMessageManager").GetComponent<InfoMessageManager>();
+        inputFieldNameFile = GameObject.FindGameObjectWithTag("inputFieldNameFile");
         instantiateBasicFunctions();
         saveManager.Instantiate(this, backendManager, viewsManager, inputFieldNameFile);
     }
