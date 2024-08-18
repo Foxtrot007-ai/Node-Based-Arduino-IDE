@@ -1,6 +1,5 @@
 using System;
 using Backend.Type;
-using Castle.Core.Internal;
 
 namespace Backend.API.DTO
 {
@@ -11,7 +10,7 @@ namespace Backend.API.DTO
 
         public bool IsDtoValid()
         {
-            if (Value.IsNullOrEmpty())
+            if (string.IsNullOrEmpty(Value))
                 return true;
 
             switch (Type.EType)

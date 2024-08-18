@@ -11,7 +11,6 @@ using Backend.Template;
 using Backend.Template.Json;
 using Backend.Type;
 using Backend.Validator;
-using Castle.Core.Internal;
 using Unity.Plastic.Newtonsoft.Json;
 
 namespace Backend
@@ -197,8 +196,8 @@ namespace Backend
 
         public void AddClassConstructorTemplate(string className, string library, List<string> inputs)
         {
-            if (library.IsNullOrEmpty()
-                || !inputs.TrueForAll(x => !x.IsNullOrEmpty() && x != "void"))
+            if (string.IsNullOrEmpty(library)
+                || !inputs.TrueForAll(x => !string.IsNullOrEmpty(x) && x != "void"))
             {
                 throw new Exception();
             }

@@ -3,12 +3,10 @@ using Backend.API;
 using Backend.API.DTO;
 using Backend.Connection;
 using Backend.Exceptions;
-using Backend.Exceptions.InOut;
 using Backend.IO;
 using Backend.Node.BuildIn;
 using Backend.Template;
 using Backend.Type;
-using Castle.Core.Internal;
 
 namespace Backend.Node
 {
@@ -29,7 +27,7 @@ namespace Backend.Node
 
         protected override string MakeCodeParam(CodeManager codeManager)
         {
-            if (!Value.IsNullOrEmpty()) return _output.MyType.EType == EType.String ? $"\"{Value}\"" : Value;
+            if (!string.IsNullOrEmpty(Value)) return _output.MyType.EType == EType.String ? $"\"{Value}\"" : Value;
 
             switch (_output.MyType.EType)
             {

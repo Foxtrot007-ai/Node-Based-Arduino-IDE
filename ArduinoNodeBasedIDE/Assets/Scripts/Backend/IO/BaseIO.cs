@@ -5,7 +5,6 @@ using Backend.API;
 using Backend.Connection;
 using Backend.Exceptions.InOut;
 using Backend.Node;
-using Castle.Core.Internal;
 
 namespace Backend.IO
 {
@@ -79,7 +78,7 @@ namespace Backend.IO
         {
             if (_connected is null)
                 return;
-            
+
             var inOut = _connected;
             try
             {
@@ -182,7 +181,7 @@ namespace Backend.IO
             var toVisit = new Stack<BaseNode>();
             toVisit.Push(ParentNode);
 
-            while (!toVisit.IsNullOrEmpty())
+            while (toVisit.Count != 0)
             {
                 var parent = toVisit.Pop();
                 if (parent == baseIO.ParentNode)

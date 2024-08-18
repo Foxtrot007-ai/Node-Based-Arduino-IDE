@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Castle.Core.Internal;
 
 namespace Backend.API.DTO
 {
@@ -12,11 +11,11 @@ namespace Backend.API.DTO
 
         public bool IsDtoValid()
         {
-            return !FunctionName.IsNullOrEmpty()
-                   && !Library.IsNullOrEmpty()
+            return !string.IsNullOrEmpty(FunctionName)
+                   && !string.IsNullOrEmpty(Library)
                    && InputsType != null
-                   && !OutputType.IsNullOrEmpty()
-                   && InputsType.TrueForAll(x => !x.IsNullOrEmpty() && x != "void");
+                   && !string.IsNullOrEmpty(OutputType)
+                   && InputsType.TrueForAll(x => !string.IsNullOrEmpty(x) && x != "void");
         }
     }
 }
