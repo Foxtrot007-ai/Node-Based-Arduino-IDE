@@ -8,6 +8,9 @@ using Tests.EditMode.ut.Backend.Helpers;
 
 namespace Tests.EditMode.ut.Backend.IO
 {
+    [TestFixture]
+    [TestOf(typeof(ChainIO))]
+    [Category("IO")]
     public class ChainIOTest
     {
         private ChainIO _chainIO1;

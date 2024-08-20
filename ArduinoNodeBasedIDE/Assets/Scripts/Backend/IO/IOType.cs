@@ -1,4 +1,4 @@
-﻿namespace Backend.Connection
+﻿namespace Backend.IO
 {
     public enum IOType
     {
@@ -7,7 +7,6 @@
         Class,
         Primitive,
         String,
-        Dynamic,
         Auto
     }
 }

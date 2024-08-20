@@ -1,4 +1,3 @@
-using Backend.API;
 using Backend.Connection;
 using Backend.Exceptions;
 using Backend.Exceptions.InOut;

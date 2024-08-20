@@ -1,5 +1,6 @@
 using System.Reflection;
 using Backend.Connection;
+using Backend.IO;
 using Backend.Type;
 using Backend.Variables;
 using NSubstitute;
@@ -51,7 +52,7 @@ namespace Tests.EditMode.ut.Backend.Helpers
         public static TypeIOMock CreateTypeIO(IOSide side = IOSide.Input)
         {
             var inOut = Substitute.For<TypeIOMock>(side);
-            inOut.IOType.Returns(IOType.Dynamic);
+            inOut.IOType.Returns(IOType.Primitive);
             inOut.IsOptional.Returns(false);
             return inOut;
         }
