@@ -1,5 +1,3 @@
-using Backend.Connection;
-
 namespace Backend.IO
 {
     public interface ISubscribeIO

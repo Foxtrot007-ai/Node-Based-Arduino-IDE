@@ -1,4 +1,3 @@
-using Backend.Connection;
 using Backend.IO;
 using Backend.Template;
 
@@ -10,9 +9,6 @@ namespace Backend.Node.BuildIn
         private ChainIO _chainIO1;
         private ChainIO _chainIO2;
 
-        protected BracketNode()
-        {
-        }
         public BracketNode(BuildInTemplate buildInTemplate) : base(buildInTemplate)
         {
             _chainIO1 = new ChainIO(this, IOSide.Output, false, false);

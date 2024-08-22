@@ -13,7 +13,9 @@ namespace Backend.Template
         public virtual List<IType> InputsTypes { get; }
         public virtual IType OutputType { get; }
 
-        protected FunctionTemplate(){}
+        protected FunctionTemplate()
+        {
+        }
         public FunctionTemplate(long id, string library, FunctionJson functionJson) : base(id, functionJson.Name)
         {
             Library = library;
@@ -21,16 +23,6 @@ namespace Backend.Template
             InputsTypes = functionJson.InputsType.Select(TypeConverter.ToIType).ToList();
 
             Category = library;
-            _instanceType = typeof(FunctionNode);
-        }
-
-        public FunctionTemplate(long id, FunctionTemplateDto functionTemplateDto) : base(id, functionTemplateDto.FunctionName)
-        {
-            Library = functionTemplateDto.Library;
-            InputsTypes = functionTemplateDto.InputsType.Select(TypeConverter.ToIType).ToList();
-            OutputType = TypeConverter.ToIType(functionTemplateDto.OutputType);
-
-            Category = functionTemplateDto.Library;
             _instanceType = typeof(FunctionNode);
         }
     }

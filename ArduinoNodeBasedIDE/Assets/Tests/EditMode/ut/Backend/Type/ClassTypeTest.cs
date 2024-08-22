@@ -37,7 +37,7 @@ namespace Tests.EditMode.ut.Backend.Type
         }
 
         [Test]
-        public void NotClassNameException()
+        public void NotClassTypeException()
         {
             //given
             //when

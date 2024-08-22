@@ -1,4 +1,4 @@
-using Backend.Connection;
+using Backend.IO;
 using Backend.Variables;
 
 namespace Backend.Node.BuildIn
@@ -7,7 +7,7 @@ namespace Backend.Node.BuildIn
     {
         public override string NodeName => "Set " + _variable.Name;
 
-        public SetVariableNode(Variable variable, string id) : base(variable, IOSide.Input, id)
+        public SetVariableNode(Variable variable) : base(variable, IOSide.Input, new PathName(variable.PathName, "SET"))
         {
             AddFlowInputs();
             AddInputs(_value);

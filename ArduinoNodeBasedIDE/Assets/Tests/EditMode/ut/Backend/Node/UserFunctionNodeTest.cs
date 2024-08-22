@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Backend.API;
-using Backend.Connection;
+using Backend.IO;
 using Backend.MyFunction;
 using Backend.Node;
 using Backend.Type;
@@ -29,7 +29,7 @@ namespace Tests.EditMode.ut.Backend.Node
             var type = MockHelper.CreateType();
             _userFunctionMock.OutputType.Returns(type);
 
-            _sut = new UserFunctionNode(_userFunctionMock, "test");
+            _sut = new UserFunctionNode(_userFunctionMock);
 
             PrepareBaseSetup(_sut);
 
@@ -62,7 +62,7 @@ namespace Tests.EditMode.ut.Backend.Node
             };
             _userFunctionMock.InputList.Variables.Returns(list);
 
-            var sut = new UserFunctionNode(_userFunctionMock, "test");
+            var sut = new UserFunctionNode(_userFunctionMock);
 
             Assert.AreEqual(3, sut.InputsList.Count);
             Assert.IsInstanceOf<FlowIO>(sut.InputsList[0]);
@@ -89,7 +89,7 @@ namespace Tests.EditMode.ut.Backend.Node
             };
             _userFunctionMock.InputList.Variables.Returns(list);
 
-            var sut = new UserFunctionNode(_userFunctionMock, "test");
+            var sut = new UserFunctionNode(_userFunctionMock);
 
             Assert.AreEqual(2, sut.InputsList.Count);
             ExpectHelper.TypeEqual(type1, sut.InputsList[0]);

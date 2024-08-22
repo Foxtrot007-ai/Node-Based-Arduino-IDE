@@ -1,9 +1,8 @@
 ﻿using Backend.API;
 using Backend.Exceptions.InOut;
-using Backend.IO;
 using Backend.Node;
 
-namespace Backend.Connection
+namespace Backend.IO
 {
     public class FlowIO : BaseIO
     {

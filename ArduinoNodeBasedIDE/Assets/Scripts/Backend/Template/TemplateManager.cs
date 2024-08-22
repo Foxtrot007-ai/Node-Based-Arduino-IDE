@@ -4,7 +4,6 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
 using Backend.API;
-using Backend.API.DTO;
 using Backend.Node;
 using Backend.Node.BuildIn;
 using Backend.Template;
@@ -20,8 +19,6 @@ namespace Backend
         public List<ITemplate> Templates => _templates.Values.ToList();
 
         private Dictionary<long, ITemplate> _templates = new();
-        private Dictionary<string, FunctionsJson> _functions = new();
-        private Dictionary<string, ClassJson> _classes = new();
         private long _highestId = 500;
         protected string _tempalateDir;
         private const string FunctionsDir = "functions";
@@ -71,7 +68,6 @@ namespace Backend
             foreach (var file in files)
             {
                 var json = LoadJsonFromFile<FunctionsJson>(file);
-                _functions.Add(json.Library, json);
                 foreach (var (id, functionJson) in json.Functions)
                 {
                     TrySetNewId(id);
@@ -92,7 +88,6 @@ namespace Backend
                 var classType = new ClassType(className);
                 var library = json.Library;
 
-                _classes.Add(className, json);
                 foreach (var (id, functionJson) in json.Methods)
                 {
                     TrySetNewId(id);
@@ -130,104 +125,12 @@ namespace Backend
                 _templates.Add(id, new LogicalOpTemplate(id, op));
                 id++;
             }
-            
+
             foreach (ArithmeticOpTemplate.EArithmeticOp op in Enum.GetValues(typeof(ArithmeticOpTemplate.EArithmeticOp)))
             {
                 _templates.Add(id, new ArithmeticOpTemplate(id, op));
                 id++;
             }
-        }
-
-        public void AddFunctionTemplate(FunctionTemplateDto functionTemplateDto)
-        {
-            if (!functionTemplateDto.IsDtoValid())
-            {
-                throw new Exception();
-            }
-
-            _highestId++;
-            var library = functionTemplateDto.Library;
-            if (!_functions.TryGetValue(library, out var functionsJson))
-            {
-                functionsJson = new FunctionsJson
-                {
-                    Library = library,
-                };
-                _functions.Add(library, functionsJson);
-            }
-
-            var function = new FunctionJson(functionTemplateDto);
-            functionsJson.Functions.Add(_highestId, function);
-
-            _templates.Add(_highestId, new FunctionTemplate(_highestId, functionTemplateDto));
-            WriteJsonToFile(MakePath(FunctionsDir, library), functionsJson);
-        }
-
-        public void AddClassMethodTemplate(string className, FunctionTemplateDto functionTemplateDto)
-        {
-            if (!functionTemplateDto.IsDtoValid())
-            {
-                throw new Exception();
-            }
-
-            if (!ClassTypeValidator.Instance.IsClassType(className))
-            {
-                ClassTypeValidator.Instance.AddClassType(className);
-            }
-
-            _highestId++;
-            if (!_classes.TryGetValue(className, out var classJson))
-            {
-                classJson = new ClassJson
-                {
-                    ClassName = className,
-                    Library = functionTemplateDto.Library,
-                };
-                _classes.Add(className, classJson);
-            }
-
-            var method = new FunctionJson(functionTemplateDto);
-            classJson.Methods.Add(_highestId, method);
-
-            var classType = new ClassType(className);
-            _templates.Add(_highestId, new ClassMethodTemplate(_highestId, functionTemplateDto, classType));
-            WriteJsonToFile(MakePath(ClassesDir, className), classJson);
-        }
-
-        public void AddClassConstructorTemplate(string className, string library, List<string> inputs)
-        {
-            if (string.IsNullOrEmpty(library)
-                || !inputs.TrueForAll(x => !string.IsNullOrEmpty(x) && x != "void"))
-            {
-                throw new Exception();
-            }
-
-            if (!ClassTypeValidator.Instance.IsClassType(className))
-            {
-                ClassTypeValidator.Instance.AddClassType(className);
-            }
-
-            _highestId++;
-            if (!_classes.TryGetValue(className, out var classJson))
-            {
-                classJson = new ClassJson
-                {
-                    ClassName = className,
-                    Library = library,
-                };
-                _classes.Add(className, classJson);
-            }
-
-            classJson.Constructors.Add(_highestId, inputs);
-
-            var classType = new ClassType(className);
-            _templates.Add(_highestId, new ClassConstructorTemplate(_highestId, library, inputs, classType));
-            WriteJsonToFile(MakePath(ClassesDir, className), classJson);
-        }
-
-        private void WriteJsonToFile<T>(string filePath, T json)
-        {
-            _fileSystem.File.WriteAllText(filePath + ".json", JsonConvert.SerializeObject(json));
         }
 
         public virtual ITemplate GetTemplateById(long id)

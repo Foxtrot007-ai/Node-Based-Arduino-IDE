@@ -46,7 +46,7 @@ namespace Backend.MyFunction
 
         public void Change(FunctionManageDto functionManageDto)
         {
-            if (Name != functionManageDto.FunctionName) 
+            if (Name != functionManageDto.FunctionName)
             {
                 _manager.Validate(functionManageDto);
             }
@@ -54,7 +54,7 @@ namespace Backend.MyFunction
             Name = functionManageDto.FunctionName;
 
             if (OutputType.Equals(functionManageDto.OutputType)) return;
-            
+
             OutputType = functionManageDto.OutputType;
             _refs.ForEach(node => node.ChangeOutputType(OutputType));
             _returnRefs.ForEach(node => node.ChangeInputType(OutputType));
@@ -67,7 +67,7 @@ namespace Backend.MyFunction
 
         public INode CreateNode()
         {
-            return new UserFunctionNode(this, PathName.ToString());
+            return new UserFunctionNode(this);
         }
 
         public void Delete()

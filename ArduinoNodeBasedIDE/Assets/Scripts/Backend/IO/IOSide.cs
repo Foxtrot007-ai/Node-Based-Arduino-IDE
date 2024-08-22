@@ -1,4 +1,4 @@
-﻿namespace Backend.Connection
+﻿namespace Backend.IO
 {
     public enum IOSide
     {

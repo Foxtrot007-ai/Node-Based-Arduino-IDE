@@ -1,8 +1,7 @@
 using System;
-using Backend.IO;
 using Backend.Type;
 
-namespace Backend.Connection
+namespace Backend.IO
 {
     public static class HelperIO
     {

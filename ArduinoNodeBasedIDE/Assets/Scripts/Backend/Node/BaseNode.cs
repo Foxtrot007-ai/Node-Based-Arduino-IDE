@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Backend.API;
-using Backend.Connection;
 using Backend.Exceptions;
 using Backend.IO;
 
@@ -13,16 +12,18 @@ namespace Backend.Node
         public virtual string NodeName { get; protected set; }
         public bool IsDeleted { get; private set; }
         public virtual NodeType NodeType { get; protected set; } = NodeType.Classic;
-        public virtual string CreatorId { get; } = "0";
+        public virtual string CreatorId => _pathName.ToString();
         public virtual List<IConnection> InputsList { get; private set; } = new();
         public virtual List<IConnection> OutputsList { get; private set; } = new();
+
+        private PathName _pathName;
 
         protected FlowIO _prevNode;
         protected FlowIO _nextNode;
 
-        protected BaseNode(string creatorId) : this()
+        protected BaseNode(PathName pathName) : this()
         {
-            CreatorId = creatorId;
+            _pathName = pathName;
         }
         protected BaseNode()
         {

@@ -20,7 +20,7 @@ namespace Tests.EditMode.ut.Backend.Node.BuildIn
         public void Init()
         {
             _variableMock = Substitute.For<Variable>();
-            _sut = Substitute.ForPartsOf<SetVariableNode>(_variableMock, "test");
+            _sut = Substitute.ForPartsOf<SetVariableNode>(_variableMock);
 
             PrepareBaseSetup(_sut);
 

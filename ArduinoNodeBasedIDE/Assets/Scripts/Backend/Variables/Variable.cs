@@ -58,12 +58,12 @@ namespace Backend.Variables
 
         public INode CreateGetNode()
         {
-            return new GetVariableNode(this, new PathName(PathName, "GET").ToString());
+            return new GetVariableNode(this);
         }
 
         public INode CreateSetNode()
         {
-            return new SetVariableNode(this, new PathName(PathName, "SET").ToString());
+            return new SetVariableNode(this);
         }
 
         public virtual void Delete()

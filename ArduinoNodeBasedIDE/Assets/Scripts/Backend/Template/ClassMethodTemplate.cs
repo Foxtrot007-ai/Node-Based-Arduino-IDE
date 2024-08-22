@@ -9,15 +9,10 @@ namespace Backend.Template
     {
         public virtual ClassType Class { get; }
 
-        protected ClassMethodTemplate(){}
-        public ClassMethodTemplate(long id, string library, FunctionJson functionJson, ClassType classType) : base(id, library, functionJson)
+        protected ClassMethodTemplate()
         {
-            Class = classType;
-
-            Category = classType.TypeName;
-            _instanceType = typeof(ClassMethodNode);
         }
-        public ClassMethodTemplate(long id, FunctionTemplateDto functionTemplateDto, ClassType classType) : base(id, functionTemplateDto)
+        public ClassMethodTemplate(long id, string library, FunctionJson functionJson, ClassType classType) : base(id, library, functionJson)
         {
             Class = classType;
 

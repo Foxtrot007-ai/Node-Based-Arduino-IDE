@@ -1,6 +1,5 @@
 using System;
 using Backend.API;
-using Backend.Connection;
 using Backend.IO;
 using Backend.MyFunction;
 using Backend.Type;
@@ -15,7 +14,7 @@ namespace Backend.Node
         protected UserFunctionNode()
         {
         }
-        public UserFunctionNode(UserFunction userFunction, string id) : base(id)
+        public UserFunctionNode(UserFunction userFunction) : base(userFunction.PathName)
         {
             _userFunction = userFunction;
             _userFunction.AddRef(this);

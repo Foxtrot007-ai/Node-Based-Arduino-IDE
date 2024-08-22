@@ -1,5 +1,5 @@
-using Backend.Connection;
 using Backend.Exceptions;
+using Backend.IO;
 using Backend.Variables;
 
 namespace Backend.Node.BuildIn
@@ -8,7 +8,7 @@ namespace Backend.Node.BuildIn
     {
         public override string NodeName => "Get " + _variable.Name;
 
-        public GetVariableNode(Variable variable, string id) : base(variable, IOSide.Output, id)
+        public GetVariableNode(Variable variable) : base(variable, IOSide.Output, new PathName(variable.PathName, "GET"))
         {
             AddOutputs(_value);
         }

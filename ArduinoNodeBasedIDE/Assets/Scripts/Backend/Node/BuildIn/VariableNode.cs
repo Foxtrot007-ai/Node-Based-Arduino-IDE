@@ -1,4 +1,3 @@
-using Backend.Connection;
 using Backend.IO;
 using Backend.Type;
 using Backend.Variables;
@@ -10,7 +9,7 @@ namespace Backend.Node.BuildIn
         protected Variable _variable;
         protected TypeIO _value;
 
-        protected VariableNode(Variable variable, IOSide side, string id) : base(id)
+        protected VariableNode(Variable variable, IOSide side, PathName pathName) : base(pathName)
         {
             _variable = variable;
             _value = new TypeIO(this, side, variable.Type);

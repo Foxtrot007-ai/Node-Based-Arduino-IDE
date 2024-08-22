@@ -1,4 +1,3 @@
-using Backend.Connection;
 using Backend.IO;
 using Backend.Template;
 using Backend.Type;
@@ -8,10 +7,6 @@ namespace Backend.Node.BuildIn
     public class NotNode : BuildInNode
     {
         private TypeIO _in;
-
-        protected NotNode()
-        {
-        }
 
         public NotNode(BuildInTemplate buildInTemplate) : base(buildInTemplate)
         {

@@ -12,7 +12,9 @@ namespace Backend.Template
         public virtual string Library { get; }
         public virtual List<IType> Inputs { get; }
 
-        protected ClassConstructorTemplate(){}
+        protected ClassConstructorTemplate()
+        {
+        }
         public ClassConstructorTemplate(long id, string library, List<string> inputs, ClassType classType) : base(id, classType.TypeName)
         {
             Class = classType;

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Backend.Connection;
 using Backend.Exceptions;
 using Backend.Exceptions.InOut;
 using Backend.IO;
