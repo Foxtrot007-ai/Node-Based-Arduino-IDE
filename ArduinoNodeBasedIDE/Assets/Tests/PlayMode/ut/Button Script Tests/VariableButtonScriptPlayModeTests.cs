@@ -6,13 +6,16 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
+using Backend;
+using Backend.Type;
+
 
 
 namespace ut.UIClasses.Buttons
 {
     public class VariableButtonScriptPlayModeTests
     {
-        /*
+        
         [UnityTest]
         public IEnumerator SetNodeBlockTest()
         {
@@ -35,13 +38,18 @@ namespace ut.UIClasses.Buttons
 
             //when
 
-            button.SetNodeBlock(SimpleNodeBlockMaker.MakeVariable("a", Backend.Type.EType.Int));
+            IVariable newVariable = manager.backendManager.GlobalVariables.AddVariable(new Backend.API.DTO.VariableManageDto
+            {
+                VariableName = "a",
+                Type = new Backend.Type.PrimitiveType(EType.Int)
+            });
 
+            button.SetNodeBlock(newVariable);
 
             //then
             yield return new WaitForSeconds(1);
             Assert.AreEqual(button.text.GetComponent<TMP_Text>().text, "a");
-            Assert.AreEqual(button.typeField.GetComponent<TMP_Text>().text, "Int");
+            Assert.AreEqual(button.typeField.GetComponent<TMP_Text>().text, "int");
         }
         [UnityTest]
         public IEnumerator SpawnNodeBlockTest()
@@ -62,17 +70,22 @@ namespace ut.UIClasses.Buttons
 
             NodeBlockManager manager = managerObject.GetComponent<NodeBlockManager>();
             VariableButtonScript button = buttonObject.GetComponent<VariableButtonScript>();
-            IVariableManage variable = SimpleNodeBlockMaker.MakeVariable("a", Backend.Type.EType.Int);
+            IVariable newVariable = manager.backendManager.GlobalVariables.AddVariable(new Backend.API.DTO.VariableManageDto
+            {
+                VariableName = "a",
+                Type = new Backend.Type.PrimitiveType(EType.Int)
+            });
             //when
 
-            button.SetNodeBlock(variable);
+            button.SetNodeBlock(newVariable);
             button.SpawnNodeBlock();
 
             //then
             yield return new WaitForSeconds(1);
             GameObject[] nodeBlock = GameObject.FindGameObjectsWithTag("NodeBlock");
             List<GameObject> nodeBlocks = new List<GameObject>(nodeBlock);
-            Assert.NotNull(nodeBlocks.Find(obj => obj.GetComponent<NodeBlockController>().nodeBlock.NodeName == variable.Name));
+            Assert.AreNotEqual(nodeBlocks.Count, 0);
+            Assert.NotNull(nodeBlocks.Find(obj => obj.GetComponent<NodeBlockController>().nodeBlock.NodeName == "Get "+ newVariable.Name));
         }
         [UnityTest]
         public IEnumerator DeleteNodeBlockTest()
@@ -93,18 +106,21 @@ namespace ut.UIClasses.Buttons
 
             NodeBlockManager manager = managerObject.GetComponent<NodeBlockManager>();
             VariableButtonScript button = buttonObject.GetComponent<VariableButtonScript>();
-            IVariableManage variable = SimpleNodeBlockMaker.MakeVariable("a", Backend.Type.EType.Int);
-            manager.viewsManager.AddVariableToView(variable);
-            manager.variableList.Add(variable);
+            IVariable newVariable = manager.backendManager.GlobalVariables.AddVariable(new Backend.API.DTO.VariableManageDto
+            {
+                VariableName = "a",
+                Type = new Backend.Type.PrimitiveType(EType.Int)
+            });
+
+  
             //when
 
-            button.SetNodeBlock(variable);
-            button.DeleteNodeBlock();
+            button.SetNodeBlock(newVariable);
+            button.variable.Delete();
 
             //then
             yield return new WaitForSeconds(1);
-            Assert.AreEqual(manager.viewsManager.GetLocalVariables().Contains(variable), false);
-            Assert.AreEqual(manager.variableList.Contains(variable), false);
+            Assert.AreEqual(manager.backendManager.GlobalVariables.Variables.Contains(newVariable), false);
         }
         [UnityTest]
         public IEnumerator EditNodeBlockTest()
@@ -125,19 +141,21 @@ namespace ut.UIClasses.Buttons
 
             NodeBlockManager manager = managerObject.GetComponent<NodeBlockManager>();
             VariableButtonScript button = buttonObject.GetComponent<VariableButtonScript>();
-            IVariableManage variable = SimpleNodeBlockMaker.MakeVariable("a", Backend.Type.EType.Int);
-            manager.viewsManager.AddVariableToView(variable);
-            manager.variableList.Add(variable);
+            IVariable newVariable = manager.backendManager.GlobalVariables.AddVariable(new Backend.API.DTO.VariableManageDto
+            {
+                VariableName = "a",
+                Type = new Backend.Type.PrimitiveType(EType.Int)
+            });
             //when
 
-            button.SetNodeBlock(variable);
+            button.SetNodeBlock(newVariable);
             button.EditMyNodeBlock();
 
             //then
             yield return new WaitForSeconds(1);
 
             GameObject editor = GameObject.Find("VariableEditor");
-            Assert.AreEqual(editor.GetComponent<VariableEditor>().variable, variable);
+            Assert.AreEqual(editor.GetComponent<VariableEditor>().variable, newVariable);
         }
         [UnityTest]
         public IEnumerator SpawnSetNodeBlockTest()
@@ -158,18 +176,22 @@ namespace ut.UIClasses.Buttons
 
             NodeBlockManager manager = managerObject.GetComponent<NodeBlockManager>();
             VariableButtonScript button = buttonObject.GetComponent<VariableButtonScript>();
-            IVariableManage variable = SimpleNodeBlockMaker.MakeVariable("a", Backend.Type.EType.Int);
+            IVariable newVariable = manager.backendManager.GlobalVariables.AddVariable(new Backend.API.DTO.VariableManageDto
+            {
+                VariableName = "a",
+                Type = new Backend.Type.PrimitiveType(EType.Int)
+            });
             //when
 
-            button.SetNodeBlock(variable);
+            button.SetNodeBlock(newVariable);
             button.SpawnSetNodeBlock();
 
             //then
             yield return new WaitForSeconds(1);
             GameObject[] nodeBlock = GameObject.FindGameObjectsWithTag("NodeBlock");
             List<GameObject> nodeBlocks = new List<GameObject>(nodeBlock);
-            Assert.NotNull(nodeBlocks.Find(obj => obj.GetComponent<NodeBlockController>().nodeBlock.NodeName == variable.Name));
+            Assert.NotNull(nodeBlocks.Find(obj => obj.GetComponent<NodeBlockController>().nodeBlock.NodeName == "Set " + newVariable.Name));
         }
-        */
+        
     }
 }

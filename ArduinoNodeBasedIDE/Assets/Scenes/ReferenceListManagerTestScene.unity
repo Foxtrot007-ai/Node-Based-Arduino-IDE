@@ -1270,7 +1270,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeBlockSpawnPoint: {x: 0, y: 0, z: 0}
   nodeBlockPrefab: {fileID: 1609763804198202507, guid: 99021652e1c873d4d9ea6f525b422f1f, type: 3}
-  nodeBlockInputPrefab: {fileID: 0}
+  nodeBlockInputPrefab: {fileID: 1609763804198202507, guid: a91d92082e7f79d4293df6d960b4f493, type: 3}
   inputFieldNameFile: {fileID: 0}
   localVariableList: {fileID: 0}
   messageInfo: {fileID: 0}

@@ -6,13 +6,16 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
+using Backend;
+using Backend.Type;
+using Backend.API.DTO;
 
 
 namespace ut.UIClasses.Buttons
 {
     public class InputButtonScriptPlayModeTests
     {
-        /*
+        
         [UnityTest]
         public IEnumerator SetNodeBlockTest()
         {
@@ -33,15 +36,28 @@ namespace ut.UIClasses.Buttons
             NodeBlockManager manager = managerObject.GetComponent<NodeBlockManager>();
             InputButtonScript button = buttonObject.GetComponent<InputButtonScript>();
 
+            IUserFunction function = manager.backendManager.Functions.AddFunction(new Backend.API.DTO.FunctionManageDto
+            {
+                FunctionName = "test1",
+                OutputType = new VoidType()
+            });
+            //Creating Variable
+            IVariable node = function.InputList.AddVariable(new VariableManageDto
+            {
+                VariableName = "a",
+                Type = new Backend.Type.PrimitiveType(Backend.Type.EType.Int)
+            });
+
+
             //when
 
-            button.SetNodeBlock(SimpleNodeBlockMaker.MakeVariable("a", Backend.Type.EType.Int));
+            button.SetNodeBlock(node);
 
 
             //then
             yield return new WaitForSeconds(1);
             Assert.AreEqual(button.text.GetComponent<TMP_Text>().text, "a");
-            Assert.AreEqual(button.typeField.GetComponent<TMP_Text>().text, "Int");
+            Assert.AreEqual(button.typeField.GetComponent<TMP_Text>().text, "int");
         }
         [UnityTest]
         public IEnumerator SpawnNodeBlockTest()
@@ -62,17 +78,27 @@ namespace ut.UIClasses.Buttons
 
             NodeBlockManager manager = managerObject.GetComponent<NodeBlockManager>();
             InputButtonScript button = buttonObject.GetComponent<InputButtonScript>();
-            IVariableManage variable = SimpleNodeBlockMaker.MakeVariable("a", Backend.Type.EType.Int);
-            //when
 
-            button.SetNodeBlock(variable);
+            manager.AddNodeBlock("test1", 0, 0);
+
+            IUserFunction function = manager.backendManager.Functions.Functions[0];
+            //Creating Variable
+            IVariable node = function.InputList.AddVariable(new VariableManageDto
+            {
+                VariableName = "a",
+                Type = new Backend.Type.PrimitiveType(Backend.Type.EType.Int)
+            });
+
+            //when
+            yield return new WaitForSeconds(1);
+            button.SetNodeBlock(node);
             button.SpawnNodeBlock();
 
             //then
             yield return new WaitForSeconds(1);
             GameObject[] nodeBlock = GameObject.FindGameObjectsWithTag("NodeBlock");
             List<GameObject> nodeBlocks = new List<GameObject>(nodeBlock);
-            Assert.Null(nodeBlocks.Find(obj => obj.GetComponent<NodeBlockController>().nodeBlock.NodeName == variable.Name));
+            Assert.Null(nodeBlocks.Find(obj => obj.GetComponent<NodeBlockController>().nodeBlock.NodeName == node.Name));
         }
         [UnityTest]
         public IEnumerator DeleteNodeBlockTest()
@@ -93,9 +119,16 @@ namespace ut.UIClasses.Buttons
 
             NodeBlockManager manager = managerObject.GetComponent<NodeBlockManager>();
             InputButtonScript button = buttonObject.GetComponent<InputButtonScript>();
-            IVariableManage variable = SimpleNodeBlockMaker.MakeVariable("a", Backend.Type.EType.Int);
-            manager.viewsManager.AddVariableToView(variable);
-            manager.variableList.Add(variable);
+            manager.AddNodeBlock("test1", 0, 0);
+
+            IUserFunction function = manager.backendManager.Functions.Functions[0];
+            //Creating Variable
+            IVariable variable = function.InputList.AddVariable(new VariableManageDto
+            {
+                VariableName = "a",
+                Type = new Backend.Type.PrimitiveType(Backend.Type.EType.Int)
+            });
+
             //when
 
             button.SetNodeBlock(variable);
@@ -103,8 +136,7 @@ namespace ut.UIClasses.Buttons
 
             //then
             yield return new WaitForSeconds(1);
-            Assert.AreEqual(manager.viewsManager.GetLocalVariables().Contains(variable), true);
-            Assert.AreEqual(manager.variableList.Contains(variable), true);
+            Assert.AreEqual(manager.backendManager.Functions.Functions[0].InputList.Variables.Contains(variable), true);
         }
         [UnityTest]
         public IEnumerator EditNodeBlockTest()
@@ -125,9 +157,16 @@ namespace ut.UIClasses.Buttons
 
             NodeBlockManager manager = managerObject.GetComponent<NodeBlockManager>();
             InputButtonScript button = buttonObject.GetComponent<InputButtonScript>();
-            IVariableManage variable = SimpleNodeBlockMaker.MakeVariable("a", Backend.Type.EType.Int);
-            manager.viewsManager.AddVariableToView(variable);
-            manager.variableList.Add(variable);
+            manager.AddNodeBlock("test1", 0, 0);
+
+            IUserFunction function = manager.backendManager.Functions.Functions[0];
+            //Creating Variable
+            IVariable variable = function.InputList.AddVariable(new VariableManageDto
+            {
+                VariableName = "a",
+                Type = new Backend.Type.PrimitiveType(Backend.Type.EType.Int)
+            });
+
             //when
 
             button.SetNodeBlock(variable);
@@ -139,36 +178,5 @@ namespace ut.UIClasses.Buttons
             GameObject editor = GameObject.Find("VariableEditor");
             Assert.AreEqual(editor.GetComponent<VariableEditor>().variable, variable);
         }
-        [UnityTest]
-        public IEnumerator RemoveNodeBlockTest()
-        {
-            //given
-            var asyncLoadLevel = SceneManager.LoadSceneAsync("InputButtonScriptTestScene", LoadSceneMode.Single);
-            while (!asyncLoadLevel.isDone)
-            {
-                Debug.Log("Loading the Scene");
-                yield return null;
-            }
-
-            GameObject managerObject = GameObject.FindGameObjectWithTag("NodeBlocksManager");
-            GameObject buttonObject = GameObject.Find("InputButton");
-
-            Assert.NotNull(managerObject);
-            Assert.NotNull(buttonObject);
-
-            NodeBlockManager manager = managerObject.GetComponent<NodeBlockManager>();
-            InputButtonScript button = buttonObject.GetComponent<InputButtonScript>();
-            IVariableManage variable = SimpleNodeBlockMaker.MakeVariable("a", Backend.Type.EType.Int);
-            //when
-
-            button.SetNodeBlock(variable);
-            button.RemoveVariable();
-
-            //then
-            yield return new WaitForSeconds(1);
-            GameObject[] buttons = GameObject.FindGameObjectsWithTag("InputButton");
-            List<GameObject> buttonList = new List<GameObject>(buttons);
-            Assert.IsEmpty(buttonList);
-        }*/
     }
 }

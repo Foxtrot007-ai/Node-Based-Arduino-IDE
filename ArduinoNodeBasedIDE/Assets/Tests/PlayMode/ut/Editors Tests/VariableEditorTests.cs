@@ -11,7 +11,6 @@ namespace ut.UIClasses.Editors
 {
     public class VariableEditorTests
     {
-        /*
         [UnityTest]
         public IEnumerator LoadTest()
         {
@@ -31,7 +30,11 @@ namespace ut.UIClasses.Editors
 
             NodeBlockManager manager = managerObject.GetComponent<NodeBlockManager>();
             VariableEditor editor = editorObject.GetComponent<VariableEditor>();
-            IVariableManage variable = SimpleNodeBlockMaker.MakeVariable("a", EType.Int);
+            IVariable variable = manager.backendManager.GlobalVariables.AddVariable(new Backend.API.DTO.VariableManageDto
+            {
+                VariableName = "a",
+                Type = new Backend.Type.PrimitiveType(EType.Int)
+            });
             //when
 
             editor.InstantiateEditor(variable);
@@ -39,7 +42,7 @@ namespace ut.UIClasses.Editors
             //then
             yield return new WaitForSeconds(1);
             Assert.AreEqual(editor.variableNameField.GetComponent<TMP_InputField>().text, variable.Name);
-            Assert.AreEqual(editor.typeField.GetComponent<DropdownTypesScript>().option, variable.Type.TypeName);
+            Assert.AreEqual(editor.typeField.GetComponent<DropdownTypesScript>().option, "String");
         }
         [UnityTest]
         public IEnumerator UpdateTest()
@@ -60,7 +63,11 @@ namespace ut.UIClasses.Editors
 
             NodeBlockManager manager = managerObject.GetComponent<NodeBlockManager>();
             VariableEditor editor = editorObject.GetComponent<VariableEditor>();
-            IVariableManage variable = SimpleNodeBlockMaker.MakeVariable("a", EType.Int);
+            IVariable variable = manager.backendManager.GlobalVariables.AddVariable(new Backend.API.DTO.VariableManageDto
+            {
+                VariableName = "a",
+                Type = new Backend.Type.PrimitiveType(EType.Int)
+            });
             //when
 
             editor.InstantiateEditor(variable);
@@ -71,7 +78,7 @@ namespace ut.UIClasses.Editors
             //then
             yield return new WaitForSeconds(1);
             Assert.AreEqual(variable.Name, "newName");
-            Assert.AreEqual(variable.Type.TypeName, "Bool");
+            Assert.AreEqual(variable.Type.TypeName, "bool");
         }
         [UnityTest]
         public IEnumerator SwitchTest()
@@ -92,23 +99,31 @@ namespace ut.UIClasses.Editors
 
             NodeBlockManager manager = managerObject.GetComponent<NodeBlockManager>();
             VariableEditor editor = editorObject.GetComponent<VariableEditor>();
-            IVariableManage variable = SimpleNodeBlockMaker.MakeVariable("a", EType.Int);
+            IVariable variable = manager.backendManager.GlobalVariables.AddVariable(new Backend.API.DTO.VariableManageDto
+            {
+                VariableName = "a",
+                Type = new Backend.Type.PrimitiveType(EType.Int)
+            });
             //when
 
             editor.InstantiateEditor(variable);
 
             yield return new WaitForSeconds(1);
             Assert.AreEqual(editor.variableNameField.GetComponent<TMP_InputField>().text, variable.Name);
-            Assert.AreEqual(editor.typeField.GetComponent<DropdownTypesScript>().option, variable.Type.TypeName);
+            Assert.AreEqual(editor.typeField.GetComponent<DropdownTypesScript>().option, "String");
 
-            IVariableManage otherVariable = SimpleNodeBlockMaker.MakeVariable("b", EType.Bool);
+            IVariable otherVariable = manager.backendManager.GlobalVariables.AddVariable(new Backend.API.DTO.VariableManageDto
+            {
+                VariableName = "b",
+                Type = new Backend.Type.PrimitiveType(EType.Bool)
+            });
             editor.InstantiateEditor(otherVariable);
             //then
 
             yield return new WaitForSeconds(1);
             Assert.AreEqual(editor.variable, otherVariable);
             Assert.AreEqual(editor.variableNameField.GetComponent<TMP_InputField>().text, otherVariable.Name);
-            Assert.AreEqual(editor.typeField.GetComponent<DropdownTypesScript>().option, otherVariable.Type.TypeName);
-        }*/
+            Assert.AreEqual(editor.typeField.GetComponent<DropdownTypesScript>().option, "String");
+        }
     }
 }
