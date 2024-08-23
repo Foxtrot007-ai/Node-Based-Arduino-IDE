@@ -124,31 +124,22 @@ public class SaveStateModule
         //iterate and save connections
         foreach (KeyValuePair<INode, string> entry in controllerIDs)
         {
-            int outputIndex = 0;
-            foreach(IConnection con in entry.Key.OutputsList)
+            int inputIndex = 0;
+            foreach(IConnection con in entry.Key.InputsList)
             {
                 if(con.Connected != null)
                 {
                     sConnection connection = new sConnection();
                     connection.controllerIdFirst = entry.Value;
-                    connection.outputIndex = outputIndex;
+                    connection.inputIndex = inputIndex;
 
                     INode controllerSecond = con.Connected.ParentNode;
                     connection.controllerIdSecond = controllerIDs[controllerSecond];
-                    int inputIndex = 0;
-                    foreach (IConnection con2 in controllerSecond.InputsList)
-                    {
-                        if(con.Connected == con2)
-                        {
-                            connection.inputIndex = inputIndex;
-                            break;
-                        }
-                        inputIndex++;
-                    }
-
+                    connection.outputIndex = controllerSecond.OutputsList.IndexOf(con.Connected);
+                    
                     save.sConnections.Add(connection);
                 }
-                outputIndex++;
+                inputIndex++;
             }
         }
 
@@ -246,11 +237,11 @@ public class SaveStateModule
         //connect them;
         foreach(sConnection con in save.sConnections)
         {
-           
             INode controllerFirst = controllerIDs[con.controllerIdFirst];
             INode controllerSecond = controllerIDs[con.controllerIdSecond];
             Debug.Log(controllerFirst.NodeName + ", " + controllerSecond.NodeName);
-            controllerFirst.OutputsList[con.outputIndex].Connect(controllerSecond.InputsList[con.inputIndex]);
+            Debug.Log(con.outputIndex + "," + con.inputIndex);
+            controllerFirst.InputsList[con.inputIndex].Connect(controllerSecond.OutputsList[con.outputIndex]);
         }
     }
 
