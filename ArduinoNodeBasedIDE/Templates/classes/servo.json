@@ -1,0 +1,28 @@
+{
+  "ClassName": "Servo",
+  "Library": "Servo.h",
+  "Constructors": {
+    "500": []
+  },
+  "Methods": {
+    "501": {
+      "Name": "attach",
+      "InputsType": [
+        "int"
+      ],
+      "OutputType": "void"
+    },
+    "502": {
+      "Name": "attach",
+      "InputsType": [
+        "int",
+        "int",
+        "int"
+      ],
+      "OutputType": "void"
+    }
+  }
+}
+
+
+
