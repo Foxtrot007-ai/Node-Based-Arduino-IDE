@@ -32,7 +32,7 @@ public class NodeBlockManager : MonoBehaviour
     public GameObject localVariableList;
 
     public long listTimeStamp = 1;
-    
+
     public InfoMessageManager messageInfo;
     //my FunctionsList objects
     //public List<IFunction> myFunctionList = new List<IFunction>();
@@ -56,7 +56,7 @@ public class NodeBlockManager : MonoBehaviour
     }
 
     //Starting functions
-    
+
     public void instantiateBasicFunctions()
     {
         viewsManager.AddNewView(backendManager.Setup);
@@ -70,8 +70,6 @@ public class NodeBlockManager : MonoBehaviour
         startNodeBlockObject = SpawnNodeBlockWithoutValidation(nodeBlockPrefab).GetComponent<NodeBlockController>();
         startNodeBlockObject.isStartNodeBlock = true;
         startNodeBlockObject.InstantiateNodeBlockController(backendManager.Loop.StartNode);
-
-        
     }
 
     //SearchNodeBlock Section
@@ -80,11 +78,12 @@ public class NodeBlockManager : MonoBehaviour
         List<IUserFunction> temp = new List<IUserFunction>();
         foreach (IUserFunction node in list)
         {
-            if (node.Name.Contains(nodeBlockName)) {
+            if (node.Name.Contains(nodeBlockName))
+            {
                 temp.Add(node);
             }
         }
-      
+
         return temp;
     }
 
@@ -119,7 +118,7 @@ public class NodeBlockManager : MonoBehaviour
         //throw exception
         return null;
     }
-   
+
     public List<IVariable> SearchNodeBlocks(GlobalVariableListManager manager, String nodeBlockName)
     {
         return SearchNodeBlocks(backendManager.GlobalVariables.Variables, nodeBlockName);
@@ -141,7 +140,7 @@ public class NodeBlockManager : MonoBehaviour
     }
 
     //SpawnNodeBlock section
- 
+
     public GameObject SpawnNodeBlockWithoutValidation(GameObject prefab)
     {
         nodeBlockSpawnPoint.z = 0;
@@ -164,7 +163,6 @@ public class NodeBlockManager : MonoBehaviour
     }
 
 
-
     public void SpawnNodeBlock(ButtonScript button)
     {
         //throw exception
@@ -173,7 +171,7 @@ public class NodeBlockManager : MonoBehaviour
     public void SpawnNodeBlock(ReferenceButtonScript button)
     {
         INode node = button.template.CreateNodeInstance(viewsManager.actualView);
-        if(node.NodeType == Backend.Node.NodeType.Input)
+        if (node.NodeType == Backend.Node.NodeType.Input)
         {
             SpawnNodeBlockInput(node);
         }
@@ -198,7 +196,7 @@ public class NodeBlockManager : MonoBehaviour
     }
     public void SpawnNodeBlock(InputButtonScript button, IFunction function)
     {
-        if(viewsManager.actualView == function)
+        if (viewsManager.actualView == function)
         {
             SpawnNodeBlock(button.variable.CreateGetNode());
         }
@@ -308,7 +306,7 @@ public class NodeBlockManager : MonoBehaviour
         if (!currentVariableEditor.activeSelf)
         {
             currentVariableEditor.SetActive(true);
-            currentVariableEditor.GetComponent<VariableEditor>().InstantiateEditor(button.variable);    
+            currentVariableEditor.GetComponent<VariableEditor>().InstantiateEditor(button.variable);
         }
     }
 
@@ -358,12 +356,12 @@ public class NodeBlockManager : MonoBehaviour
 
     public void SaveState()
     {
-        try 
-        { 
+        try
+        {
             saveManager.Save();
             messageInfo.addMessage("Code saved succesfully", 0.3f);
         }
-        catch (Exception e)
+        catch(Exception e)
         {
             messageInfo.addMessage(e.Message, 0.3f);
         }
@@ -383,22 +381,21 @@ public class NodeBlockManager : MonoBehaviour
             saveManager.Load();
             messageInfo.addMessage("Code saved succesfully", 0.3f);
         }
-        catch (Exception e)
+        catch(Exception e)
         {
             messageInfo.addMessage(e.Message, 0.3f);
         }
         listTimeStamp++;
     }
 
-    public void GenerateCode() 
-    { 
+    public void GenerateCode()
+    {
         try
         {
-            backendManager.BuildCode(Application.persistentDataPath + "/code.ino", saveManager.GetCurrentLoadedFilePath());
-
+            backendManager.BuildCode(Environment.CurrentDirectory + "/code.ino", saveManager.GetCurrentLoadedFilePath());
             messageInfo.addMessage("Code generate succesfully", 0.3f);
         }
-        catch (Exception e)
+        catch(Exception e)
         {
             messageInfo.addMessage(e.Message, 0.3f);
         }

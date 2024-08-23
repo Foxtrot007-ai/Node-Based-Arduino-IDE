@@ -19,7 +19,6 @@ namespace Backend
         public List<ITemplate> Templates => _templates.Values.ToList();
 
         private Dictionary<long, ITemplate> _templates = new();
-        private long _highestId = 500;
         protected string _tempalateDir;
         private const string FunctionsDir = "functions";
         private const string ClassesDir = "classes";
@@ -35,14 +34,6 @@ namespace Backend
         }
         public TemplateManager() : this(new FileSystem(), Environment.CurrentDirectory + "/Templates")
         {
-        }
-
-        private void TrySetNewId(long id)
-        {
-            if (id > _highestId)
-            {
-                _highestId = id;
-            }
         }
 
         private string MakePath(params string[] dirs)
@@ -62,15 +53,23 @@ namespace Backend
             return JsonConvert.DeserializeObject<T>(_fileSystem.File.ReadAllText(path));
         }
 
+        private string[] GetFilesOrCreateDir(string dir)
+        {
+            var path = MakePath(dir);
+            if (_fileSystem.Directory.Exists(path)) return _fileSystem.Directory.GetFiles(path);
+
+            _fileSystem.Directory.CreateDirectory(path);
+            return Array.Empty<string>();
+        }
+
         private void LoadFunctionsFromFile()
         {
-            var files = _fileSystem.Directory.GetFiles(MakePath(FunctionsDir));
+            var files = GetFilesOrCreateDir(FunctionsDir);
             foreach (var file in files)
             {
                 var json = LoadJsonFromFile<FunctionsJson>(file);
                 foreach (var (id, functionJson) in json.Functions)
                 {
-                    TrySetNewId(id);
                     _templates.Add(id, new FunctionTemplate(id, json.Library, functionJson));
                 }
             }
@@ -78,7 +77,7 @@ namespace Backend
 
         private void LoadMethodsFromFile()
         {
-            var files = _fileSystem.Directory.GetFiles(MakePath(ClassesDir));
+            var files = GetFilesOrCreateDir(ClassesDir);
             foreach (var file in files)
             {
                 var json = LoadJsonFromFile<ClassJson>(file);
@@ -90,13 +89,11 @@ namespace Backend
 
                 foreach (var (id, functionJson) in json.Methods)
                 {
-                    TrySetNewId(id);
                     _templates.Add(id, new ClassMethodTemplate(id, library, functionJson, classType));
                 }
 
                 foreach (var (id, list) in json.Constructors)
                 {
-                    TrySetNewId(id);
                     _templates.Add(id, new ClassConstructorTemplate(id, library, list, classType));
                 }
             }
