@@ -36,7 +36,7 @@ namespace ut.UIClasses.Dropdown
             Assert.NotNull(dropdown);
             //then
             yield return new WaitForSeconds(1);
-            Assert.AreEqual(dropdown.GetComponent<TMP_Dropdown>().options.Count, 10);
+            Assert.AreEqual(dropdown.GetComponent<TMP_Dropdown>().options.Count, 11);
         }
         
         [UnityTest, Order(2)]

@@ -24,7 +24,8 @@ public class VariableEditor : MonoBehaviour
     {
         this.variable = variable;
         variableNameField.GetComponentInChildren<TMP_InputField>().text = variable.Name;
-        dropdownType.option = variable.Type.TypeName;
+        string type = variable.Type.TypeName;
+        dropdownType.option = type[0].ToString().ToUpper() + type.Substring(1);
     }
 
     private VariableManageDto MakeVariableDto(string name, string type)

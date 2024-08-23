@@ -22,6 +22,8 @@ public class ConstantEditor : MonoBehaviour
     {
         this.node = (IInputNode) node;
         valueField.GetComponentInChildren<TMP_InputField>().text = this.node.Value;
+        string type = node.OutputsList[0].IOName;
+        dropdownType.option = type[0].ToString().ToUpper() + type.Substring(1);
     }
     private InputNodeValueDto MakeInputNodeDto(string value, string type)
     {

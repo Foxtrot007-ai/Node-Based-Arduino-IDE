@@ -42,7 +42,7 @@ namespace ut.UIClasses.Editors
             //then
             yield return new WaitForSeconds(1);
             Assert.AreEqual(editor.variableNameField.GetComponent<TMP_InputField>().text, variable.Name);
-            Assert.AreEqual(editor.typeField.GetComponent<DropdownTypesScript>().option, "String");
+            Assert.AreEqual(editor.typeField.GetComponent<DropdownTypesScript>().option, "Int");
         }
         [UnityTest]
         public IEnumerator UpdateTest()
@@ -110,7 +110,7 @@ namespace ut.UIClasses.Editors
 
             yield return new WaitForSeconds(1);
             Assert.AreEqual(editor.variableNameField.GetComponent<TMP_InputField>().text, variable.Name);
-            Assert.AreEqual(editor.typeField.GetComponent<DropdownTypesScript>().option, "String");
+            Assert.AreEqual(editor.typeField.GetComponent<DropdownTypesScript>().option, "Int");
 
             IVariable otherVariable = manager.backendManager.GlobalVariables.AddVariable(new Backend.API.DTO.VariableManageDto
             {
@@ -123,7 +123,7 @@ namespace ut.UIClasses.Editors
             yield return new WaitForSeconds(1);
             Assert.AreEqual(editor.variable, otherVariable);
             Assert.AreEqual(editor.variableNameField.GetComponent<TMP_InputField>().text, otherVariable.Name);
-            Assert.AreEqual(editor.typeField.GetComponent<DropdownTypesScript>().option, "String");
+            Assert.AreEqual(editor.typeField.GetComponent<DropdownTypesScript>().option, "Bool");
         }
     }
 }

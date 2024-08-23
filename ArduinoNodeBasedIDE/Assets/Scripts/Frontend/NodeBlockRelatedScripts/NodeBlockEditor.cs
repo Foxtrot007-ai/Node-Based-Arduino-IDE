@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using Backend.API;
 using Backend.API.DTO;
+using UnityEngine.Windows;
 
 
 //Function Editor script for Function editor UI control
@@ -49,7 +50,8 @@ public class NodeBlockEditor : MonoBehaviour
         instantiated = true;
         currentNodeBlock = nodeBlock;
         nodeBlockName.GetComponentInChildren<TMP_InputField>().text = currentNodeBlock.Name;
-        dropdownType.option = currentNodeBlock.OutputType.TypeName;
+        string type = currentNodeBlock.OutputType.TypeName;
+        dropdownType.option = type[0].ToString().ToUpper() + type.Substring(1);
         InstantiateInputs();
     }
 

@@ -31,6 +31,8 @@ public class NodeBlockManager : MonoBehaviour
 
     public GameObject localVariableList;
 
+    public long listTimeStamp = 1;
+    
     public InfoMessageManager messageInfo;
     //my FunctionsList objects
     //public List<IFunction> myFunctionList = new List<IFunction>();
@@ -217,6 +219,7 @@ public class NodeBlockManager : MonoBehaviour
     }
     public void DeleteNodeBlock(VariableButtonScript button)
     {
+        listTimeStamp++;
         button.variable.Delete();
         if (button.GetComponentInParent<GlobalVariableListManager>() is not null)
         {
@@ -235,6 +238,7 @@ public class NodeBlockManager : MonoBehaviour
 
     public void DeleteNodeBlock(FunctionButtonScript button)
     {
+        listTimeStamp++;
         button.function.Delete();
         Debug.Log(button.function.IsDelete);
         button.GetComponentInParent<FunctionListManager>().UpdateContent();
@@ -250,6 +254,7 @@ public class NodeBlockManager : MonoBehaviour
 
     public void AddNodeBlock(string name, int numberOfInput, int numberOfOutput)
     {
+        listTimeStamp++;
         IUserFunction newFuntion = backendManager.Functions.AddFunction(new Backend.API.DTO.FunctionManageDto
         {
             FunctionName = name,
@@ -267,6 +272,7 @@ public class NodeBlockManager : MonoBehaviour
     }
     public void AddNodeBlock(GlobalVariableListManager list, string name)
     {
+        listTimeStamp++;
         IVariable newVariable = backendManager.GlobalVariables.AddVariable(new Backend.API.DTO.VariableManageDto
         {
             VariableName = name,
@@ -276,6 +282,7 @@ public class NodeBlockManager : MonoBehaviour
 
     public void AddNodeBlock(LocalVariableListManager list, string name)
     {
+        listTimeStamp++;
         IVariable newVariable = viewsManager.actualView.Variables.AddVariable(new Backend.API.DTO.VariableManageDto
         {
             VariableName = name,
@@ -371,18 +378,24 @@ public class NodeBlockManager : MonoBehaviour
     public void LoadState()
     {
         ResetScene();
-        
+        try
+        {
             saveManager.Load();
             messageInfo.addMessage("Code saved succesfully", 0.3f);
-       
-        
+        }
+        catch (Exception e)
+        {
+            messageInfo.addMessage(e.Message, 0.3f);
+        }
+        listTimeStamp++;
     }
 
     public void GenerateCode() 
     { 
         try
         {
-            backendManager.BuildCode("Assets/Resources/code.ino", saveManager.GetCurrentLoadedFilePath());
+            backendManager.BuildCode(Application.persistentDataPath + "/code.ino", saveManager.GetCurrentLoadedFilePath());
+
             messageInfo.addMessage("Code generate succesfully", 0.3f);
         }
         catch (Exception e)

@@ -8,6 +8,7 @@ public class ListManager : MonoBehaviour
 {
 
     public string lastInput = "";
+    public long nodeBlockManagerTimeStamp = 0;
     public GameObject inputField;
     public GameObject listContainer;
     public GameObject buttonContent;
@@ -32,6 +33,14 @@ public class ListManager : MonoBehaviour
             lastInput = readInput;
             UpdateContent();
         }
+
+        if (nodeBlockManager.listTimeStamp != nodeBlockManagerTimeStamp)
+        {
+            nodeBlockManagerTimeStamp = nodeBlockManager.listTimeStamp;
+            UpdateContent();
+        }
+        
+
     }
 
     //function for overriding

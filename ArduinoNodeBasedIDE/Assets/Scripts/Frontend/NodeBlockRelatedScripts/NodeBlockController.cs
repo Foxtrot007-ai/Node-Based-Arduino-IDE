@@ -96,6 +96,7 @@ public class NodeBlockController : MonoBehaviour
 
     public void InstantiateNodeBlockController(INode nodeBlock)
     {
+        Debug.Log(nodeBlock.NodeName);
         SetNodeBlock(nodeBlock);
         AddInPoints();
         AddOutPoint();

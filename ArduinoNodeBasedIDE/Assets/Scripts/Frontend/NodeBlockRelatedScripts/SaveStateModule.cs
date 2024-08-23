@@ -59,13 +59,13 @@ public class SaveStateModule
 
     public string GetCurrentLoadedFilePath()
     {
-        return ("defaultSaveFile" != currentLoadFileName) ? "Assets/Resources/" + currentLoadFileName + ".json" : "Editor state not saved";
+        return ("defaultSaveFile" != currentLoadFileName) ? Application.persistentDataPath + "/" + currentLoadFileName + ".json" : "Editor state not saved";
     }
     private void WriteToFile(string json)
     {
         string currentPath = inputFieldNameFile.GetComponent<TMP_InputField>().text;
         this.currentLoadFileName = currentPath;
-        StreamWriter writer = new StreamWriter("Assets/Resources/" + currentPath + ".json", false);
+        StreamWriter writer = new StreamWriter(Application.persistentDataPath + "/" + currentPath + ".json", false);
         writer.Write(json);
         writer.Close();
     }
@@ -74,7 +74,7 @@ public class SaveStateModule
     {
         string currentPath = inputFieldNameFile.GetComponent<TMP_InputField>().text;
         this.currentLoadFileName = currentPath;
-        StreamReader reader = new StreamReader("Assets/Resources/" + currentPath + ".json");
+        StreamReader reader = new StreamReader(Application.persistentDataPath + "/" + currentPath + ".json");
         return reader.ReadLine();
     }
 

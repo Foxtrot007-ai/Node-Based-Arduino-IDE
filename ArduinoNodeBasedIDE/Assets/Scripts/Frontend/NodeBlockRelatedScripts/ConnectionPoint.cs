@@ -47,7 +47,7 @@ public class ConnectionPoint : MonoBehaviour
        
         if (connection.Connected != null)
         {
-            if (connection.Connected.UIPoint.transform.position != points[1])
+            if (connection.Connected.UIPoint != null && connection.Connected.UIPoint.transform.position != points[1])
             {
                 points[1] = connection.Connected.UIPoint.transform.position;
                 DrawLine();
