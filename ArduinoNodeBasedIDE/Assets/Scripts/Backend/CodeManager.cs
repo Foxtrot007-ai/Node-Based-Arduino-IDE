@@ -86,6 +86,7 @@ namespace Backend
             builder.Append("* From file " + programName + "\n");
             builder.Append($"* {DateTime.Now}\n");
             builder.Append("***********************************************************/\n");
+            builder.Append("\n");
             foreach (string include in Includes.Where(include => !_ignoreIncludes.Contains(include)))
             {
                 builder.Append($"#include<{include}>\n");

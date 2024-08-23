@@ -7,7 +7,7 @@ namespace Backend.Template
 {
     public class ClassConstructorTemplate : BaseTemplate
     {
-
+        public override string Name => Class.TypeName;
         public virtual ClassType Class { get; }
         public virtual string Library { get; }
         public virtual List<IType> Inputs { get; }
@@ -15,7 +15,7 @@ namespace Backend.Template
         protected ClassConstructorTemplate()
         {
         }
-        public ClassConstructorTemplate(long id, string library, List<string> inputs, ClassType classType) : base(id, classType.TypeName)
+        public ClassConstructorTemplate(long id, string library, List<string> inputs, ClassType classType) : base(id)
         {
             Class = classType;
             Library = library;

@@ -1,4 +1,3 @@
-using Backend.API.DTO;
 using Backend.Node;
 using Backend.Template.Json;
 using Backend.Type;
@@ -7,6 +6,7 @@ namespace Backend.Template
 {
     public class ClassMethodTemplate : FunctionTemplate
     {
+        public override string Name => Class.TypeName + "." + FunctionName;
         public virtual ClassType Class { get; }
 
         protected ClassMethodTemplate()

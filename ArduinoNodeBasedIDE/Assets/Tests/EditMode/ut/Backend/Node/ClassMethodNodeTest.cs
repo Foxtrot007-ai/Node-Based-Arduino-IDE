@@ -113,7 +113,7 @@ namespace Tests.EditMode.ut.Backend.Node
         {
             PrepareVoidSetup();
 
-            _classMethodTemplate.Name.Returns("name");
+            _classMethodTemplate.FunctionName.Returns("name");
             _classMethodTemplate.Library.Returns("library");
 
             _class1.ToCodeParamReturn(_codeManagerMock, "class");
@@ -139,7 +139,7 @@ namespace Tests.EditMode.ut.Backend.Node
         {
             PrepareNonVoidSetup();
 
-            _classMethodTemplate.Name.Returns("name");
+            _classMethodTemplate.FunctionName.Returns("name");
             _classMethodTemplate.Library.Returns("library");
 
             _class1.ToCodeParamReturn(_codeManagerMock, "class");

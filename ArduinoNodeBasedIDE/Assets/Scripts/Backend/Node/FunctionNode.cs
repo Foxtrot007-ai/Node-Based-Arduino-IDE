@@ -35,7 +35,7 @@ namespace Backend.Node
         protected virtual string BuildCode(CodeManager codeManager)
         {
             var codeParam = codeManager.BuildParamCode(GetWithoutFlow(InputsList));
-            return $"{NodeName}({codeParam})";
+            return $"{_functionTemplate.FunctionName}({codeParam})";
         }
 
         protected override void MakeCode(CodeManager codeManager)

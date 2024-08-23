@@ -120,12 +120,13 @@ namespace Tests.EditMode.ut.Backend
             Assert.AreEqual("* From file TestFile", actualStrLines[2]);
             // Assert.AreEqual(DateTime.Now, actualStrLines[3]);
             Assert.AreEqual("***********************************************************/", actualStrLines[4]);
-            Assert.AreEqual("#include<test>", actualStrLines[5]);
-            Assert.AreEqual("", actualStrLines[6]);
-            Assert.AreEqual("{", actualStrLines[7]);
-            Assert.AreEqual("\ttest1", actualStrLines[8]);
-            Assert.AreEqual("\ttest2", actualStrLines[9]);
-            Assert.AreEqual("}", actualStrLines[10]);
+            Assert.AreEqual("", actualStrLines[5]);
+            Assert.AreEqual("#include<test>", actualStrLines[6]);
+            Assert.AreEqual("", actualStrLines[7]);
+            Assert.AreEqual("{", actualStrLines[8]);
+            Assert.AreEqual("\ttest1", actualStrLines[9]);
+            Assert.AreEqual("\ttest2", actualStrLines[10]);
+            Assert.AreEqual("}", actualStrLines[11]);
         }
     }
 }

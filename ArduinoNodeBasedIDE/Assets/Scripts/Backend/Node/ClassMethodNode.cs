@@ -20,7 +20,7 @@ namespace Backend.Node
         protected override string BuildCode(CodeManager codeManager)
         {
             var codeParam = codeManager.BuildParamCode(GetWithoutFlow(InputsList).Skip(1));
-            return $"{ConnectedToCodeParam(codeManager, _classIn)}.{NodeName}({codeParam})";
+            return $"{ConnectedToCodeParam(codeManager, _classIn)}.{_classMethodTemplate.FunctionName}({codeParam})";
         }
     }
 }

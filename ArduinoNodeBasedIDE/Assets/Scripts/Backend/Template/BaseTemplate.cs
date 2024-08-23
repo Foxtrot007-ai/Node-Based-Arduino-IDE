@@ -6,7 +6,7 @@ namespace Backend.Template
     public abstract class BaseTemplate : ITemplate
     {
         protected System.Type _instanceType;
-        public virtual string Name { get; }
+        public abstract string Name { get; }
         public virtual string Category { get; protected set; }
         public string Id => PathName.ToString();
         public virtual PathName PathName { get; }
@@ -14,10 +14,9 @@ namespace Backend.Template
         protected BaseTemplate()
         {
         }
-        protected BaseTemplate(long id, string name)
+        protected BaseTemplate(long id)
         {
             PathName = new PathName(new PathName("ROOT-1"), "TEMPLATE", id);
-            Name = name;
         }
 
         public INode CreateNodeInstance()

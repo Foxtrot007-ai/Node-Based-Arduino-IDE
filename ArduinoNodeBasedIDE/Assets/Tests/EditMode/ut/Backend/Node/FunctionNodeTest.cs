@@ -105,7 +105,7 @@ namespace Tests.EditMode.ut.Backend.Node
         {
             PrepareVoidSetup();
 
-            _functionTemplateMock.Name.Returns("name");
+            _functionTemplateMock.FunctionName.Returns("name");
             _functionTemplateMock.Library.Returns("library");
             _type1.ToCodeParamReturn(_codeManagerMock, "test1");
             _type2.ToCodeParamReturn(_codeManagerMock, "test2");
@@ -129,7 +129,7 @@ namespace Tests.EditMode.ut.Backend.Node
         {
             PrepareNonVoidSetup();
 
-            _functionTemplateMock.Name.Returns("name");
+            _functionTemplateMock.FunctionName.Returns("name");
             _functionTemplateMock.Library.Returns("library");
             _type1.ToCodeParamReturn(_codeManagerMock, "test1");
             _type2.ToCodeParamReturn(_codeManagerMock, "test2");
