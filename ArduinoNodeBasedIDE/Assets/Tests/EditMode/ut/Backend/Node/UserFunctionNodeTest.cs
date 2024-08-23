@@ -102,7 +102,26 @@ namespace Tests.EditMode.ut.Backend.Node
         }
 
         [Test]
-        public void AddParamTest()
+        public void NonVoidAddParamTest()
+        {
+            PrepareNonVoidSetup();
+
+            var type = MockHelper.CreateType(EType.String);
+            var newParam = MockHelper.CreateVariable(type);
+
+            _sut.AddParam(newParam);
+
+            EqualSizeInput(3);
+            EqualInput(_type1, 0);
+            EqualInput(_type2, 1);
+            EqualTypeInput(type, 2);
+
+            EqualSizeOutput(1);
+            EqualOutput(_typeOut3, 0);
+        }
+        
+        [Test]
+        public void VoidAddParamTest()
         {
             PrepareVoidSetup();
 
@@ -121,6 +140,45 @@ namespace Tests.EditMode.ut.Backend.Node
             EqualOutput(_nextMock, 0);
         }
 
+        [Test]
+        public void NonVoidChangeParamTest()
+        {
+            PrepareNonVoidSetup();
+
+            var type = MockHelper.CreateType(EType.String);
+            var newParam = MockHelper.CreateVariable(type);
+
+            _sut.ChangeParam(0, newParam);
+
+            EqualSizeInput(2);
+            EqualInput(_type1, 0);
+            EqualInput(_type2, 1);
+
+            EqualSizeOutput(1);
+            EqualOutput(_typeOut3, 0);
+            _type1.Received().ChangeType(newParam.Type);
+        }
+        
+        [Test]
+        public void VoidChangeParamTest()
+        {
+            PrepareVoidSetup();
+
+            var type = MockHelper.CreateType(EType.String);
+            var newParam = MockHelper.CreateVariable(type);
+
+            _sut.ChangeParam(0, newParam);
+
+            EqualSizeInput(3);
+            EqualInput(_prevMock, 0);
+            EqualInput(_type1, 1);
+            EqualInput(_type2, 2);
+
+            EqualSizeOutput(1);
+            EqualOutput(_nextMock, 0);
+            _type1.Received().ChangeType(newParam.Type);
+        }
+        
         [Test]
         public void VoidRemoveParamTest()
         {

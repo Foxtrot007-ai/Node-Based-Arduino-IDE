@@ -33,6 +33,10 @@ namespace Backend.Node
             }
         }
 
+        private TypeIO GetParamByIndex(int index)
+        {
+            return (TypeIO)InputsList[IsFlow() ? index + 1 : index];
+        }
         public virtual void AddParam(IVariable param)
         {
             AddInputs(new TypeIO(this, IOSide.Input, (IType)param.Type));
@@ -40,7 +44,12 @@ namespace Backend.Node
 
         public virtual void RemoveParam(int index)
         {
-            RemoveInOut(InputsList[IsFlow() ? index + 1 : index]);
+            RemoveInOut(GetParamByIndex(index));
+        }
+
+        public virtual void ChangeParam(int index, IVariable variable)
+        {
+            GetParamByIndex(index).ChangeType((IType)variable.Type);
         }
 
         public virtual void ChangeOutputType(IMyType type)

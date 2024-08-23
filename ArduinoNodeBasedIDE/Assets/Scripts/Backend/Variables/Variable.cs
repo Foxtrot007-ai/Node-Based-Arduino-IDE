@@ -54,6 +54,7 @@ namespace Backend.Variables
             if (Type.Equals(newType)) return;
             Type = newType;
             _refs.ForEach(x => x.ChangeType(newType));
+            _variablesManager.ChangeNotify(this);
         }
 
         public INode CreateGetNode()

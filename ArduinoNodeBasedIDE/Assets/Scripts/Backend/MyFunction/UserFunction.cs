@@ -95,6 +95,11 @@ namespace Backend.MyFunction
             _refs.ForEach(node => node.AddParam(variable));
         }
 
+        public virtual void ChangeInOutType(int index, IVariable variable)
+        {
+            _refs.ForEach(node => node.ChangeParam(index, variable));
+        }
+
         public virtual void DeleteInOut(int index)
         {
             _refs.ForEach(node => node.RemoveParam(index));

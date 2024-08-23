@@ -68,6 +68,11 @@ namespace Backend.Variables
             Variables.Remove(variable);
         }
 
+        public virtual void ChangeNotify(IVariable variable)
+        {
+
+        }
+
         public virtual IVariable GetVariableByPn(PathName pathName)
         {
             return Variables.Find(variable => ((Variable)variable).PathName.GetId() == pathName.GetId());

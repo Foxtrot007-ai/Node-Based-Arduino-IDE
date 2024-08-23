@@ -33,6 +33,12 @@ namespace Backend.Variables
             return variable;
         }
 
+        public override void ChangeNotify(IVariable variable)
+        {
+            int index = Variables.IndexOf(variable);
+            _userFunction.ChangeInOutType(index, variable);
+        }
+
         public override bool IsVariableDuplicate(string name)
         {
             return _userFunction.IsVariableDuplicate(name);
