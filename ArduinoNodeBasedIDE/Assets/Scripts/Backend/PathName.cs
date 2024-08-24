@@ -40,5 +40,21 @@ namespace Backend
         {
             return _path;
         }
+
+        protected bool Equals(PathName other)
+        {
+            return _path == other._path;
+        }
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((PathName)obj);
+        }
+        public override int GetHashCode()
+        {
+            return (_path != null ? _path.GetHashCode() : 0);
+        }
     }
 }

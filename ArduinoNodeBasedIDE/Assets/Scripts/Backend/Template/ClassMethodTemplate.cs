@@ -12,7 +12,8 @@ namespace Backend.Template
         protected ClassMethodTemplate()
         {
         }
-        public ClassMethodTemplate(long id, string library, FunctionJson functionJson, ClassType classType) : base(id, library, functionJson)
+        public ClassMethodTemplate(long id, string library, FunctionJson functionJson, ClassType classType) 
+            : base(library, functionJson, new PathName($"ROOT-1/TEMPLATE-1/{library.ToUpper()}-1/{classType.TypeName.ToUpper()}-1/METHOD-{id}"))
         {
             Class = classType;
 

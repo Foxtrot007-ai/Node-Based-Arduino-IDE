@@ -15,7 +15,8 @@ namespace Backend.Template
         protected ClassConstructorTemplate()
         {
         }
-        public ClassConstructorTemplate(long id, string library, List<string> inputs, ClassType classType) : base(id)
+        public ClassConstructorTemplate(long id, string library, List<string> inputs, ClassType classType) 
+            : base(new PathName($"ROOT-1/TEMPLATE-1/{library.ToUpper()}-1/{classType.TypeName.ToUpper()}-1/CONSTRUCTOR-{id}"))
         {
             Class = classType;
             Library = library;

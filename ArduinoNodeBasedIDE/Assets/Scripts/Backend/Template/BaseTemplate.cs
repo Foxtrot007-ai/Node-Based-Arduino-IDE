@@ -14,9 +14,9 @@ namespace Backend.Template
         protected BaseTemplate()
         {
         }
-        protected BaseTemplate(long id)
+        protected BaseTemplate(PathName pathName)
         {
-            PathName = new PathName(new PathName("ROOT-1"), "TEMPLATE", id);
+            PathName = pathName;
         }
 
         public INode CreateNodeInstance()

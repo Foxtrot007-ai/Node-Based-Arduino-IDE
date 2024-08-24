@@ -17,7 +17,8 @@ namespace Backend.Template
         protected FunctionTemplate()
         {
         }
-        public FunctionTemplate(long id, string library, FunctionJson functionJson) : base(id)
+
+        protected FunctionTemplate(string library, FunctionJson functionJson, PathName pathName) : base(pathName)
         {
             FunctionName = functionJson.Name;
             Library = library;
@@ -26,6 +27,10 @@ namespace Backend.Template
 
             Category = library;
             _instanceType = typeof(FunctionNode);
+        }
+        public FunctionTemplate(long id, string library, FunctionJson functionJson) 
+            : this(library, functionJson, new PathName($"ROOT-1/TEMPLATE-1/{library.ToUpper()}-1/FUNCTION-{id}"))
+        {
         }
     }
 }

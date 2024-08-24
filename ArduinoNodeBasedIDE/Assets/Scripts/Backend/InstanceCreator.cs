@@ -2,6 +2,7 @@ using System;
 using Backend.API;
 using Backend.MyFunction;
 using Backend.Variables;
+using UnityEngine;
 
 namespace Backend
 {
@@ -29,7 +30,7 @@ namespace Backend
         private INode GetTemplate(PathName pathName, IFunction function)
         {
             return ((TemplateManager)_backendManager.Templates)
-                .GetTemplateById(pathName.GetId())
+                .GetTemplateByPn(pathName)
                 .CreateNodeInstance(function);
         }
 
@@ -74,6 +75,7 @@ namespace Backend
         public INode CreateNodeInstance(string id, IFunction function)
         {
             var pathName = new PathName(id);
+            Debug.Log(pathName);
             if (pathName.GetFirstPath().ToString() != "ROOT-1")
             {
                 throw new ArgumentException();
@@ -84,7 +86,7 @@ namespace Backend
             return nextPn.GetClassName() switch
             {
                 "GLOBAL_VAR" => GetVariable(nextPn, _backendManager.GlobalVariables),
-                "TEMPLATE" => GetTemplate(nextPn, function),
+                "TEMPLATE" => GetTemplate(pathName, function),
                 "SETUP" => GetVariable(nextPn.GetNextPath(), _backendManager.Setup.Variables),
                 "LOOP" => GetVariable(nextPn.GetNextPath(), _backendManager.Loop.Variables),
                 "USER_FUNCTION" => GetFunction(nextPn),

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ namespace Backend
     {
         public List<ITemplate> Templates => _templates.Values.ToList();
 
-        private Dictionary<long, ITemplate> _templates = new();
+        private Dictionary<PathName, ITemplate> _templates = new();
         protected string _tempalateDir;
         private const string FunctionsDir = "functions";
         private const string ClassesDir = "classes";
@@ -48,6 +49,12 @@ namespace Backend
 
             return path.ToString();
         }
+
+        private void AddTemplate(BaseTemplate template)
+        {
+            _templates.Add(template.PathName, template);
+        }
+        
         private T LoadJsonFromFile<T>(string path)
         {
             return JsonConvert.DeserializeObject<T>(_fileSystem.File.ReadAllText(path));
@@ -70,7 +77,7 @@ namespace Backend
                 var json = LoadJsonFromFile<FunctionsJson>(file);
                 foreach (var (id, functionJson) in json.Functions)
                 {
-                    _templates.Add(id, new FunctionTemplate(id, json.Library, functionJson));
+                    AddTemplate(new FunctionTemplate(id, json.Library, functionJson));
                 }
             }
         }
@@ -89,50 +96,55 @@ namespace Backend
 
                 foreach (var (id, functionJson) in json.Methods)
                 {
-                    _templates.Add(id, new ClassMethodTemplate(id, library, functionJson, classType));
+                    AddTemplate(new ClassMethodTemplate(id, library, functionJson, classType));
                 }
 
                 foreach (var (id, list) in json.Constructors)
                 {
-                    _templates.Add(id, new ClassConstructorTemplate(id, library, list, classType));
+                    AddTemplate(new ClassConstructorTemplate(id, library, list, classType));
                 }
             }
         }
 
         private void LoadBuildIn()
         {
-            _templates.Add(1, new BuildInTemplate(1, "Input", typeof(InputNode)));
-            _templates.Add(2, new BuildInTemplate(2, "If", typeof(IfNode)));
-            _templates.Add(3, new BuildInTemplate(3, "While", typeof(WhileNode)));
-            _templates.Add(4, new ReturnNodeTemplate(4));
-            _templates.Add(5, new BuildInTemplate(5, "Break", typeof(BreakNode)));
-            _templates.Add(6, new BuildInTemplate(6, "Continue", typeof(ContinueNode)));
-            _templates.Add(7, new BuildInTemplate(7, "!", typeof(NotNode)));
-            _templates.Add(8, new BuildInTemplate(8, "()", typeof(BracketNode)));
-
-            var id = 9;
+            List<BuildInTemplate> buildInTemplates = new()
+            {
+                new BuildInTemplate(1, "Input", typeof(InputNode)),
+                new BuildInTemplate(2, "If", typeof(IfNode)),
+                new BuildInTemplate(3, "While", typeof(WhileNode)),
+                new ReturnNodeTemplate(4),
+                new BuildInTemplate(5, "Break", typeof(BreakNode)),
+                new BuildInTemplate(6, "Continue", typeof(ContinueNode)),
+                new BuildInTemplate(7, "!", typeof(NotNode)),
+                new BuildInTemplate(8, "()", typeof(BracketNode))
+            };
+            int id = buildInTemplates.Count + 1;
+            
+            foreach (ArithmeticOpTemplate.EArithmeticOp op in Enum.GetValues(typeof(ArithmeticOpTemplate.EArithmeticOp)))
+            {
+                buildInTemplates.Add(new ArithmeticOpTemplate(id, op));
+                id++;
+            }
+            
             foreach (CompareOpTemplate.ECompareOp op in Enum.GetValues(typeof(CompareOpTemplate.ECompareOp)))
             {
-                _templates.Add(id, new CompareOpTemplate(id, op));
+                buildInTemplates.Add(new CompareOpTemplate(id, op));
                 id++;
             }
 
             foreach (LogicalOpTemplate.ELogicalOp op in Enum.GetValues(typeof(LogicalOpTemplate.ELogicalOp)))
             {
-                _templates.Add(id, new LogicalOpTemplate(id, op));
+                buildInTemplates.Add(new LogicalOpTemplate(id, op));
                 id++;
             }
-
-            foreach (ArithmeticOpTemplate.EArithmeticOp op in Enum.GetValues(typeof(ArithmeticOpTemplate.EArithmeticOp)))
-            {
-                _templates.Add(id, new ArithmeticOpTemplate(id, op));
-                id++;
-            }
+         
+            buildInTemplates.ForEach(AddTemplate);
         }
 
-        public virtual ITemplate GetTemplateById(long id)
+        public virtual ITemplate GetTemplateByPn(PathName pathName)
         {
-            return _templates[id];
+            return _templates[pathName];
         }
     }
 }

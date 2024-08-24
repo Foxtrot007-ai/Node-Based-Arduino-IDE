@@ -67,7 +67,7 @@ namespace Tests.EditMode.ut.Backend
             var template = Substitute.For<ITemplate>();
             template.CreateNodeInstance(null).Returns(_nodeMock);
             var templateManager = Substitute.For<TemplateManager>();
-            templateManager.GetTemplateById(1).Returns(template);
+            templateManager.GetTemplateByPn(new PathName("ROOT-1/TEMPLATE-1")).Returns(template);
             _backendManagerMock.Templates.Returns(templateManager);
             
             Assert.AreSame(_nodeMock, _sut.CreateNodeInstance(path, null));
