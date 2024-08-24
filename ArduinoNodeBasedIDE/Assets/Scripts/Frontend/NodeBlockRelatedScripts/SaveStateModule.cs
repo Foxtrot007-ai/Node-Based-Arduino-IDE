@@ -151,6 +151,8 @@ public class SaveStateModule
 
     public void Load()
     {
+        viewManager.actualView = null;
+        viewManager.views.Clear();
         string json = ReadFromFile();
         Debug.Log(json);
         sSaveFile save = JsonUtility.FromJson<sSaveFile>(json);
@@ -243,6 +245,8 @@ public class SaveStateModule
             Debug.Log(con.outputIndex + "," + con.inputIndex);
             controllerFirst.InputsList[con.inputIndex].Connect(controllerSecond.OutputsList[con.outputIndex]);
         }
+        
+        viewManager.ChangeView(backendManager.Setup);
     }
 
     
