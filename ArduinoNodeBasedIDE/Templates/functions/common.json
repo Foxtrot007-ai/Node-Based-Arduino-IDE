@@ -1,0 +1,35 @@
+{
+  "Library": "common",
+  "Functions": {
+    "1": {
+      "Name": "digitalRead",
+      "InputsType": [
+        "int"
+      ],
+      "OutputType": "int"
+    },
+    "2": {
+      "Name": "digitalWrite",
+      "InputsType": [
+        "int",
+        "int"
+      ],
+      "OutputType": "void"
+    },
+    "3": {
+      "Name": "pinMode",
+      "InputsType": [
+        "int",
+        "int"
+      ],
+      "OutputType": "void"
+    },
+    "4": {
+      "Name": "delay",
+      "InputsType": [
+        "int"
+      ],
+      "OutputType": "void"
+    }
+  }
+}

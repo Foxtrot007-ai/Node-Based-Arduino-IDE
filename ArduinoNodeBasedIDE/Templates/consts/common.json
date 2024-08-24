@@ -1,0 +1,33 @@
+{
+  "Library": "common",
+  "Consts": {
+    "1" : {
+      "Name": "HIGH",
+      "Type": "int"
+    },
+    "2" : {
+      "Name": "LOW",
+      "Type": "int"
+    },
+    "3" : {
+      "Name": "INPUT",
+      "Type": "int"
+    },
+    "4" : {
+      "Name": "INPUT_PULLUP",
+      "Type": "int"
+    },
+    "5" : {
+      "Name": "OUTPUT",
+      "Type": "int"
+    },
+    "6" : {
+      "Name": "true",
+      "Type": "bool"
+    },
+    "7" : {
+      "Name": "false",
+      "Type": "bool"
+    }
+  }
+}

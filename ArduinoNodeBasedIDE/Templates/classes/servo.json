@@ -2,17 +2,17 @@
   "ClassName": "Servo",
   "Library": "Servo.h",
   "Constructors": {
-    "500": []
+    "1": []
   },
   "Methods": {
-    "501": {
+    "2": {
       "Name": "attach",
       "InputsType": [
         "int"
       ],
       "OutputType": "void"
     },
-    "502": {
+    "3": {
       "Name": "attach",
       "InputsType": [
         "int",
@@ -20,9 +20,35 @@
         "int"
       ],
       "OutputType": "void"
+    },
+    "4": {
+      "Name": "write",
+      "InputsType": [
+        "int"
+      ],
+      "OutputType": "void"
+    },
+    "5": {
+      "Name": "writeMicroseconds",
+      "InputsType": [
+        "int"
+      ],
+      "OutputType": "void"
+    },
+    "6": {
+      "Name": "read",
+      "InputsType": [],
+      "OutputType": "int"
+    },
+    "7": {
+      "Name": "attached",
+      "InputsType": [],
+      "OutputType": "bool"
+    },
+    "8": {
+      "Name": "detach",
+      "InputsType": [],
+      "OutputType": "void"
     }
   }
 }
-
-
-
