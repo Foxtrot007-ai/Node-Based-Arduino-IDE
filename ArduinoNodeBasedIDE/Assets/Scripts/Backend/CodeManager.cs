@@ -20,7 +20,7 @@ namespace Backend
         public List<string> CodeLines { get; }
         public Dictionary<IVariable, VariableStatus> Variables { get; }
         public HashSet<string> Includes { get; }
-        private List<string> _ignoreIncludes = new() {"system", "common"};
+        private List<string> _ignoreIncludes = new() {"", "system", "common"};
 
         public CodeManager()
         {

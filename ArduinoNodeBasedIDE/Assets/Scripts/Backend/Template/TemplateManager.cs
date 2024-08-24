@@ -23,14 +23,16 @@ namespace Backend
         protected string _tempalateDir;
         private const string FunctionsDir = "functions";
         private const string ClassesDir = "classes";
+        private const string ConstsDir = "consts";
         private readonly IFileSystem _fileSystem;
 
         protected TemplateManager(IFileSystem fileSystem, string dir)
         {
             _fileSystem = fileSystem;
             _tempalateDir = dir;
+            LoadConstsFromFile();
             LoadBuildIn();
-            LoadMethodsFromFile(); // Methods must be first, will create available class names
+            LoadClassesFromFile(); // Methods must be first, will create available class names
             LoadFunctionsFromFile();
         }
         public TemplateManager() : this(new FileSystem(), Environment.CurrentDirectory + "/Templates")
@@ -54,7 +56,7 @@ namespace Backend
         {
             _templates.Add(template.PathName, template);
         }
-        
+
         private T LoadJsonFromFile<T>(string path)
         {
             return JsonConvert.DeserializeObject<T>(_fileSystem.File.ReadAllText(path));
@@ -75,6 +77,8 @@ namespace Backend
             foreach (var file in files)
             {
                 var json = LoadJsonFromFile<FunctionsJson>(file);
+                if (json is null)
+                    continue;
                 foreach (var (id, functionJson) in json.Functions)
                 {
                     AddTemplate(new FunctionTemplate(id, json.Library, functionJson));
@@ -82,16 +86,25 @@ namespace Backend
             }
         }
 
-        private void LoadMethodsFromFile()
+        private void LoadClassesFromFile()
         {
             var files = GetFilesOrCreateDir(ClassesDir);
+            // Load all classNames
             foreach (var file in files)
             {
                 var json = LoadJsonFromFile<ClassJson>(file);
-                var className = json.ClassName;
+                if (json is null)
+                    continue;
+                ClassTypeValidator.Instance.AddClassType(json.ClassName);
+            }
 
-                ClassTypeValidator.Instance.AddClassType(className);
-                var classType = new ClassType(className);
+            // Load methods and constructors
+            foreach (var file in files)
+            {
+                var json = LoadJsonFromFile<ClassJson>(file);
+                if (json is null)
+                    continue;
+                var classType = new ClassType(json.ClassName);
                 var library = json.Library;
 
                 foreach (var (id, functionJson) in json.Methods)
@@ -102,6 +115,21 @@ namespace Backend
                 foreach (var (id, list) in json.Constructors)
                 {
                     AddTemplate(new ClassConstructorTemplate(id, library, list, classType));
+                }
+            }
+        }
+
+        private void LoadConstsFromFile()
+        {
+            var files = GetFilesOrCreateDir(ConstsDir);
+            foreach (var file in files)
+            {
+                var json = LoadJsonFromFile<ConstsJson>(file);
+                if (json is null)
+                    continue;
+                foreach (var (id, constJson) in json.Consts)
+                {
+                    AddTemplate(new ConstTemplate(id, json.Library, constJson));
                 }
             }
         }
@@ -120,13 +148,13 @@ namespace Backend
                 new BuildInTemplate(8, "()", typeof(BracketNode))
             };
             int id = buildInTemplates.Count + 1;
-            
+
             foreach (ArithmeticOpTemplate.EArithmeticOp op in Enum.GetValues(typeof(ArithmeticOpTemplate.EArithmeticOp)))
             {
                 buildInTemplates.Add(new ArithmeticOpTemplate(id, op));
                 id++;
             }
-            
+
             foreach (CompareOpTemplate.ECompareOp op in Enum.GetValues(typeof(CompareOpTemplate.ECompareOp)))
             {
                 buildInTemplates.Add(new CompareOpTemplate(id, op));
@@ -138,7 +166,7 @@ namespace Backend
                 buildInTemplates.Add(new LogicalOpTemplate(id, op));
                 id++;
             }
-         
+
             buildInTemplates.ForEach(AddTemplate);
         }
 
