@@ -20,7 +20,7 @@ public class ViewsManager
 
     public List<IVariable> GetLocalVariables()
     {
-       return (actualView == null) ? null : actualView.Variables.Variables;
+        return (actualView == null) ? null : actualView.Variables.Variables;
     }
     public void DeleteView(IFunction node, IUserFunctionsManager functionList)
     {
@@ -29,7 +29,7 @@ public class ViewsManager
             GameObject.Destroy(obj);
         }
 
-        functionList.DeleteFunction((IUserFunction) node);
+        functionList.DeleteFunction((IUserFunction)node);
     }
 
     public void DeleteAllView()
@@ -49,7 +49,7 @@ public class ViewsManager
         {
             foreach (GameObject block in views[actualView])
             {
-                if(block != null)
+                if (block != null)
                     block.SetActive(false);
             }
         }
@@ -58,7 +58,7 @@ public class ViewsManager
         {
             foreach (GameObject block in views[actualView])
             {
-                if (block != null)  
+                if (block != null)
                     block.SetActive(true);
             }
         }

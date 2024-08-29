@@ -366,16 +366,9 @@ public class NodeBlockManager : MonoBehaviour
             messageInfo.addMessage(e.Message, 0.3f);
         }
     }
-
-    public void ResetScene()
-    {
-        viewsManager.DeleteAllView();
-    }
-
-
+    
     public void LoadState()
     {
-        ResetScene();
         try
         {
             saveManager.Load();

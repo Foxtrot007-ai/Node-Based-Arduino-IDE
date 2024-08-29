@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using Backend.API;
 using System.IO;
+using Backend.API.DTO;
 using TMPro;
 using Backend.Json;
 
@@ -29,16 +30,18 @@ public class SaveStateModule
     {
         public string viewName;
         public List<sController> sControllers;
-}
+    }
+
     [Serializable]
     public class sController
     {
         public string controllerId;
         public bool isStartNode;
-        public bool isInputNode;
+        public sInputValue inputValue;
         public string creatorId;
         public Vector3 positionOnScene;
     }
+
     [Serializable]
     public class sConnection
     {
@@ -48,6 +51,12 @@ public class SaveStateModule
         public int inputIndex;
     }
 
+    [Serializable]
+    public class sInputValue
+    {
+        public string value;
+        public string type;
+    }
     public void Instantiate(NodeBlockManager manager, IBackendManager bManager, ViewsManager vManager, GameObject inputField)
     {
         this.nodeBlockManager = manager;
@@ -70,12 +79,16 @@ public class SaveStateModule
         writer.Close();
     }
 
-    private string ReadFromFile()
+    private sSaveFile ReadFromJsonFromFile()
     {
         string currentPath = inputFieldNameFile.GetComponent<TMP_InputField>().text;
+        var filePath = Application.persistentDataPath + "/" + currentPath + ".json";
+        if (!File.Exists(filePath))
+        {
+            return null;
+        }
         this.currentLoadFileName = currentPath;
-        StreamReader reader = new StreamReader(Application.persistentDataPath + "/" + currentPath + ".json");
-        return reader.ReadLine();
+        return JsonUtility.FromJson<sSaveFile>(File.ReadAllText(filePath));
     }
 
     public void Save()
@@ -86,16 +99,16 @@ public class SaveStateModule
         save.sViews = new List<sView>();
         save.sConnections = new List<sConnection>();
         Dictionary<INode, string> controllerIDs = new Dictionary<INode, string>();
-        
+
         //iterate and save controllers positions
-        foreach(KeyValuePair<IFunction, List<GameObject>> entry in viewManager.views)
+        foreach (KeyValuePair<IFunction, List<GameObject>> entry in viewManager.views)
         {
             sView view = new sView();
             view.viewName = entry.Key.Name;
             view.sControllers = new List<sController>();
             foreach (GameObject obj in entry.Value)
             {
-                if(obj == null)
+                if (obj == null)
                 {
                     continue;
                 }
@@ -103,18 +116,21 @@ public class SaveStateModule
                 sController controller = new sController();
                 string newId = "#" + currentControllerIndex;
                 controller.controllerId = newId;
-                controllerIDs.Add(obj.GetComponent<NodeBlockController>().nodeBlock, newId);
+                var nodeController = obj.GetComponent<NodeBlockController>();
+                controllerIDs.Add(nodeController.nodeBlock, newId);
                 currentControllerIndex++;
-                controller.positionOnScene = obj.GetComponent<NodeBlockController>().transform.position;
-                controller.creatorId = obj.GetComponent<NodeBlockController>().nodeBlock.CreatorId;
-                controller.isStartNode = obj.GetComponent<NodeBlockController>().isStartNodeBlock;
-                if(obj.GetComponent<NodeBlockControllerInput>() != null)
+                controller.positionOnScene = nodeController.transform.position;
+                controller.creatorId = nodeController.nodeBlock.CreatorId;
+                controller.isStartNode = nodeController.isStartNodeBlock;
+                if (nodeController.nodeBlock is IInputNode inputNode)
                 {
-                    controller.isInputNode = true;
+                    controller.inputValue = new sInputValue();
+                    controller.inputValue.value = inputNode.Value;
+                    controller.inputValue.type = inputNode.Type.TypeName;
                 }
                 else
                 {
-                    controller.isInputNode = false;
+                    controller.inputValue = null;
                 }
                 view.sControllers.Add(controller);
             }
@@ -125,9 +141,9 @@ public class SaveStateModule
         foreach (KeyValuePair<INode, string> entry in controllerIDs)
         {
             int inputIndex = 0;
-            foreach(IConnection con in entry.Key.InputsList)
+            foreach (IConnection con in entry.Key.InputsList)
             {
-                if(con.Connected != null)
+                if (con.Connected != null)
                 {
                     sConnection connection = new sConnection();
                     connection.controllerIdFirst = entry.Value;
@@ -136,7 +152,7 @@ public class SaveStateModule
                     INode controllerSecond = con.Connected.ParentNode;
                     connection.controllerIdSecond = controllerIDs[controllerSecond];
                     connection.outputIndex = controllerSecond.OutputsList.IndexOf(con.Connected);
-                    
+
                     save.sConnections.Add(connection);
                 }
                 inputIndex++;
@@ -151,22 +167,21 @@ public class SaveStateModule
 
     public void Load()
     {
-        viewManager.actualView = null;
-        viewManager.views.Clear();
-        string json = ReadFromFile();
-        Debug.Log(json);
-        sSaveFile save = JsonUtility.FromJson<sSaveFile>(json);
-        backendManager.Load(save.sBackend);
-
-        if(save == null)
+        sSaveFile save = ReadFromJsonFromFile();
+        // Debug.Log(save);
+        if (save == null)
         {
             throw new Exception("Load file fail.");
         }
+        viewManager.DeleteAllView();
+        viewManager.actualView = null;
+        viewManager.views.Clear();
+        backendManager.Load(save.sBackend);
 
         Dictionary<string, INode> controllerIDs = new Dictionary<string, INode>();
 
         //create gameobjects with controllers
-        foreach(sView view in save.sViews)
+        foreach (sView view in save.sViews)
         {
             Debug.Log("viewName: " + view.viewName);
             IFunction function = backendManager.Functions.Functions.Find(v => v.Name == view.viewName);
@@ -179,7 +194,7 @@ public class SaveStateModule
             {
                 function = backendManager.Loop;
             }
-            else if(function == null)
+            else if (function == null)
             {
                 throw new Exception("view Name fail");
             }
@@ -192,22 +207,9 @@ public class SaveStateModule
             foreach (sController controller in view.sControllers)
             {
                 Debug.Log("controllerId: " + controller.controllerId);
-
                 Debug.Log("creatorId: " + controller.creatorId);
-
                 Debug.Log(controller.isStartNode);
 
-                GameObject nodeBlockObject;
-                if (!controller.isInputNode)
-                {
-                    nodeBlockObject = nodeBlockManager.SpawnNodeBlockWithoutValidation(nodeBlockManager.nodeBlockPrefab);
-                }
-                else
-                {
-                    nodeBlockObject = nodeBlockManager.SpawnNodeBlockWithoutValidation(nodeBlockManager.nodeBlockInputPrefab);
-                }
-                
-                nodeBlockObject.transform.position = controller.positionOnScene;
                 INode node;
                 if (view.viewName == "setup" && controller.isStartNode)
                 {
@@ -217,7 +219,7 @@ public class SaveStateModule
                 {
                     node = backendManager.Loop.StartNode;
                 }
-                else if(controller.isStartNode)
+                else if (controller.isStartNode)
                 {
                     node = function.StartNode;
                 }
@@ -226,8 +228,27 @@ public class SaveStateModule
                     node = backendManager.InstanceCreator.CreateNodeInstance(controller.creatorId, function);
                 }
 
-                if (controller.isStartNode) { //startnode 
-                    nodeBlockObject.GetComponent<NodeBlockController>().isStartNodeBlock = true; 
+                GameObject nodeBlockObject;
+                if (node is IInputNode inputNode)
+                {
+                    inputNode.SetValue(new InputNodeValueDto
+                    {
+                        Type = Backend.Type.TypeConverter.ToIType(controller.inputValue.type),
+                        Value = controller.inputValue.value,
+                    });
+                    nodeBlockObject = nodeBlockManager.SpawnNodeBlockWithoutValidation(nodeBlockManager.nodeBlockInputPrefab);
+                }
+                else
+                {
+                    nodeBlockObject = nodeBlockManager.SpawnNodeBlockWithoutValidation(nodeBlockManager.nodeBlockPrefab);
+                }
+
+                nodeBlockObject.transform.position = controller.positionOnScene;
+
+                if (controller.isStartNode)
+                {
+                    //startnode 
+                    nodeBlockObject.GetComponent<NodeBlockController>().isStartNodeBlock = true;
                 }
 
                 nodeBlockObject.GetComponent<NodeBlockController>().InstantiateNodeBlockController(node);
@@ -237,7 +258,7 @@ public class SaveStateModule
         }
 
         //connect them;
-        foreach(sConnection con in save.sConnections)
+        foreach (sConnection con in save.sConnections)
         {
             INode controllerFirst = controllerIDs[con.controllerIdFirst];
             INode controllerSecond = controllerIDs[con.controllerIdSecond];
@@ -245,9 +266,9 @@ public class SaveStateModule
             Debug.Log(con.outputIndex + "," + con.inputIndex);
             controllerFirst.InputsList[con.inputIndex].Connect(controllerSecond.OutputsList[con.outputIndex]);
         }
-        
+
         viewManager.ChangeView(backendManager.Setup);
     }
 
-    
+
 }

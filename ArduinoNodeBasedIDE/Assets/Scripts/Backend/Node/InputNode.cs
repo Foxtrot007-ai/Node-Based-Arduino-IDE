@@ -12,6 +12,8 @@ namespace Backend.Node
     public class InputNode : BuildInNode, IInputNode
     {
         public string Value { get; private set; }
+        public IMyType Type => _output.MyType;
+
         private TypeIO _output;
         public override NodeType NodeType => NodeType.Input;
 
