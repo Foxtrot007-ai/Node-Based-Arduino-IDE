@@ -75,7 +75,7 @@ namespace Backend.Variables
 
         public virtual IVariable GetVariableByPn(PathName pathName)
         {
-            return Variables.Find(variable => ((Variable)variable).PathName.GetId() == pathName.GetId());
+            return Variables.Find(variable => ((Variable)variable).PathName.Equals(pathName));
         }
     }
 }

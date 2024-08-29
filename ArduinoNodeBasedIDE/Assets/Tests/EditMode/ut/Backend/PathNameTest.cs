@@ -11,28 +11,38 @@ namespace Tests.EditMode.ut.Backend
         [Test]
         public void ConstructorTest()
         {
-            Assert.AreEqual("ROOT-1/TEST-12", 
+            Assert.AreEqual("ROOT-1/TEST-12",
                             new PathName(new PathName("ROOT-1"), "TEST", 12).ToString());
         }
-        
+
         [Test]
-        [TestCase("ROOT-12")]
-        [TestCase("ROOT-12/TEST-24")]
-        public void GetId(string str)
+        public void GetId1()
         {
-            var path = new PathName(str);
+            var path = new PathName("ROOT-12");
             Assert.AreEqual(12, path.GetId());
         }
 
         [Test]
-        [TestCase("ROOT-12")]
-        [TestCase("ROOT-12/TEST-21")]
-        public void GetClassNamePath(string str)
+        public void GetId2()
         {
-            var path = new PathName(str);
+            var path = new PathName("ROOT-12/TEST-21");
+            Assert.AreEqual(21, path.GetId());
+        }
+
+        [Test]
+        public void GetClassName1()
+        {
+            var path = new PathName("ROOT-12");
             Assert.AreEqual("ROOT", path.GetClassName());
         }
-        
+
+        [Test]
+        public void GetClassName2()
+        {
+            var path = new PathName("ROOT-12/TEST-21");
+            Assert.AreEqual("TEST", path.GetClassName());
+        }
+
         [Test]
         [TestCase("ROOT-12")]
         [TestCase("ROOT-12/TEST-22")]
@@ -41,27 +51,68 @@ namespace Tests.EditMode.ut.Backend
             var path = new PathName(str);
             Assert.AreEqual("ROOT-12", path.GetFirstPath().ToString());
         }
-        
+
         [Test]
         public void GetNextPathNull()
         {
             var path = new PathName("ROOT-12");
             Assert.AreEqual(null, path.GetNextPath());
         }
-        
+
         [Test]
         public void GetNextPath1()
         {
             var path = new PathName("ROOT-12/TEST-22");
             Assert.AreEqual("TEST-22", path.GetNextPath().ToString());
         }
-        
+
         [Test]
         public void GetNextPath2()
         {
             var path = new PathName("ROOT-12/TEST-23/TEST-34/TEST-45");
             Assert.AreEqual("TEST-23/TEST-34/TEST-45", path.GetNextPath().ToString());
         }
-        
+
+        [Test]
+        public void GetLast()
+        {
+            var path = new PathName("ROOT-12");
+            Assert.AreEqual("ROOT-12", path.GetLastPath().ToString());
+        }
+
+        [Test]
+        public void GetLast1()
+        {
+            var path = new PathName("ROOT-12/TEST-22");
+            Assert.AreEqual("TEST-22", path.GetLastPath().ToString());
+        }
+
+        [Test]
+        public void GetLast2()
+        {
+            var path = new PathName("ROOT-12/TEST-23/TEST-34/TEST-45");
+            Assert.AreEqual("TEST-45", path.GetLastPath().ToString());
+        }
+
+        [Test]
+        public void GetParentNull()
+        {
+            var path = new PathName("ROOT-12");
+            Assert.AreEqual(null, path.GetParent());
+        }
+
+        [Test]
+        public void GetParent1()
+        {
+            var path = new PathName("ROOT-12/TEST-22");
+            Assert.AreEqual("ROOT-12", path.GetParent().ToString());
+        }
+
+        [Test]
+        public void GetParent2()
+        {
+            var path = new PathName("ROOT-12/TEST-23/TEST-34/TEST-45");
+            Assert.AreEqual("ROOT-12/TEST-23/TEST-34", path.GetParent().ToString());
+        }
     }
 }

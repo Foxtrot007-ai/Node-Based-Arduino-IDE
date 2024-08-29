@@ -13,17 +13,18 @@ namespace Backend
         {
             _path = parent + "/" + className + "-" + id;
         }
-        
+
         public long GetId()
         {
-            return long.Parse(GetFirstPath()._path.Split("-")[1]);
+            var last = GetLastPath();
+            return last is null ? -1 : long.Parse(last._path.Split("-")[1]);
         }
 
         public string GetClassName()
         {
-            return _path.Split("-")[0];
+            return GetLastPath()?._path.Split("-")[0];
         }
-        
+
         public PathName GetFirstPath()
         {
             var split = _path.Split("/");
@@ -35,7 +36,19 @@ namespace Backend
             var index = _path.IndexOf("/");
             return index == -1 ? null : new PathName(_path[(index + 1)..]);
         }
-        
+
+        public PathName GetLastPath()
+        {
+            var index = _path.LastIndexOf("/");
+            return index == -1 ? this : new PathName(_path[(index + 1)..]);
+        }
+
+        public PathName GetParent()
+        {
+            var index = _path.LastIndexOf("/");
+            return index == -1 ? null : new PathName(_path[..index]);
+        }
+
         public override string ToString()
         {
             return _path;

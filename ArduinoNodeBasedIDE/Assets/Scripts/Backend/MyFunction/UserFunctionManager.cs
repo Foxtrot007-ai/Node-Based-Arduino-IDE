@@ -76,7 +76,7 @@ namespace Backend.MyFunction
 
         public virtual UserFunction GetFunctionByPn(PathName pathName)
         {
-            return (UserFunction)Functions.Find(fun => ((UserFunction)fun).PathName.GetId() == pathName.GetId());
+            return (UserFunction)Functions.Find(fun => ((UserFunction)fun).PathName.Equals(pathName));
         }
     }
 }

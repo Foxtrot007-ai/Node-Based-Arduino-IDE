@@ -17,9 +17,9 @@ namespace Backend
 
         private INode GetVariable(PathName pathName, IVariablesManager variablesManager)
         {
-            var variable = ((VariablesManager)variablesManager).GetVariableByPn(pathName);
+            var variable = ((VariablesManager)variablesManager).GetVariableByPn(pathName.GetParent());
 
-            return pathName.GetNextPath().GetClassName() switch
+            return pathName.GetClassName() switch
             {
                 "GET" => variable.CreateGetNode(),
                 "SET" => variable.CreateSetNode(),
@@ -36,38 +36,21 @@ namespace Backend
 
         private INode GetFunction(PathName pathName)
         {
-            var userFunction = ((UserFunctionManager)_backendManager.Functions).GetFunctionByPn(pathName);
-            var nextPn = pathName.GetNextPath();
-            if (nextPn is null)
-            {
-                return userFunction.CreateNode();
-            }
-            return nextPn.GetClassName() switch
-            {
-                "LOCAL_VAR" => GetVariable(nextPn, userFunction.Variables),
-                "PARAM_VAR" => GetVariable(nextPn, userFunction.InputList),
-                _ => throw new Exception(),
-            };
-        }
 
-        // DEPRECATED
-        public INode CreateNodeInstance(string id)
-        {
-            var pathName = new PathName(id);
-            if (pathName.GetFirstPath().ToString() != "ROOT-1")
+            if (pathName.GetClassName() == "USER_FUNCTION")
             {
-                throw new ArgumentException();
+                return ((UserFunctionManager)_backendManager.Functions)
+                    .GetFunctionByPn(pathName)
+                    .CreateNode();
             }
 
-            var nextPn = pathName.GetNextPath();
+            var userFunction = ((UserFunctionManager)_backendManager.Functions)
+                .GetFunctionByPn(pathName.GetParent().GetParent());
 
-            return nextPn.GetClassName() switch
+            return pathName.GetParent().GetClassName() switch
             {
-                "GLOBAL_VAR" => GetVariable(nextPn, _backendManager.GlobalVariables),
-                "TEMPLATE" => GetTemplate(nextPn, null),
-                "SETUP" => GetVariable(nextPn.GetNextPath(), _backendManager.Setup.Variables),
-                "LOOP" => GetVariable(nextPn.GetNextPath(), _backendManager.Loop.Variables),
-                "USER_FUNCTION" => GetFunction(nextPn),
+                "LOCAL_VAR" => GetVariable(pathName, userFunction.Variables),
+                "PARAM_VAR" => GetVariable(pathName, userFunction.InputList),
                 _ => throw new Exception(),
             };
         }
@@ -81,15 +64,13 @@ namespace Backend
                 throw new ArgumentException();
             }
 
-            var nextPn = pathName.GetNextPath();
-
-            return nextPn.GetClassName() switch
+            return pathName.GetNextPath().GetFirstPath().GetClassName() switch
             {
-                "GLOBAL_VAR" => GetVariable(nextPn, _backendManager.GlobalVariables),
+                "GLOBAL_VAR" => GetVariable(pathName, _backendManager.GlobalVariables),
                 "TEMPLATE" => GetTemplate(pathName, function),
-                "SETUP" => GetVariable(nextPn.GetNextPath(), _backendManager.Setup.Variables),
-                "LOOP" => GetVariable(nextPn.GetNextPath(), _backendManager.Loop.Variables),
-                "USER_FUNCTION" => GetFunction(nextPn),
+                "SETUP" => GetVariable(pathName, _backendManager.Setup.Variables),
+                "LOOP" => GetVariable(pathName, _backendManager.Loop.Variables),
+                "USER_FUNCTION" => GetFunction(pathName),
                 _ => throw new Exception(),
             };
         }

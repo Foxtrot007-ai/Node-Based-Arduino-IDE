@@ -46,20 +46,20 @@ namespace Tests.EditMode.ut.Backend
                 .GetVariableByPn(Arg.Is<PathName>(x => x.ToString() == pn))
                 .Returns(_variableMock);
         }
-        
+
         private void MockGetFunctionByPn(string pn)
         {
             _functionManagerMock
                 .GetFunctionByPn(Arg.Is<PathName>(x => x.ToString() == pn))
                 .Returns(_userFunctionMock);
         }
-        
+
         [Test]
         public void NotRootPathTest()
         {
-            Assert.Throws<ArgumentException>(() => _sut.CreateNodeInstance("test"));
+            Assert.Throws<ArgumentException>(() => _sut.CreateNodeInstance("test", null));
         }
-        
+
         [Test]
         public void TemplateTest()
         {
@@ -69,7 +69,7 @@ namespace Tests.EditMode.ut.Backend
             var templateManager = Substitute.For<TemplateManager>();
             templateManager.GetTemplateByPn(new PathName("ROOT-1/TEMPLATE-1")).Returns(template);
             _backendManagerMock.Templates.Returns(templateManager);
-            
+
             Assert.AreSame(_nodeMock, _sut.CreateNodeInstance(path, null));
         }
 
@@ -77,108 +77,108 @@ namespace Tests.EditMode.ut.Backend
         public void GlobalVariableGetTest()
         {
             var path = "ROOT-1/GLOBAL_VAR-1/GET-1";
-            MockGetVariableByPn("GLOBAL_VAR-1/GET-1");
+            MockGetVariableByPn("ROOT-1/GLOBAL_VAR-1");
             _backendManagerMock.GlobalVariables.Returns(_variablesManagerMock);
 
-            Assert.AreSame(_getVariable, _sut.CreateNodeInstance(path));
+            Assert.AreSame(_getVariable, _sut.CreateNodeInstance(path, null));
         }
-        
+
         [Test]
         public void GlobalVariableSetTest()
         {
             var path = "ROOT-1/GLOBAL_VAR-1/SET-1";
-            MockGetVariableByPn("GLOBAL_VAR-1/SET-1");
+            MockGetVariableByPn("ROOT-1/GLOBAL_VAR-1");
             _backendManagerMock.GlobalVariables.Returns(_variablesManagerMock);
 
-            Assert.AreSame(_setVariable, _sut.CreateNodeInstance(path));
+            Assert.AreSame(_setVariable, _sut.CreateNodeInstance(path, null));
         }
 
         [Test]
         public void SetupVariableGetTest()
         {
             var path = "ROOT-1/SETUP-1/LOCAL_VAR-1/GET-1";
-            MockGetVariableByPn("LOCAL_VAR-1/GET-1");
+            MockGetVariableByPn("ROOT-1/SETUP-1/LOCAL_VAR-1");
             _backendManagerMock.Setup.Variables.Returns(_variablesManagerMock);
-            
-            Assert.AreSame(_getVariable, _sut.CreateNodeInstance(path));
+
+            Assert.AreSame(_getVariable, _sut.CreateNodeInstance(path, null));
         }
-        
+
         [Test]
         public void SetupVariableSetTest()
         {
             var path = "ROOT-1/SETUP-1/LOCAL_VAR-1/SET-1";
-            MockGetVariableByPn("LOCAL_VAR-1/SET-1");
+            MockGetVariableByPn("ROOT-1/SETUP-1/LOCAL_VAR-1");
             _backendManagerMock.Setup.Variables.Returns(_variablesManagerMock);
 
-            Assert.AreSame(_setVariable, _sut.CreateNodeInstance(path));
+            Assert.AreSame(_setVariable, _sut.CreateNodeInstance(path, null));
         }
-        
+
         [Test]
         public void LoopVariableGetTest()
         {
             var path = "ROOT-1/LOOP-1/LOCAL_VAR-1/GET-1";
-            MockGetVariableByPn("LOCAL_VAR-1/GET-1");
+            MockGetVariableByPn("ROOT-1/LOOP-1/LOCAL_VAR-1");
             _backendManagerMock.Loop.Variables.Returns(_variablesManagerMock);
-            
-            Assert.AreSame(_getVariable, _sut.CreateNodeInstance(path));
+
+            Assert.AreSame(_getVariable, _sut.CreateNodeInstance(path, null));
         }
-        
+
         [Test]
         public void LoopVariableSetTest()
         {
             var path = "ROOT-1/LOOP-1/LOCAL_VAR-1/SET-1";
-            MockGetVariableByPn("LOCAL_VAR-1/SET-1");
+            MockGetVariableByPn("ROOT-1/LOOP-1/LOCAL_VAR-1");
             _backendManagerMock.Loop.Variables.Returns(_variablesManagerMock);
 
-            Assert.AreSame(_setVariable, _sut.CreateNodeInstance(path));
+            Assert.AreSame(_setVariable, _sut.CreateNodeInstance(path, null));
         }
-        
+
         [Test]
         public void UserFuncLocalVariableGetTest()
         {
             var path = "ROOT-1/USER_FUNCTION-1/LOCAL_VAR-1/GET-1";
-            MockGetVariableByPn("LOCAL_VAR-1/GET-1");
-            MockGetFunctionByPn("USER_FUNCTION-1/LOCAL_VAR-1/GET-1");
+            MockGetVariableByPn("ROOT-1/USER_FUNCTION-1/LOCAL_VAR-1");
+            MockGetFunctionByPn("ROOT-1/USER_FUNCTION-1");
             _backendManagerMock.Functions.Returns(_functionManagerMock);
             _userFunctionMock.Variables.Returns(_variablesManagerMock);
-            
-            Assert.AreSame(_getVariable, _sut.CreateNodeInstance(path));
+
+            Assert.AreSame(_getVariable, _sut.CreateNodeInstance(path, null));
         }
-        
+
         [Test]
         public void UserFuncLocalVariableSetTest()
         {
             var path = "ROOT-1/USER_FUNCTION-1/LOCAL_VAR-1/SET-1";
-            MockGetVariableByPn("LOCAL_VAR-1/SET-1");
-            MockGetFunctionByPn("USER_FUNCTION-1/LOCAL_VAR-1/SET-1");
+            MockGetVariableByPn("ROOT-1/USER_FUNCTION-1/LOCAL_VAR-1");
+            MockGetFunctionByPn("ROOT-1/USER_FUNCTION-1");
             _backendManagerMock.Functions.Returns(_functionManagerMock);
             _userFunctionMock.Variables.Returns(_variablesManagerMock);
 
-            Assert.AreSame(_setVariable, _sut.CreateNodeInstance(path));
+            Assert.AreSame(_setVariable, _sut.CreateNodeInstance(path, null));
         }
-        
+
         [Test]
         public void UserFuncParamVariableGetTest()
         {
             var path = "ROOT-1/USER_FUNCTION-1/PARAM_VAR-1/GET-1";
-            MockGetVariableByPn("PARAM_VAR-1/GET-1");
-            MockGetFunctionByPn("USER_FUNCTION-1/PARAM_VAR-1/GET-1");
+            MockGetVariableByPn("ROOT-1/USER_FUNCTION-1/PARAM_VAR-1");
+            MockGetFunctionByPn("ROOT-1/USER_FUNCTION-1");
             _backendManagerMock.Functions.Returns(_functionManagerMock);
             _userFunctionMock.InputList.Returns(_variablesManagerMock);
-            
-            Assert.AreSame(_getVariable, _sut.CreateNodeInstance(path));
+
+            Assert.AreSame(_getVariable, _sut.CreateNodeInstance(path, null));
         }
-        
+
         [Test]
         public void UserFuncParamVariableSetTest()
         {
             var path = "ROOT-1/USER_FUNCTION-1/PARAM_VAR-1/SET-1";
-            MockGetVariableByPn("PARAM_VAR-1/SET-1");
-            MockGetFunctionByPn("USER_FUNCTION-1/PARAM_VAR-1/SET-1");
+            MockGetVariableByPn("ROOT-1/USER_FUNCTION-1/PARAM_VAR-1");
+            MockGetFunctionByPn("ROOT-1/USER_FUNCTION-1");
             _backendManagerMock.Functions.Returns(_functionManagerMock);
             _userFunctionMock.InputList.Returns(_variablesManagerMock);
 
-            Assert.AreSame(_setVariable, _sut.CreateNodeInstance(path));
+            Assert.AreSame(_setVariable, _sut.CreateNodeInstance(path, null));
         }
     }
 }
