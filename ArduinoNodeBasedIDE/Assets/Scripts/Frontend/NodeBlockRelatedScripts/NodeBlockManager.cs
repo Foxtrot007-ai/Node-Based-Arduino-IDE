@@ -21,6 +21,9 @@ public class NodeBlockManager : MonoBehaviour
     //views
     public ViewsManager viewsManager = new ViewsManager();
 
+    //camera
+    private Camera cameraComponent;
+
     //loader
 
     public SaveStateModule saveManager = new SaveStateModule();
@@ -49,6 +52,7 @@ public class NodeBlockManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        cameraComponent = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         messageInfo = GameObject.FindGameObjectWithTag("InfoMessageManager").GetComponent<InfoMessageManager>();
         inputFieldNameFile = GameObject.FindGameObjectWithTag("inputFieldNameFile");
         instantiateBasicFunctions();
@@ -334,24 +338,33 @@ public class NodeBlockManager : MonoBehaviour
         nodeBlockEditor.SetActive(true);
     }
 
+    private void SetCameraToStartNode()
+    {
+        var startNodePosition = viewsManager.views[viewsManager.actualView][0].transform.position;
+        cameraComponent.transform.position = new Vector3(startNodePosition.x, startNodePosition.y, -30);
+        
+    }
 
     //MenuBar buttons functions
     public void ChangeView(FunctionButtonScript button)
     {
         viewsManager.ChangeView(button.function);
         localVariableList.GetComponent<LocalVariableListManager>().ReloadVariables();
+        SetCameraToStartNode();
     }
 
     public void ChangeViewToSetup()
     {
         viewsManager.ChangeView(backendManager.Setup);
         localVariableList.GetComponent<LocalVariableListManager>().ReloadVariables();
+        SetCameraToStartNode();
     }
 
     public void ChangeViewToLoop()
     {
         viewsManager.ChangeView(backendManager.Loop);
         localVariableList.GetComponent<LocalVariableListManager>().ReloadVariables();
+        SetCameraToStartNode();
     }
 
     public void SaveState()
