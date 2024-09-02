@@ -4,6 +4,7 @@ using UnityEngine;
 using Backend.API;
 using Backend;
 using Backend.Type;
+using System.IO;
 
 public class NodeBlockManager : MonoBehaviour
 {
@@ -147,6 +148,8 @@ public class NodeBlockManager : MonoBehaviour
 
     public GameObject SpawnNodeBlockWithoutValidation(GameObject prefab)
     {
+        
+        nodeBlockSpawnPoint = cameraComponent.transform.position;
         nodeBlockSpawnPoint.z = 0;
         GameObject nodeBlockObject = Instantiate(prefab, nodeBlockSpawnPoint, Quaternion.identity);
         viewsManager.AddToView(nodeBlockObject);
@@ -398,7 +401,10 @@ public class NodeBlockManager : MonoBehaviour
     {
         try
         {
-            backendManager.BuildCode(Environment.CurrentDirectory + "/code.ino", saveManager.GetCurrentLoadedFilePath());
+            var path = Environment.CurrentDirectory + "/code";
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+
+            backendManager.BuildCode(path + "/code.ino", saveManager.GetCurrentLoadedFilePath());
             messageInfo.addMessage("Code generate succesfully", 0.3f);
         }
         catch(Exception e)
